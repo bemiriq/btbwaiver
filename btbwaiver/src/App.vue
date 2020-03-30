@@ -4,7 +4,7 @@
     <br>
     <div>
       <!-- <img alt="Vue logo" src="./assets/btb.png"> -->
-      <a href="/"><b-img center src="./assets/btb.png" alt="BTB LOGO"></b-img></a>
+      <a href="/"><img center src="./assets/btb.png" alt="BTB LOGO"></img></a>
     </div>
 
   <br><br>
@@ -23,7 +23,7 @@
   </ul> -->
 
   <div v-show="reservationTimeDiv">
-    <span style="font-size: 3em;">{{ reservationTimeTitle }}</span>
+    <span style="font-size: 2em;">{{ reservationTimeTitle }}</span>
     <!-- <BookingName msg="Please select your booking name"/> -->
     <b-row>
       <b-col md="auto">
@@ -36,6 +36,10 @@
       </b-col>
     </b-row>
 
+    <div v-for="item in timeList" :key="timeList">
+      <button>{{item}}</button>
+    </div>
+
     <b-button variant="outline-primary" v-on:click="reservationTimeDiv = !reservationTimeDiv,reservationNameDiv = !reservationNameDiv">Button</b-button>
 
   </div>
@@ -44,10 +48,14 @@
   <!-- <b-button variant="outline-primary" v-on:click="reservationNameDiv = !reservationNameDiv">Button</b-button> -->
 
   <div v-show="!reservationNameDiv">
-    <span style="font-size: 3em;">{{ reservationNameTitle }}</span>
-      <ul>
+    <span style="font-size: 2em;">{{ reservationNameTitle }}</span>
+      <!-- <ul>
         <li v-for="post in posts" :key="post.customerName">{{post.customerName}}</li>
-      </ul>
+      </ul> -->
+
+      <div v-for="post in posts" :key="post.customerName">
+        <button>{{post.customerName}}</button>
+      </div>
 
     <br>
 
@@ -342,7 +350,7 @@
 
     <br><br>
 
-    
+
     <b-container class="bv-example-row">
       <b-row>
         <b-col>
@@ -366,6 +374,10 @@
 </template>
 
 
+<script src="moment.js"></script>
+<script>
+    moment().format();
+</script>
 
 <script>
 // import HelloWorld from './components/HelloWorld.vue'
@@ -374,6 +386,7 @@ import axios from 'axios';
 import VueSignature from "vue-signature-pad";
 // import App from "./App";
 import Vue from 'vue';
+import moment from 'moment';
 
 Vue.use(VueSignature);
 Vue.config.productionTip = false;
@@ -387,10 +400,22 @@ export default {
     // BookingName
   },
 
-  mounted: function () {
-    axios.get('https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival=2020-03-12')
-      .then(response => (this.posts = response.data.data))
-  },
+  // mounted: function () {
+  //   axios.get('https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival=2020-03-12')
+  //     .then(response => (this.posts = response.data.data))
+  // },
+
+   mounted: function(){
+   const current = new moment();
+   for(let i=0;i<5;i++){
+      this.timeList.push(current.format("HH:mm"));
+      current.add(15, "minutes");
+   };
+
+   axios.get('https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival=2020-03-12')
+      .then(response => (this.posts = response.data.data));
+
+ },
 
 
   data() {
@@ -413,6 +438,8 @@ export default {
         minorNameTitle: 'Are you responsible for any minors in your group today? Please check the off below to sign a waiver for them.',
         signDivTitle: 'Please sign with your finger',
         randomNumber: "https://btbwaiver/llecnas9841"+Math.floor(Math.random() * 1000000000)+"652602/",
+         timeList: [
+        ],
         posts: [],
         form:{
           email: '',
