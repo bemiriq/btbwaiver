@@ -337,6 +337,12 @@
     </div>
 
     <br><br>
+
+    <input col="6" type="text" disabled="true" v-model="randomNumber"/>
+
+    <br><br>
+
+    
     <b-container class="bv-example-row">
       <b-row>
         <b-col>
@@ -406,6 +412,7 @@ export default {
         genderNameTitle: 'Whats your gender ?',
         minorNameTitle: 'Are you responsible for any minors in your group today? Please check the off below to sign a waiver for them.',
         signDivTitle: 'Please sign with your finger',
+        randomNumber: "https://btbwaiver/llecnas9841"+Math.floor(Math.random() * 1000000000)+"652602/",
         posts: [],
         form:{
           email: '',
