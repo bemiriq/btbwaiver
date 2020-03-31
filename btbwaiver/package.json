@@ -13,6 +13,7 @@
     "bootstrap-vue": "^2.1.0",
     "moment": "^2.24.0",
     "vue": "^2.5.2",
+    "vue-date-dropdown": "^1.0.5",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {

@@ -45,12 +45,15 @@
 
     <br><br>
 
-    <div id="bookingTimeModal">
-      <b-button v-b-modal.modal-center>DONT KNOW</b-button>
+    <div>
+      <!-- <b-button v-b-modal.modal-center>DONT KNOW</b-button> -->
 
-      <b-modal id="modal-center" centered title="Booking Time Required">
+      <!-- <b-modal id="modal-center" centered title="Booking Time Required">
         <p class="my-4">Please look up for front desk staff to get your booking time. This process is required to forward your photos/videos from Beat The Bomb.</p>
-      </b-modal>
+      </b-modal> -->
+
+       <b-button variant="primary" v-on:click="reservationNameDiv = !reservationNameDiv, reservationTimeDiv = !reservationTimeDiv">DONT KNOW</b-button>
+
     </div>
 
     <br> <br>
@@ -230,16 +233,20 @@
         label-for="input-1"
       >
       </b-form-group>
-        <b-form-input
-          id="inputField"
-          v-model="form.dateofbirth"
-          type="date"
-          required
-          placeholder="Enter your first name"
-        ></b-form-input>
-      </b-form>
 
-      <br><br>
+      <b-form-group>
+        <date-dropdown 
+          default="1995.01.10" 
+          min="1960" 
+          max="2020"
+          :months-names="months" 
+          v-model="selectedDate" id="dateDropdownDesign">
+        </date-dropdown>
+      </b-form-group>
+    
+    </b-form>
+
+    <br><br>
 
     <b-container class="bv-example-row">
       <b-row>
@@ -360,9 +367,23 @@
   <div v-show="!minorsignDiv">
      
      <br><br>
+    <div style="text-align: left; margin-left: 2%; margin-right: 2%; text-align:justify;">
+      <span style="font-size: 1.0em;">{{ waiverParagraph1 }}</span><br/><br/>
+      <span style="font-size: 1.0em; ">{{ waiverParagraph2 }}</span><br/><br/>
+      <span style="font-size: 1.0em;">{{ waiverParagraph3 }}</span><br/><br/>
+      <span style="font-size: 1.0em;">{{ waiverParagraph4 }}</span><br/><br/>
+      <span style="font-size: 1.0em;">{{ waiverParagraph5 }}</span><br/><br/>
+      <span style="font-size: 1.0em;">{{ waiverParagraph6 }}</span><br/><br/>
+      <span style="font-size: 1.0em;">{{ waiverParagraph7 }}</span><br/><br/>
+      <span style="font-size: 1.0em;">{{ waiverParagraph8 }}</span><br/><br/>
+      <span style="font-size: 1.0em;">{{ waiverParagraph9 }}</span><br/><br/>
+      <span style="font-size: 1.0em;">{{ waiverParagraph10 }}</span><br/><br/>
+    </div>
+    <br>
+      <span style="font-size: 1.3em;">{{ signDivTitle }}</span>
+      <br>
 
-      <span style="font-size: 1.5em;">{{ signDivTitle }}</span>
-
+      
     <div class="container">
       <div class="row">
         <div class="col-12 mt-2">
@@ -378,24 +399,20 @@
       <div class="row">
         <div class="col-3 mt-2">
           <button class="btn btn-outline-secondary" @click="undo">Undo</button>
+        
+          <button class="btn btn-outline-primary" @click="change">Reset</button>
         </div>
-        <div class="col-3 mt-2">
-          <button class="btn btn-outline-primary" @click="save">Save</button>
-        </div>
-        <div class="col-3 mt-2">
-          <button class="btn btn-outline-primary" @click="change">Change</button>
-        </div>
-        <div class="col-3 mt-2">
+        <!-- <div class="col-3 mt-2">
           <button class="btn btn-outline-primary" @click="resume">Resume</button>
-        </div>
+        </div> -->
       </div>
     </div>
 
     <br><br>
 
-    <input col="6" type="text" disabled="true" v-model="randomNumber"/>
+    <input col="6" type="hidden" disabled="true" v-model="randomNumber"/>
 
-    <br><br>
+    <br>
 
 
     <b-container class="bv-example-row">
@@ -427,6 +444,9 @@
     moment().format();
 </script>
 
+<script src="../dist/vue-date-dropdown.min.js"></script>
+
+
 <script>
 // import HelloWorld from './components/HelloWorld.vue'
 // import BookingName from './components/HelloWorld.vue'
@@ -435,9 +455,13 @@ import VueSignature from "vue-signature-pad";
 // import App from "./App";
 import Vue from 'vue';
 import moment from 'moment';
+import DateDropdown from 'vue-date-dropdown'; // this for the date dropdown
+
 
 Vue.use(VueSignature);
 Vue.config.productionTip = false;
+
+Vue.use(DateDropdown);
 
 
 
@@ -446,6 +470,7 @@ export default {
   components: {
     // HelloWorld,
     // BookingName
+    DateDropdown
   },
 
   // mounted: function () {
@@ -528,6 +553,8 @@ let next15Minutes = moment().add(15, 'minutes');
         modalTimeDialog: false,
         modalNameDialog: false,
         randomNumber: "https://btbwaiver/llecnas9841"+Math.floor(Math.random() * 1000000000)+"652602/",
+        selectedDate: '',
+        months: 'Jan, Feb, Mar, Apr, May, Jun, July, Aug, Sep, Oct, Nov, Dec',
          timeList: [],
         posts: [],
         form:{
@@ -549,7 +576,7 @@ let next15Minutes = moment().add(15, 'minutes');
           {genderitem: 'Male', name: 'Male'},
           {genderitem: 'Female', name: 'Female'},
           {genderitem: 'Non-binary', name: 'Non-binary'},
-          {genderitem: 'Others', name: 'Others'}
+          {genderitem: 'Other', name: 'Other'}
         ],
 
         signatureoptions:{
@@ -561,8 +588,30 @@ let next15Minutes = moment().add(15, 'minutes');
         minorsName: "",
         title: "Date of Birth"
       }
-    ]
-      }
+    ],
+
+      // below is the paragraph that represents waiver
+      waiverParagraph1: ' Task Force Zero LLC is the owner and operator of Beat The Bomb.',
+      
+      waiverParagraph2: 'In consideration of Task Force Zero LLC allowing me to participate in Beat The Bomb, Iunderstand and acknowledge that risks and dangers exist due to participation in BeatThe Bomb. ',
+
+      waiverParagraph3: 'I understand and acknowledge that my participation in Beat The Bomb (and/or my useof any equipment provided) may result in harm to me (including but not limited to): bodilyinjury, fractures, eye injury, blindness, heat stroke, heart attack, disease strains, partialand/or total paralysis, death or other ailments that could cause serious disability.',
+
+      waiverParagraph4: 'I understand and acknowledge that such injuries could result from (including but notlimited to): traversing back and forth across a laser maze that uses Class IIIa 5mWlasers with a 650nm red wavelength; slips, trips, and/or falls in the facility, including butnot limited to slippery floors and/or walls (from water, paint, or other substances), thathave no hand rails; contact with and/or crashing into other participants (whether due totheir or your purposeful, reckless, or negligent behavior); contact with and/or crasheswith the walls, floors, large metal columns, or doors of any room; defective or negligentlymaintained or operated equipment in our facility, and/or equipment that is being used ina manner in which it was never intended to be used; getting blasted by high pressure aircanons connected to pipes filled with paint and foam and/or soft rubber balls.',
+
+      waiverParagraph5:' I understand that the above risks and dangers (and resultant harm to me) maybe caused by the negligence of the owners, employees, officers or agents of Task ForceZero LLC; the negligence of other participants or onlookers in the experience, by myown negligence, by accidents, or by forces of nature or other causes. These risks anddangers may arise from foreseeable or unforeseeable causes. By my participation inthese activities and/or use of equipment, I hereby assume all risks and dangers and allresponsibility for any losses and/or damages, whether caused in whole or in part by thenegligence or other conduct of the owners, agents, officers, employees of Task ForceZero LLC, or by any other person.',
+
+      waiverParagraph6:' I, on behalf of myself, my personal representatives and my heirs, executors,administrators, and assigns, hereby voluntarily agree to release, waive, discharge, holdharmless, defend and indemnify Task Force Zero LLC and its owners, employees,agents, officers, members, promoters, contractors or business partners, from any andevery claims, demands, actions or rights of action, of whatsoever kind or nature, either inlaw or in equity arising from or by reason of any bodily injury, or personal injuries knownor unknown, property damage, wrongful death, loss of services, or otherwise, resultingor to arise out of my participation in Beat The Bomb, whether by negligence or non-negligence or from any and all other incidents of harm and /or ill-will.',
+
+      waiverParagraph7: 'I specifically understand that I am releasing, discharging and waiving any claims oractions that I may have presently or in the future for the negligent acts or conduct by theowners, employees, agents, officers, members, promoters, contractors or businesspartners of Task Force Zero LLC. This waiver also applies to me even if I am not aparticipant but am instead attending Beat The Bomb as a spectator or bystander. ',
+
+      waiverParagraph8: 'Furthermore I hereby give Task Force Zero LLC or any of its assigns or businesspartners the absolute and irrevocable right and permission with respect to any and all photographs/videos taken of myself, a) to copyright the same in Task Force Zero LLC’sor Beat The Bomb’s name or any other name that Task Force Zero LLC may select; b) touse, re-use, publish and republish the same in whole or in part, separately or inconjunction with other photographs, in any medium now or hereafter known, includingon the Internet and any and all social media channels, and for any purpose whatsoever,including (but not by way of limitation) advertising, promotion and trade; I hereby releaseand discharge Task Force Zero LLC from all and any claims and demands ensuing fromor in connection with the use of the photographs/videos, including any and all claims forlibel and invasion of privacy. This authorization and release shall inure to the benefit ofthe legal representatives, licensees, and assigns of Task Force Zero LLC.',
+
+      waiverParagraph9: 'Finally, for two years after the expiration of this agreement, I waive any and all rightsto build, design, develop, or fund, aid, influence, or direct, anyone else to build, design,or develop, without the express written permission and agreement of Task Force ZeroLLC, any product or experience, for either commercial or even non-commercialpurposes, that is substantially similar in technical design, game mechanics, orexperiential elements to Beat The Bomb or aspects of it. This waiver intends to captureall of the constituent Beat The Bomb games, currently Hack Attack, Laser Maze, EchoChamber, Floor Grid, or CyberBot, and also Beat The Bombs signature paint explosionending (which concept covers all projectile paint, paint blast, paint canon, or paint bombexperiences). This waiver is meant to provide additional legal protection to Task ForceZero LLC over and above any other protections provided by applicable copyright andtrademark laws, out of respect for the investment and effort that it took Task Force ZeroLLC develop the Beat The Bomb product and experience, and despite the fact that BeatThe Bomb is marketed to and open to the general public.',
+
+      waiverParagraph10: 'I HAVE READ THE ABOVE WAIVER AND RELEASE AND BY SIGNING IT AGREE ITIS MY INTENTION TO EXEMPT AND RELIEVE TASK FORCE ZERO LLC FROMLIABILITY FOR PERSONAL INJURY, PROPERTY DAMAGE AND/OR WRONGFULDEATH CAUSED BY NEGLIGENCE AND/OR ANY OTHER CAUSE.'
+    }
+
     },
 
     methods:{
@@ -681,6 +730,11 @@ let next15Minutes = moment().add(15, 'minutes');
     margin:auto;
     margin-top: 10px;
     font-size: 1.1em;
+  }
+
+  #dateDropdownDesign{
+    margin-left: 20%;
+    width: 30%;
   }
 
   #signature {
