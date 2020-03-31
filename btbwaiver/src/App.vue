@@ -4,7 +4,8 @@
     <br>
     <div>
       <!-- <img alt="Vue logo" src="./assets/btb.png"> -->
-      <a href="/"><img center src="./assets/btb.png" alt="BTB LOGO"></img></a>
+      <a href="/"><img center src="./assets/btb.png" alt="BTB LOGO" style="width:50%;"></img></a>
+
     </div>
 
   <br><br>
@@ -23,28 +24,29 @@
   </ul> -->
 
   <div v-show="reservationTimeDiv">
-    <span style="font-size: 2em;">{{ reservationTimeTitle }}</span>
-    <!-- <BookingName msg="Please select your booking name"/> -->
-    <b-row>
-      <b-col md="auto">
-        <!-- <b-time v-model="value" locale="en" @context="onContext"></b-time> -->
-      </b-col>
-      <b-col>
-        <!-- <p>Value: <b>'{{ value }}'</b></p> -->
-        <!-- <p class="mb-0">Context:</p> -->
-        <!-- <pre class="small">{{ context }}</pre> -->
-      </b-col>
-    </b-row>
 
     <br>
+
+    <span style="font-size: 1.7em;">{{ reservationTimeTitle }}</span>
+    <!-- <BookingName msg="Please select your booking name"/> -->
+
+    <br> <br>
 
     <div v-for="item in timeList" :key="timeList">
-      <button>{{item}}</button>
+      <b-button block pill variant="outline-info" id="fetchButtonGap" v-on:click="reservationTimeDiv = !reservationTimeDiv,reservationNameDiv = !reservationNameDiv">
+        {{item}}<br>
+      </b-button>
     </div>
 
-    <br>
+    <br><br>
 
-    <b-button variant="outline-primary" v-on:click="reservationTimeDiv = !reservationTimeDiv,reservationNameDiv = !reservationNameDiv">DONT KNOW</b-button>
+    <div id="bookingTimeModal">
+      <b-button v-b-modal.modal-center>DONT KNOW</b-button>
+
+      <b-modal id="modal-center" centered title="Booking Time Required">
+        <p class="my-4">Please look up for front desk staff to get your booking time. This process is required to forward your photos/videos from Beat The Bomb.</p>
+      </b-modal>
+    </div>
 
     <br> <br>
 
@@ -54,16 +56,23 @@
   <!-- <b-button variant="outline-primary" v-on:click="reservationNameDiv = !reservationNameDiv">Button</b-button> -->
 
   <div v-show="!reservationNameDiv">
-    <span style="font-size: 2em;">{{ reservationNameTitle }}</span>
+
+    <br><br>
+
+    <span style="font-size: 1.7em;">{{ reservationNameTitle }}</span>
       <!-- <ul>
         <li v-for="post in posts" :key="post.customerName">{{post.customerName}}</li>
       </ul> -->
 
+    <br><br>
+
       <div v-for="post in posts" :key="post.customerName">
-        <button>{{post.customerName}}</button>
+        <b-button block pill variant="outline-info" id="fetchButtonGap" v-on:click="reservationNameDiv = !reservationNameDiv, emailDiv = !emailDiv">
+          {{post.customerName}}
+        </b-button>
       </div>
 
-    <br>
+    <br><br>
 
     <b-container class="bv-example-row">
       <b-row>
@@ -73,9 +82,18 @@
 
         <b-col></b-col>
 
+
         <b-col>
-            <b-button variant="primary" v-on:click="reservationNameDiv = !reservationNameDiv, emailDiv = !emailDiv">NEXT</b-button>
+          <div id="bookingNameModal">
+            <b-button v-b-modal="'modalName'">DONT KNOW</b-button>
+
+            <b-modal id="modalName" centered title="Booking Name Required">
+              <p class="my-4">Please call front desk staff for the help ! We forward your Beat The Bomb photos/videos using your booking email, so booking name is required.</p>
+            </b-modal>
+          </div>
+
         </b-col>
+
 
       </b-row>
 
@@ -89,7 +107,8 @@
 
   <div v-show="!emailDiv">
     <!-- <p>SAN 2</p> -->
-    <br>
+    <br><br>
+
     <span style="font-size: 1.5em;">
       What is your Email ?
     </span>
@@ -102,17 +121,16 @@
       >
       </b-form-group>
         <b-form-input
-          id="inline-form-input-name"
-          class="mb-2 mr-sm-2 mb-sm-0"
+          id="inputField"
           v-model="form.email"
           type="email"
           required
           placeholder="Enter email"
         ></b-form-input>
 
-    <br>
+    <br><br>
 
-    <span style="font-size: 1.5em;">
+    <span style="font-size: 1.2em;">
       Interested in getting promotional emails from Beat The Bomb?
     </span>
 
@@ -182,8 +200,7 @@
       >
       </b-form-group>
         <b-form-input
-          id="inline-form-input-name"
-          class="mb-2 mr-sm-2 mb-sm-0"
+          id="inputField"
           v-model="form.firstname"
           type="text"
           required
@@ -196,12 +213,11 @@
       >
       </b-form-group>
         <b-form-input
-          id="inline-form-input-name"
-          class="mb-2 mr-sm-2 mb-sm-0"
+          id="inputField"
           v-model="form.lastname"
           type="text"
           required
-          placeholder="Enter your first name"
+          placeholder="Enter your last name"
         ></b-form-input>
 
         <b-form-group
@@ -210,8 +226,7 @@
       >
       </b-form-group>
         <b-form-input
-          id="inline-form-input-name"
-          class="mb-2 mr-sm-2 mb-sm-0"
+          id="inputField"
           v-model="form.dateofbirth"
           type="date"
           required
@@ -219,7 +234,7 @@
         ></b-form-input>
       </b-form>
 
-      <br>
+      <br><br>
 
     <b-container class="bv-example-row">
       <b-row>
@@ -243,6 +258,9 @@
 
 
   <div v-show="!genderDiv">
+
+    <br><br>
+
     <span style="font-size: 1.5em;">{{ genderNameTitle }}</span>
 
     <br><br>
@@ -255,7 +273,9 @@
       text-field="name"
     ></b-form-radio-group>
 
-    <br>
+
+    <br><br>
+
 
     <b-container class="bv-example-row">
       <b-row>
@@ -280,27 +300,30 @@
    
     <br><br>
 
-    <span style="font-size: 1.2em;">{{ minorNameTitle }}</span>
+    <span style="font-size: 1.1em;">{{ minorNameTitle }}</span>
+
+    <br><br>
 
     <div class="work-experiences">
 
         <div class="form-row" v-for="(experience, index) in minorsDetail" :key="index">
-          <div class="form-group col-md-6">
-            <label>Minor's full name</label>
+          <div class="form-group" id="minorsInput">
+            <label id="minorHeading">Minor's full name</label>
             <input v-model="experience.company" :name="`minorsDetail[${index}][company]`" type="text" class="form-control" placeholder="Minor Full Name">
           </div>
-          <div class="form-group col-md-6">
-            <label>Minor's date of birth</label>
+          <div class="form-group" id="minorsInput">
+            <label id="minorHeading">Minor's date of birth</label>
             <input v-model="experience.title" :name="`minorsDetail[${index}][minordob]`" type="date" class="form-control" placeholder="DOB">
           </div>
         </div>
       </div>
 
+    <br>
+
       <div class="form-group">
         <button @click="addExperience" type="button" class="btn btn-secondary">Add Minor</button>
       </div>
      
-      <hr>
 
     <!--   <div class="form-group">
         <button @click="submit" type="button" class="btn btn-primary">Submit</button>
@@ -331,7 +354,7 @@
 
   <div v-show="!minorsignDiv">
      
-     <br>
+     <br><br>
 
       <span style="font-size: 1.5em;">{{ signDivTitle }}</span>
 
@@ -447,7 +470,7 @@ let next15Minutes = moment().add(15, 'minutes');
 
   console.log();
    // var mycurrenttime = current.subtract(1, 'hours');
-   for(let i=0;i<6;i++){
+   for(let i=0;i<5;i++){
     
 
         if(i<2){
@@ -497,6 +520,8 @@ let next15Minutes = moment().add(15, 'minutes');
         genderNameTitle: 'Whats your gender ?',
         minorNameTitle: 'Are you responsible for any minors in your group today? Please check the off below to sign a waiver for them.',
         signDivTitle: 'Please sign with your finger',
+        modalTimeDialog: false,
+        modalNameDialog: false,
         randomNumber: "https://btbwaiver/llecnas9841"+Math.floor(Math.random() * 1000000000)+"652602/",
          timeList: [
         ],
@@ -629,6 +654,26 @@ let next15Minutes = moment().add(15, 'minutes');
       font-size: 6em;
     }
 
+  #inputField{
+    width: 60%;
+    margin: auto;
+  }
+
+  #minorsInput{
+    width: 40%;
+    margin: auto;
+  }
+
+  #minorHeading{
+    font-size: 1.2em;
+  }
+
+  #fetchButtonGap{
+    width: 41%;
+    margin:auto;
+    margin-top: 10px;
+    font-size: 1.1em;
+  }
 
   #signature {
   border: double 3px transparent;
