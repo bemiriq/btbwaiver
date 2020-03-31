@@ -36,7 +36,12 @@
       <b-button block pill variant="outline-info" id="fetchButtonGap" v-on:click="reservationTimeDiv = !reservationTimeDiv,reservationNameDiv = !reservationNameDiv">
         {{item}}<br>
       </b-button>
+
+      <!-- <p><a href="#" @click.prevent="removeDuplicates">Remove duplicates</a></p> -->
+
     </div>
+
+
 
     <br><br>
 
@@ -88,7 +93,7 @@
             <b-button v-b-modal="'modalName'">DONT KNOW</b-button>
 
             <b-modal id="modalName" centered title="Booking Name Required">
-              <p class="my-4">Please call front desk staff for the help ! We forward your Beat The Bomb photos/videos using your booking email, so booking name is required.</p>
+              <p class="my-4">Please call front desk staff fosr the help ! We forward your Beat The Bomb photos/videos using your booking email, so booking name is required.</p>
             </b-modal>
           </div>
 
@@ -463,7 +468,7 @@ export default {
         
 let next15Minutes = moment().add(15, 'minutes');
           next15Minutes.minutes(Math.floor(next15Minutes.minutes() / 15) * 15);
-           this.timeList.push(next15Minutes.format('HH:mm'));
+           this.timeList.push(next15Minutes.format('HH:mm A'));
            const timetest = next15Minutes;
            const timetest1 = next15Minutes;
 
@@ -473,18 +478,18 @@ let next15Minutes = moment().add(15, 'minutes');
    for(let i=0;i<5;i++){
     
 
-        if(i<2){
+        if(i<1){
         //  let currenttime2 = currentTime;
           timetest.add(15, 'minutes');
           timetest.minutes(Math.floor(timetest.minutes() / 15) * 15);
-          this.timeList.push(timetest.format('HH:mm'));
+          this.timeList.push(timetest.format('HH:mm A'));
         //this.timeList.push( moment().format("HH") + ":" + quaterMinute[i] );
          // current.subtract(15, "minutes");
         }
         else{
            timetest1.subtract(15, 'minutes');
           timetest1.minutes(Math.floor(timetest1.minutes() / 15) * 15);
-          this.timeList.push(timetest1.format('HH:mm'));
+          this.timeList.push(timetest1.format('HH:mm A'));
          // next15Minutes.format('HH:mm');
        // this.timeList.push( moment().format("HH") + ":" + quaterMinute[i] );
        //   current.add(15, "minutes");
@@ -523,8 +528,7 @@ let next15Minutes = moment().add(15, 'minutes');
         modalTimeDialog: false,
         modalNameDialog: false,
         randomNumber: "https://btbwaiver/llecnas9841"+Math.floor(Math.random() * 1000000000)+"652602/",
-         timeList: [
-        ],
+         timeList: [],
         posts: [],
         form:{
           email: '',
@@ -613,6 +617,10 @@ let next15Minutes = moment().add(15, 'minutes');
         minorsDetail: this.minorsDetail
       }
       alert(JSON.stringify(data, null, 2))
+    },
+
+    removeDuplicates () {
+      this.timeList = [ ...new Set(this.timeList) ]
     }
 
 
