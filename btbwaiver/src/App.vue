@@ -36,11 +36,17 @@
       </b-col>
     </b-row>
 
+    <br>
+
     <div v-for="item in timeList" :key="timeList">
       <button>{{item}}</button>
     </div>
 
-    <b-button variant="outline-primary" v-on:click="reservationTimeDiv = !reservationTimeDiv,reservationNameDiv = !reservationNameDiv">Button</b-button>
+    <br>
+
+    <b-button variant="outline-primary" v-on:click="reservationTimeDiv = !reservationTimeDiv,reservationNameDiv = !reservationNameDiv">DONT KNOW</b-button>
+
+    <br> <br>
 
   </div>
 
@@ -75,7 +81,8 @@
 
     </b-container>
 
-   
+
+    <br> <br>
    
   </div>
 
@@ -157,8 +164,10 @@
       </b-row>
     </b-container>
    
+    <br> <br>
 
   </div>
+
 
   <div v-show="!fullnameDiv">
     <!-- <p>This is full name div </p> -->
@@ -225,6 +234,10 @@
         </b-col>
       </b-row>
     </b-container>
+
+    <br> <br>
+
+
   </div>
 
 
@@ -257,6 +270,9 @@
         </b-col>
       </b-row>
     </b-container>
+
+    <br> <br>
+
   </div>
 
 
@@ -307,6 +323,9 @@
         </b-col>
       </b-row>
     </b-container>
+
+    <br> <br>
+
   </div>
 
 
@@ -365,6 +384,7 @@
       </b-row>
     </b-container>
 
+    <br> <br>
 
   </div>
 
@@ -405,12 +425,52 @@ export default {
   //     .then(response => (this.posts = response.data.data))
   // },
 
-   mounted: function(){
-   const current = new moment();
-   for(let i=0;i<5;i++){
-      this.timeList.push(current.format("HH:mm"));
-      current.add(15, "minutes");
-   };
+   // mounted: function(){
+   // const current = new moment();
+   // for(let i=0;i<7;i++){
+   //    this.timeList.push(current.format("HH:mm"));
+   //    current.add(15, "minutes");
+   // };
+
+  mounted: function(){
+   const current = new moment().format("HH:MM");
+   console.log(current);
+   var quaterMinute = ["15","30","30","45"];
+
+        
+let next15Minutes = moment().add(15, 'minutes');
+          next15Minutes.minutes(Math.floor(next15Minutes.minutes() / 15) * 15);
+           this.timeList.push(next15Minutes.format('HH:mm'));
+           const timetest = next15Minutes;
+           const timetest1 = next15Minutes;
+
+
+  console.log();
+   // var mycurrenttime = current.subtract(1, 'hours');
+   for(let i=0;i<6;i++){
+    
+
+        if(i<2){
+        //  let currenttime2 = currentTime;
+          timetest.add(15, 'minutes');
+          timetest.minutes(Math.floor(timetest.minutes() / 15) * 15);
+          this.timeList.push(timetest.format('HH:mm'));
+        //this.timeList.push( moment().format("HH") + ":" + quaterMinute[i] );
+         // current.subtract(15, "minutes");
+        }
+        else{
+           timetest1.subtract(15, 'minutes');
+          timetest1.minutes(Math.floor(timetest1.minutes() / 15) * 15);
+          this.timeList.push(timetest1.format('HH:mm'));
+         // next15Minutes.format('HH:mm');
+       // this.timeList.push( moment().format("HH") + ":" + quaterMinute[i] );
+       //   current.add(15, "minutes");
+        }
+        // current.subtract(15, "minutes");
+
+      // this.timeList.push(current.format("HH:mm"));
+      
+   }
 
    axios.get('https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival=2020-03-12')
       .then(response => (this.posts = response.data.data));
@@ -558,6 +618,11 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  width: 50%; 
+  margin-right:auto; 
+  margin-left:auto;
+  background-color: #f5f7fa;
+  height: auto;
 }
 
     .b-form-group .label{
