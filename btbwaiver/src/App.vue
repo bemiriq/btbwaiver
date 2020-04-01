@@ -236,8 +236,8 @@
 
       <b-form-group>
         <date-dropdown 
-          default="1995.01.10" 
-          min="1960" 
+          default="1993.01.10" 
+          min="1940" 
           max="2020"
           :months-names="months" 
           v-model="selectedDate" id="dateDropdownDesign">
@@ -325,7 +325,9 @@
           </div>
           <div class="form-group" id="minorsInput">
             <label id="minorHeading">Minor's date of birth</label>
-            <input v-model="experience.title" :name="`minorsDetail[${index}][minordob]`" type="date" class="form-control" placeholder="DOB">
+            <!-- <input v-model="experience.title" :name="`minorsDetail[${index}][minordob]`" type="date" class="form-control" placeholder="DOB"> -->
+            <date-dropdown default="1993.01.10" min="1940" max="2020" :months-names="months" v-model="selectedDate" id="dateDropdownDesign">
+        </date-dropdown>
           </div>
         </div>
       </div>
@@ -333,7 +335,8 @@
     <br>
 
       <div class="form-group">
-        <button @click="addExperience" type="button" class="btn btn-secondary">Add Minor</button>
+        <button @click="addExperience" type="button" class="btn btn-info">Add Minor</button>
+        <button @click="removeExperience" type="button" class="btn btn-outline-info">Remove Minor</button>
       </div>
      
 
@@ -377,7 +380,7 @@
       <span style="font-size: 1.0em;">{{ waiverParagraph7 }}</span><br/><br/>
       <span style="font-size: 1.0em;">{{ waiverParagraph8 }}</span><br/><br/>
       <span style="font-size: 1.0em;">{{ waiverParagraph9 }}</span><br/><br/>
-      <span style="font-size: 1.0em;">{{ waiverParagraph10 }}</span><br/><br/>
+      <span style="font-size: 1.0em;"><b>{{ waiverParagraph10 }}</b></span><br/><br/>
     </div>
     <br>
       <span style="font-size: 1.3em;">{{ signDivTitle }}</span>
@@ -660,6 +663,15 @@ let next15Minutes = moment().add(15, 'minutes');
             minordob: ''
           })
         },
+
+    removeExperience: function(todo){
+      // this.minorsDetail.splice({
+      //   minorsName: '',
+      //   minordob: ''
+
+        var index = this.minorsDetail.indexOf(todo)
+        this.minorsDetail.splice(index, 1)
+    },
 
     submit () {
       const data = {
