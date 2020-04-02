@@ -136,12 +136,14 @@
         </b-button>
       </div>
 
+      <div v-if="!posts.length"><br><span style="font-size:1.1em; color: #17a2b8;">{{ noBookingTitle }}</span><br/></div>
+
     <br><br>
 
     <b-container class="bv-example-row">
       <b-row>
         <b-col>
-          <b-button variant="outline-primary" v-on:click="reservationNameDiv = !reservationNameDiv, reservationTimeDiv = !reservationTimeDiv">BACK</b-button>
+          <b-button variant="outline-info" v-on:click="reservationNameDiv = !reservationNameDiv, reservationTimeDiv = !reservationTimeDiv">BACK</b-button>
         </b-col>
 
         <b-col></b-col>
@@ -152,7 +154,7 @@
             <b-button v-b-modal="'modalName'">DONT KNOW</b-button>
 
             <b-modal id="modalName" centered title="Booking Name Required">
-              <p class="my-4">Please call front desk staff fosr the help ! We forward your Beat The Bomb photos/videos using your booking email, so booking name is required.</p>
+              <p class="my-4">Please ask front desk staff for the help !</p>
             </b-modal>
           </div>
 
@@ -496,7 +498,7 @@
         <b-col></b-col>
 
         <b-col>
-            <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv">DONE</b-button>
+            <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv ; waiverSubmitted = ! waiverSubmitted;">DONE</b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -505,8 +507,18 @@
 
   </div>
 
+  <div v-show="!waiverSubmitted">
+
+   <span style="font-size: 1.2em; color: #17a2b8;"> Thank you {{ firstname }} {{ lastname }} for signing out the waiver. <br/>
+    This page will reload after {{ time }} seconds  </span>
 
 
+
+  </div>
+
+
+
+<!-- the below div closed the APP div -->
   </div>
 </template>
 
@@ -564,13 +576,17 @@ export default {
     isDisableComputed() {
       return this.email.length < 5;      
     },
-
+    
     isDisableFixedFirstName(){
       return this.lastname.length && this.firstname.length < 3;
     },
 
     validateGenderField(){
       return this.gender.length < 1;
+    },
+
+    time: function(){
+      return this.date.format('mm:ss');
     }
 
   },
@@ -634,6 +650,10 @@ let next15Minutes = moment().add(15, 'minutes');
     axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime)
       .then(response => (this.posts = response.data.data));
 
+    setInterval(() => {
+      this.date = moment(this.date.subtract(1, 'seconds'))
+    }, 1000);
+
  },
 
 
@@ -652,6 +672,8 @@ let next15Minutes = moment().add(15, 'minutes');
         minorDiv: true,
         minorsignDiv: true,
         minorsAddDiv: true,
+        waiverSubmitted: true,
+        date: moment(60 * 10 * 1000),
 
         email: '',
         firstname: '',
@@ -664,6 +686,7 @@ let next15Minutes = moment().add(15, 'minutes');
         genderNameTitle: 'Whats your gender ?',
         minorNameTitle: 'Are you responsible for any minors in your group today? Please check the off below to sign a waiver for them.',
         signDivTitle: 'Please sign with your finger',
+        noBookingTitle: 'No booking name. Please go back and select your actual booking time.',
         modalTimeDialog: false,
         modalNameDialog: false,
         randomNumber: "https://btbwaiver/llecnas9841"+Math.floor(Math.random() * 1000000000)+"652602/",
@@ -888,8 +911,8 @@ let next15Minutes = moment().add(15, 'minutes');
         return text.length > 0;
       }
 
-     }
 
+  }
 
  }
 
