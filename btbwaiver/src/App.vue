@@ -30,20 +30,77 @@
     <span style="font-size: 1.7em;">{{ reservationTimeTitle }}</span>
     <!-- <BookingName msg="Please select your booking name"/> -->
 
+
+<!-- the table code is to work on posting data from this file to MySQL DATABASE -->
+
+<!--      <table border='1' width='80%' style='border-collapse: collapse;'>
+   <tr>
+     <th>URL</th>
+   </tr>
+
+   <!-- Add -->
+   <!-- <tr>
+     <input type="file" id="file" ref="file" />
+
+   <button type="button" @click='addRecord()' >Upload file</button>
+   <!-- </tr>
+
+  </table>
+ -->
+
     <br> <br>
 
-    <div v-for="item in timeList" :key="timeList">
-      <b-button block pill variant="outline-info" id="fetchButtonGap" v-on:click="reservationTimeDiv = !reservationTimeDiv,reservationNameDiv = !reservationNameDiv">
-        {{item}}<br>
-      </b-button>
+    <!--
+    <div v-for="(year,index) in timeList" v-model="selectedTime">
 
-      <!-- <p><a href="#" @click.prevent="removeDuplicates">Remove duplicates</a></p> -->
+      <b-button block pill variant="outline-info" id="fetchButtonGap" v-model:value="index,year" v-on:click="showTheTime();">
+        {{year}}<br>
+      </b-button>
+      <!-- <p><a href="#" @click.prevent="removeDuplicates">Remove duplicates</a></p>
 
     </div>
+
+    <button v-on:click="reservationTimeDiv = !reservationTimeDiv ; reservationNameDiv = !reservationNameDiv ;">
+      NEXT
+    </button>
+
+      <select v-model="selectedTime">
+    <option v-for="(year,index) in timeList"
+            v-model:value="index">{{year}}</option>
+    
+  </select>
+ <button v-on:click="showTheTime(); reservationTimeDiv = !reservationTimeDiv ; reservationNameDiv = !reservationNameDiv ;">
+    click here
+  </button> -->
+
+  <div>
+    <b-form-select variant="info" v-model="selectedTime" :select-size="4" class="reservationTimeOption">
+      <option v-for="(year,index) in timeList" v-model:value="index">{{year}}</option>
+    </b-form-select>
+    <div class="mt-3 selectedBookingTime"> <strong> {{ selectedTime }}</strong> </div>
+  </div>
 
 
 
     <br><br>
+
+    <b-container class="bv-example-row">
+      <b-row>
+
+        <b-col>
+           <b-button variant="primary" v-on:click="showAllTime(); reservationNameDiv = !reservationNameDiv, reservationTimeDiv = !reservationTimeDiv">DONT KNOW</b-button>
+        </b-col>
+
+        <b-col></b-col>
+
+        <b-col>
+          <b-button variant="outline-primary" v-on:click="showTheTime(); reservationTimeDiv = !reservationTimeDiv ; reservationNameDiv = !reservationNameDiv ;">NEXT</b-button>
+        </b-col>
+
+      </b-row>
+
+    </b-container>
+
 
     <div>
       <!-- <b-button v-b-modal.modal-center>DONT KNOW</b-button> -->
@@ -52,8 +109,7 @@
         <p class="my-4">Please look up for front desk staff to get your booking time. This process is required to forward your photos/videos from Beat The Bomb.</p>
       </b-modal> -->
 
-       <b-button variant="primary" v-on:click="reservationNameDiv = !reservationNameDiv, reservationTimeDiv = !reservationTimeDiv">DONT KNOW</b-button>
-
+      
     </div>
 
     <br> <br>
@@ -130,7 +186,7 @@
       </b-form-group>
         <b-form-input
           id="inputField"
-          v-model="form.email"
+          v-model="email"
           type="email"
           required
           placeholder="Enter email"
@@ -185,7 +241,7 @@
         <b-col></b-col>
 
         <b-col>
-            <b-button variant="primary" v-on:click="emailDiv = !emailDiv, fullnameDiv = !fullnameDiv">NEXT</b-button>
+            <b-button variant="primary" v-on:click="emailDiv = !emailDiv, fullnameDiv = !fullnameDiv" v-bind:disabled="isDisableComputed">NEXT</b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -204,34 +260,46 @@
 
       <b-form-group
         id="input-group-1"
-        label-for="input-1"
-      >
+        label="First Name"
+        label-for="input-1" class="nameTitle">
       </b-form-group>
+
+      <b-form-group
         <b-form-input
           id="inputField"
-          v-model="form.firstname"
+          v-model="firstname"
           type="text"
           required
           placeholder="Enter your first name"
         ></b-form-input>
-
-        <b-form-group
-        id="input-group-1"
-        label-for="input-1"
-      >
       </b-form-group>
+
+      <br/>
+
+      <b-form-group
+        id="input-group-1"
+        label="Last Name"
+        label-for="input-1" class="nameTitle">
+      </b-form-group>
+
+      <b-form-group>
+
         <b-form-input
           id="inputField"
-          v-model="form.lastname"
+          v-model="lastname"
           type="text"
           required
           placeholder="Enter your last name"
         ></b-form-input>
 
+      <br/>
+
+      </b-form-group>
+
         <b-form-group
         id="input-group-1"
-        label-for="input-1"
-      >
+        label="Date of Birth"
+        label-for="input-1" class="nameTitle">
       </b-form-group>
 
       <b-form-group>
@@ -257,7 +325,7 @@
         <b-col></b-col>
 
         <b-col>
-            <b-button variant="primary" v-on:click="fullnameDiv = !fullnameDiv, genderDiv = !genderDiv">NEXT</b-button>
+            <b-button variant="primary" v-on:click="fullnameDiv = !fullnameDiv, genderDiv = !genderDiv" v-bind:disabled="isDisableFixedFirstName">NEXT</b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -281,6 +349,8 @@
     <b-form-radio-group
       :options="genderoptions"
       class="mb-3"
+      type="text"
+      v-model="gender"
       value-field="genderitem"
       text-field="name"
     ></b-form-radio-group>
@@ -298,7 +368,7 @@
         <b-col></b-col>
 
         <b-col>
-            <b-button variant="primary" v-on:click="genderDiv = !genderDiv, minorsAddDiv = !minorsAddDiv">NEXT</b-button>
+            <b-button variant="primary" v-on:click="genderDiv = !genderDiv, minorsAddDiv = !minorsAddDiv" v-bind:disabled="validateGenderField">NEXT</b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -417,7 +487,6 @@
 
     <br>
 
-
     <b-container class="bv-example-row">
       <b-row>
         <b-col>
@@ -448,6 +517,9 @@
 </script>
 
 <script src="../dist/vue-date-dropdown.min.js"></script>
+<!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
+<script src="vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 
 <script>
@@ -488,15 +560,30 @@ export default {
    //    current.add(15, "minutes");
    // };
 
+   computed: {
+    isDisableComputed() {
+      return this.email.length < 5;      
+    },
+
+    isDisableFixedFirstName(){
+      return this.lastname.length && this.firstname.length < 3;
+    },
+
+    validateGenderField(){
+      return this.gender.length < 1;
+    }
+
+  },
+
   mounted: function(){
-   const current = new moment().format("HH:MM");
+   const current = new moment().format("hh:mm");
    console.log(current);
    var quaterMinute = ["15","30","30","45"];
 
         
 let next15Minutes = moment().add(15, 'minutes');
           next15Minutes.minutes(Math.floor(next15Minutes.minutes() / 15) * 15);
-           this.timeList.push(next15Minutes.format('HH:mm A'));
+           this.timeList.push(next15Minutes.format('hh:mm A'));
            const timetest = next15Minutes;
            const timetest1 = next15Minutes;
 
@@ -510,14 +597,14 @@ let next15Minutes = moment().add(15, 'minutes');
         //  let currenttime2 = currentTime;
           timetest.add(15, 'minutes');
           timetest.minutes(Math.floor(timetest.minutes() / 15) * 15);
-          this.timeList.push(timetest.format('HH:mm A'));
+          this.timeList.push(timetest.format('hh:mm A'));
         //this.timeList.push( moment().format("HH") + ":" + quaterMinute[i] );
          // current.subtract(15, "minutes");
         }
         else{
            timetest1.subtract(15, 'minutes');
           timetest1.minutes(Math.floor(timetest1.minutes() / 15) * 15);
-          this.timeList.push(timetest1.format('HH:mm A'));
+          this.timeList.push(timetest1.format('hh:mm A'));
          // next15Minutes.format('HH:mm');
        // this.timeList.push( moment().format("HH") + ":" + quaterMinute[i] );
        //   current.add(15, "minutes");
@@ -528,7 +615,23 @@ let next15Minutes = moment().add(15, 'minutes');
       
    }
 
-   axios.get('https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival=2020-03-12')
+   this.timeList = [ ...new Set(this.timeList) ];
+
+    // var arrivalDate = moment();
+    // console.log(arrivalDate);
+    console.log(this.selectedTime);
+     // console.log(this.arrivalTime1);
+    var arrivalDate = moment().format('YYYY-MM-DD');
+    var arrivalTime = this.arrivalTime1;
+    // console.log(arrivalTime1);
+
+    // var arrivalTime = '1530';
+    // var arrivalTime1 = '1715';
+
+   // axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate&"arrivalTime="+arrivalTime)
+   //the link below is for arrival time from one time to other
+   //axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime)+","+arrivalTime1
+    axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime)
       .then(response => (this.posts = response.data.data));
 
  },
@@ -539,6 +642,8 @@ let next15Minutes = moment().add(15, 'minutes');
         text: '',
         value: '',
         context: null,
+        arrivalTime1: '',
+        selectedTime: '',
         reservationNameDiv: true,
         reservationTimeDiv: true,
         emailDiv: true,
@@ -547,6 +652,12 @@ let next15Minutes = moment().add(15, 'minutes');
         minorDiv: true,
         minorsignDiv: true,
         minorsAddDiv: true,
+
+        email: '',
+        firstname: '',
+        lastname: '',
+        gender: '',
+
         greetings: 'Welcome to BEAT THE BOMB',
         reservationTimeTitle: 'Please select your reservation time:',
         reservationNameTitle: 'Please select your reservation name:',
@@ -592,6 +703,8 @@ let next15Minutes = moment().add(15, 'minutes');
         title: "Date of Birth"
       }
     ],
+
+    file: "",
 
       // below is the paragraph that represents waiver
       waiverParagraph1: ' Task Force Zero LLC is the owner and operator of Beat The Bomb.',
@@ -682,10 +795,106 @@ let next15Minutes = moment().add(15, 'minutes');
 
     removeDuplicates () {
       this.timeList = [ ...new Set(this.timeList) ]
-    }
+    },
+
+    addRecord: function(){
+
+       this.file = this.$refs.file.files[0];
+
+       let formData = new FormData();
+       formData.append('file', this.file);
+
+       axios.post('ajaxfile.php', formData,
+       {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+       })
+       .then(function (response) {
+
+          if(!response.data){
+             alert('File not uploaded.');
+          }else{
+             alert('File uploaded successfully.');
+          }
+
+       })
+       .catch(function (error) {
+           console.log(error);
+       });
+
+     },
+
+     showTheTime: function (event){
+      // alert(this.selectedTime);
+      // console.log(event.target.value);
+      // var standardTimeFormat = event.target.value;
+
+      var standardTimeFormat = this.selectedTime;
+
+      console.log(this.selectedTime);
+      console.log(standardTimeFormat);
+
+      var militaryTimeFormat = moment(standardTimeFormat, "h:mm A").format("HHmm");
+      // var militaryTimeFormat = moment(this.selectedTime).format("HHMM");
+      console.log(militaryTimeFormat);
+
+    var arrivalDate = moment().format('YYYY-MM-DD');
+    // var arrivalTime = this.militaryTimeFormat;
+    axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+militaryTimeFormat)
+      .then(response => (this.posts = response.data.data));
 
 
-    }
+       // var x = document.getElementById("reservationTimeDiv");
+       // var y = document.getElementById("reservationNameDiv");
+       // console.log(x);
+       //  if (x.style.display = "block") {
+       //    y.style.display = "block";
+       //    // x.style.display = "block";
+       //  } 
+       //  if(y.style.display === "block") {
+       //    x.style.display = "none";
+       //    y.style.display = "block";
+       //  }
+
+
+
+     },
+
+
+     showAllTime: function (event){
+
+    var arrivalDate = moment().format('YYYY-MM-DD');
+
+    axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate)
+      .then(response => (this.posts = response.data.data));
+
+     },
+
+
+     isDisableFixed(email) {
+      return email.length > 5;
+      },
+
+      isDisableFixedFirstName(firstname) {
+      return text.length > 2;
+      },
+
+      disableLastName(lastname){
+        return text.length > 2;
+      },
+
+      validateGenderField(gender){
+        return text.length > 0;
+      }
+
+     }
+
+
+ }
+
+
+    
 
 //     created() {
 //         const axios = require('axios');
@@ -701,7 +910,7 @@ let next15Minutes = moment().add(15, 'minutes');
 //           .catch(error => console.log(error));
 //     }
 
-};
+;
 </script>
 
 <style>
@@ -747,6 +956,21 @@ let next15Minutes = moment().add(15, 'minutes');
   #dateDropdownDesign{
     margin-left: 20%;
     width: 30%;
+  }
+
+  .nameTitle{
+    font-size: 1.1em;
+    text-align: left;
+    margin-left: 21%;
+  }
+
+  .reservationTimeOption{
+    width: 50%;
+    font-size: 1.3em;
+  }
+
+  .selectedBookingTime{
+    font-size: 1.5em;
   }
 
   #signature {
