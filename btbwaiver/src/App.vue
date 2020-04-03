@@ -50,35 +50,35 @@
 
     <br> <br>
 
-    <!--
+    
     <div v-for="(year,index) in timeList" v-model="selectedTime">
 
-      <b-button block pill variant="outline-info" id="fetchButtonGap" v-model:value="index,year" v-on:click="showTheTime();">
+      <b-button block pill variant="outline-info" id="fetchButtonGap" v-model:value="index,year" v-on:click="showTheTime(); reservationTimeDiv = !reservationTimeDiv ; reservationNameDiv = !reservationNameDiv ;">
         {{year}}<br>
       </b-button>
-      <!-- <p><a href="#" @click.prevent="removeDuplicates">Remove duplicates</a></p>
+       <!-- <p><a href="#" @click.prevent="removeDuplicates">Remove duplicates</a></p> -->
 
     </div>
 
-    <button v-on:click="reservationTimeDiv = !reservationTimeDiv ; reservationNameDiv = !reservationNameDiv ;">
+  <!--   <button v-on:click="reservationTimeDiv = !reservationTimeDiv ; reservationNameDiv = !reservationNameDiv ;">
       NEXT
-    </button>
+    </button> -->
 
-      <select v-model="selectedTime">
+<!--       <select v-model="selectedTime">
     <option v-for="(year,index) in timeList"
             v-model:value="index">{{year}}</option>
     
   </select>
  <button v-on:click="showTheTime(); reservationTimeDiv = !reservationTimeDiv ; reservationNameDiv = !reservationNameDiv ;">
     click here
-  </button> -->
+  </button -->
 
-  <div>
+<!--   <div>
     <b-form-select variant="info" v-model="selectedTime" :select-size="4" class="reservationTimeOption">
       <option v-for="(year,index) in timeList" v-model:value="index">{{year}}</option>
     </b-form-select>
     <div class="mt-3 selectedBookingTime"> <strong> {{ selectedTime }}</strong> </div>
-  </div>
+  </div> -->
 
 
 
@@ -88,13 +88,18 @@
       <b-row>
 
         <b-col>
-           <b-button variant="primary" v-on:click="showAllTime(); reservationNameDiv = !reservationNameDiv, reservationTimeDiv = !reservationTimeDiv">DONT KNOW</b-button>
+           
         </b-col>
 
-        <b-col></b-col>
+        <b-col>
+          
+          <b-button variant="primary" v-on:click="showAllTime(); reservationNameDiv = !reservationNameDiv, reservationTimeDiv = !reservationTimeDiv">DONT KNOW</b-button>
+
+
+        </b-col>
 
         <b-col>
-          <b-button variant="outline-primary" v-on:click="showTheTime(); reservationTimeDiv = !reservationTimeDiv ; reservationNameDiv = !reservationNameDiv ;">NEXT</b-button>
+
         </b-col>
 
       </b-row>
@@ -179,22 +184,47 @@
       What is your Email ?
     </span>
     <br>
-    <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+    <!-- <b-form @submit="onSubmit" @reset="onReset" v-if="show"> -->
       <b-form-group
         id="input-group-1"
         label-for="input-1"
         description="We will use this to send your bomb photos, Please make sure its correct."
       >
-      </b-form-group>
+    </b-form-group>
+      <b-form-group>
         <b-form-input
           id="inputField"
           v-model="email"
           type="email"
           required
-          placeholder="Enter email"
-        ></b-form-input>
-
+          placeholder="Enter email">
+        </b-form-input>
+      </b-form-group>
+    
     <br><br>
+
+    <span style="font-size: 1.2em;">
+      {{ instagramTitle }}
+    </span>
+    <b-form-group
+        id="input-group-1"
+        label-for="input-1"
+      >
+      </b-form-group>
+
+      <b-form-group>
+        <b-form-input
+          id="inputField"
+          v-model="instagram"
+          type="text"
+          required
+          placeholder="Instagram handle">
+        </b-form-input>
+      </b-form-group>
+
+      <span style="font-size: 0.8em;">If you don't have one, please enter @bombsquad</span>
+
+      <br><br><br>
 
     <span style="font-size: 1.2em;">
       Interested in getting promotional emails from Beat The Bomb?
@@ -498,7 +528,7 @@
         <b-col></b-col>
 
         <b-col>
-            <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv ; waiverSubmitted = ! waiverSubmitted;">DONE</b-button>
+            <b-button variant="primary" v-on:click="reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = ! waiverSubmitted;">DONE</b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -507,11 +537,17 @@
 
   </div>
 
-  <div v-show="!waiverSubmitted">
+  <div v-show="!waiverSubmitted" class="waiverSubmittedClass">
 
-   <span style="font-size: 1.2em; color: #17a2b8;"> Thank you {{ firstname }} {{ lastname }} for signing out the waiver. <br/>
-    This page will reload after {{ time }} seconds  </span>
+   <span> Thank you for signing out the waiver.<br><br>
 
+    When your team has all completed their waivers, please return to the front desk to finalize payment.
+
+    <br/><br/>
+
+    This page will reload to home page after certain seconds. </span>
+
+    <br/> <br/>
 
 
   </div>
@@ -574,11 +610,11 @@ export default {
 
    computed: {
     isDisableComputed() {
-      return this.email.length < 5;      
+      return this.email.length < 3 && this.instagram.length < 3;      
     },
     
     isDisableFixedFirstName(){
-      return this.lastname.length && this.firstname.length < 3;
+      return this.lastname.length < 3 && this.firstname.length < 3;
     },
 
     validateGenderField(){
@@ -588,6 +624,10 @@ export default {
     time: function(){
       return this.date.format('mm:ss');
     }
+
+    // validateInstagram(){
+    //   return this.instagram.length < 3;
+    // }
 
   },
 
@@ -599,7 +639,7 @@ export default {
         
 let next15Minutes = moment().add(15, 'minutes');
           next15Minutes.minutes(Math.floor(next15Minutes.minutes() / 15) * 15);
-           this.timeList.push(next15Minutes.format('hh:mm A'));
+           this.timeList.push(next15Minutes.format('h:mm A'));
            const timetest = next15Minutes;
            const timetest1 = next15Minutes;
 
@@ -613,14 +653,14 @@ let next15Minutes = moment().add(15, 'minutes');
         //  let currenttime2 = currentTime;
           timetest.add(15, 'minutes');
           timetest.minutes(Math.floor(timetest.minutes() / 15) * 15);
-          this.timeList.push(timetest.format('hh:mm A'));
+          this.timeList.push(timetest.format('h:mm A'));
         //this.timeList.push( moment().format("HH") + ":" + quaterMinute[i] );
          // current.subtract(15, "minutes");
         }
         else{
            timetest1.subtract(15, 'minutes');
           timetest1.minutes(Math.floor(timetest1.minutes() / 15) * 15);
-          this.timeList.push(timetest1.format('hh:mm A'));
+          this.timeList.push(timetest1.format('h:mm A'));
          // next15Minutes.format('HH:mm');
        // this.timeList.push( moment().format("HH") + ":" + quaterMinute[i] );
        //   current.add(15, "minutes");
@@ -674,11 +714,13 @@ let next15Minutes = moment().add(15, 'minutes');
         minorsAddDiv: true,
         waiverSubmitted: true,
         date: moment(60 * 10 * 1000),
+        timerCount: '10',
 
         email: '',
         firstname: '',
         lastname: '',
         gender: '',
+        instagram: '',
 
         greetings: 'Welcome to BEAT THE BOMB',
         reservationTimeTitle: 'Please select your reservation time:',
@@ -687,6 +729,7 @@ let next15Minutes = moment().add(15, 'minutes');
         minorNameTitle: 'Are you responsible for any minors in your group today? Please check the off below to sign a waiver for them.',
         signDivTitle: 'Please sign with your finger',
         noBookingTitle: 'No booking name. Please go back and select your actual booking time.',
+        instagramTitle: "Instagram Username for your PLAYER NAME. ",
         modalTimeDialog: false,
         modalNameDialog: false,
         randomNumber: "https://btbwaiver/llecnas9841"+Math.floor(Math.random() * 1000000000)+"652602/",
@@ -752,6 +795,24 @@ let next15Minutes = moment().add(15, 'minutes');
     }
 
     },
+
+    watch: {
+
+            timerCount: {
+                handler(value) {
+
+                    if (value > 0) {
+                        setTimeout(() => {
+                            this.timerCount--;
+                        }, 1000);
+                    }
+
+                },
+                immediate: true // This ensures the watcher is triggered upon creation
+            }
+
+        },
+
 
     methods:{
       onSubmit(evt) {
@@ -848,15 +909,14 @@ let next15Minutes = moment().add(15, 'minutes');
 
      },
 
-     showTheTime: function (event){
+     showTheTime: function (){
       // alert(this.selectedTime);
-      // console.log(event.target.value);
-      // var standardTimeFormat = event.target.value;
+       // console.log(event.target.value);
+      var standardTimeFormat = event.target.value;
 
-      var standardTimeFormat = this.selectedTime;
-
-      console.log(this.selectedTime);
-      console.log(standardTimeFormat);
+      // var standardTimeFormat = this.selectedTime;
+      // console.log(this.selectedTime);
+      // console.log(standardTimeFormat);
 
       var militaryTimeFormat = moment(standardTimeFormat, "h:mm A").format("HHmm");
       // var militaryTimeFormat = moment(this.selectedTime).format("HHMM");
@@ -884,6 +944,20 @@ let next15Minutes = moment().add(15, 'minutes');
 
      },
 
+     reloadfunction(){
+
+        // alert("SA");
+        // location.reload();
+        // alert("RD");
+        setTimeout(location.reload.bind(location), 9000);
+     },
+
+     // onShowTimeHideDiv(){
+     //  console.log("INSIDE");
+     //    this.reservationNameDiv ^="true";
+     //    // this.reservationTimeDiv = this.!reservationTimeDiv
+     // },
+
 
      showAllTime: function (event){
 
@@ -899,7 +973,11 @@ let next15Minutes = moment().add(15, 'minutes');
       return email.length > 5;
       },
 
-      isDisableFixedFirstName(firstname) {
+      validateInstagram(instagram){
+        return text.length > 3;
+      },
+
+      isDisableFixedFName(firstname) {
       return text.length > 2;
       },
 
@@ -907,7 +985,7 @@ let next15Minutes = moment().add(15, 'minutes');
         return text.length > 2;
       },
 
-      validateGenderField(gender){
+      validateGender(gender){
         return text.length > 0;
       }
 
@@ -994,6 +1072,13 @@ let next15Minutes = moment().add(15, 'minutes');
 
   .selectedBookingTime{
     font-size: 1.5em;
+  }
+
+  .waiverSubmittedClass{
+    font-size: 1.1em;
+    text-align: left;
+    margin-top: 8%;
+    margin-left: 5%;
   }
 
   #signature {
