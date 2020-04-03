@@ -421,18 +421,23 @@
     <div class="work-experiences">
 
         <div class="form-row" v-for="(experience, index) in minorsDetail" :key="index">
-          <div class="form-group" id="minorsInput">
+
+          <div class="col">
             <label id="minorHeading">Minor's full name</label>
-            <input v-model="experience.company" :name="`minorsDetail[${index}][company]`" type="text" class="form-control" placeholder="Minor Full Name">
+            <input v-model="experience.company" :name="`minorsDetail[${index}][company]`" type="text" class="form-control" placeholder="Minor Full Name"/>
           </div>
-          <div class="form-group" id="minorsInput">
+
+          <div class="col">
             <label id="minorHeading">Minor's date of birth</label>
             <!-- <input v-model="experience.title" :name="`minorsDetail[${index}][minordob]`" type="date" class="form-control" placeholder="DOB"> -->
-            <date-dropdown default="1993.01.10" min="1940" max="2020" :months-names="months" v-model="selectedDate" id="dateDropdownDesign">
-        </date-dropdown>
+            <date-dropdown default="1993.01.10" min="1940" max="2020" :months-names="months" v-model="selectedDate">
+            </date-dropdown>
+
           </div>
+
         </div>
-      </div>
+    
+    </div>
 
     <br>
 
@@ -505,7 +510,7 @@
         <div class="col-3 mt-2">
           <button class="btn btn-outline-secondary" @click="undo">Undo</button>
         
-          <button class="btn btn-outline-primary" @click="change">Reset</button>
+          <!-- <button class="btn btn-outline-primary" @click="change">Reset</button> -->
         </div>
         <!-- <div class="col-3 mt-2">
           <button class="btn btn-outline-primary" @click="resume">Resume</button>
@@ -545,7 +550,7 @@
 
     <br/><br/>
 
-    This page will reload to home page after certain seconds. </span>
+    This page will direct to waiver after 10 seconds. </span>
 
     <br/> <br/>
 
@@ -610,7 +615,7 @@ export default {
 
    computed: {
     isDisableComputed() {
-       if (this.email.length > 6 && this.instagram.length > 4) {
+       if (this.email.length > 6 && this.instagram.length > 3) {
         return false;
       } else {
         return true;
@@ -1090,6 +1095,14 @@ let next15Minutes = moment().add(15, 'minutes');
     margin-top: 8%;
     margin-left: 5%;
     color: #17a2b8;
+  }
+
+  #minorsInputFullname{
+    margin-left: 0%;
+  }
+
+  #minorsInputDiv{
+    margin-right: 7%;
   }
 
   #signature {
