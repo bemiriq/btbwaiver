@@ -610,11 +610,21 @@ export default {
 
    computed: {
     isDisableComputed() {
-      return this.email.length < 3 && this.instagram.length < 3;      
+       if (this.email.length > 6 && this.instagram.length > 4) {
+        return false;
+      } else {
+        return true;
+      }
+            
     },
+
     
     isDisableFixedFirstName(){
-      return this.lastname.length < 3 && this.firstname.length < 3;
+       if (this.firstname.length > 1 && this.lastname.length > 1) {
+        return false;
+      } else {
+        return true;
+      }
     },
 
     validateGenderField(){
@@ -633,7 +643,7 @@ export default {
 
   mounted: function(){
    const current = new moment().format("hh:mm");
-   console.log(current);
+   // console.log(current);
    var quaterMinute = ["15","30","30","45"];
 
         
@@ -644,7 +654,7 @@ let next15Minutes = moment().add(15, 'minutes');
            const timetest1 = next15Minutes;
 
 
-  console.log();
+  // console.log();
    // var mycurrenttime = current.subtract(1, 'hours');
    for(let i=0;i<5;i++){
     
@@ -674,12 +684,12 @@ let next15Minutes = moment().add(15, 'minutes');
    this.timeList = [ ...new Set(this.timeList) ];
 
     // var arrivalDate = moment();
-    // console.log(arrivalDate);
-    console.log(this.selectedTime);
-     // console.log(this.arrivalTime1);
+    // // console.log(arrivalDate);
+    // console.log(this.selectedTime);
+     // // console.log(this.arrivalTime1);
     var arrivalDate = moment().format('YYYY-MM-DD');
     var arrivalTime = this.arrivalTime1;
-    // console.log(arrivalTime1);
+    // // console.log(arrivalTime1);
 
     // var arrivalTime = '1530';
     // var arrivalTime1 = '1715';
@@ -840,8 +850,8 @@ let next15Minutes = moment().add(15, 'minutes');
       const { isEmpty, data } = this.$refs.signaturePad.saveSignature();
 
       alert("Open DevTools see the save data.");
-      console.log(isEmpty);
-      console.log(data);
+      // console.log(isEmpty);
+      // console.log(data);
     },
     change() {
       this.options = {
@@ -904,23 +914,23 @@ let next15Minutes = moment().add(15, 'minutes');
 
        })
        .catch(function (error) {
-           console.log(error);
+           // console.log(error);
        });
 
      },
 
      showTheTime: function (){
       // alert(this.selectedTime);
-       // console.log(event.target.value);
+       // // console.log(event.target.value);
       var standardTimeFormat = event.target.value;
 
       // var standardTimeFormat = this.selectedTime;
-      // console.log(this.selectedTime);
-      // console.log(standardTimeFormat);
+      // // console.log(this.selectedTime);
+      // // console.log(standardTimeFormat);
 
       var militaryTimeFormat = moment(standardTimeFormat, "h:mm A").format("HHmm");
       // var militaryTimeFormat = moment(this.selectedTime).format("HHMM");
-      console.log(militaryTimeFormat);
+      // console.log(militaryTimeFormat);
 
     var arrivalDate = moment().format('YYYY-MM-DD');
     // var arrivalTime = this.militaryTimeFormat;
@@ -930,7 +940,7 @@ let next15Minutes = moment().add(15, 'minutes');
 
        // var x = document.getElementById("reservationTimeDiv");
        // var y = document.getElementById("reservationNameDiv");
-       // console.log(x);
+       // // console.log(x);
        //  if (x.style.display = "block") {
        //    y.style.display = "block";
        //    // x.style.display = "block";
@@ -953,7 +963,7 @@ let next15Minutes = moment().add(15, 'minutes');
      },
 
      // onShowTimeHideDiv(){
-     //  console.log("INSIDE");
+     //  // console.log("INSIDE");
      //    this.reservationNameDiv ^="true";
      //    // this.reservationTimeDiv = this.!reservationTimeDiv
      // },
@@ -1003,12 +1013,12 @@ let next15Minutes = moment().add(15, 'minutes');
 //           axios.get('https://sandbox1.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7').then(response => (
 
 
-//               // console.log(response);
+//               // // console.log(response);
 //              //access the reponse object
 //               this.posts = response.data.bpi;
 //               // this.id =
 //           ))
-//           .catch(error => console.log(error));
+//           .catch(error => // console.log(error));
 //     }
 
 ;
@@ -1079,6 +1089,7 @@ let next15Minutes = moment().add(15, 'minutes');
     text-align: left;
     margin-top: 8%;
     margin-left: 5%;
+    color: #17a2b8;
   }
 
   #signature {
