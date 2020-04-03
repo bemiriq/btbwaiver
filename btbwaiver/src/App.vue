@@ -687,6 +687,8 @@ let next15Minutes = moment().add(15, 'minutes');
    }
 
    this.timeList = [ ...new Set(this.timeList) ];
+   this.timeList.sort(); //this will sort out the time from ascending to descending
+   this.timeList.reverse(); //used reverse to change asc/desc to desc/asc
 
     // var arrivalDate = moment();
     // // console.log(arrivalDate);
