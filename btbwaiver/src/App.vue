@@ -80,7 +80,7 @@
         <br><br>
 
         <div v-for="post in posts" :key="post.customerName">
-          <b-button block pill variant="outline-info" id="fetchButtonGap" v-on:click="reservationNameDiv = !reservationNameDiv, emailDiv = !emailDiv">
+          <b-button block pill variant="outline-info" id="fetchButtonGap" v-on:click="reservationNameDiv = !reservationNameDiv, fullnameDiv = !fullnameDiv">
             {{post.customerName}}
           </b-button>
         </div>
@@ -103,7 +103,7 @@
                 <b-button v-b-modal="'modalName'">DONT KNOW</b-button>
 
                 <b-modal id="modalName" centered title="Booking Name Required">
-                  <p class="my-4">Please ask front desk staff for the help !</p>
+                  <p class="my-4">Please ask the front desk staff for assistance.</p>
                 </b-modal>
               </div>
 
@@ -118,112 +118,6 @@
         <br> <br>
 
       </div>
-
-
-      <div v-show="!emailDiv">
-        <!-- <p>SAN 2</p> -->
-        <br><br>
-
-        <span style="font-size: 1.5em;">
-          What is your Email ?
-        </span>
-        <br>
-        <!-- <b-form @submit="onSubmit" @reset="onReset" v-if="show"> -->
-          <b-form-group
-          id="input-group-1"
-          label-for="input-1"
-          description="We will use this to send your bomb photos, Please make sure its correct."
-          >
-        </b-form-group>
-        <b-form-group>
-          <b-form-input
-          id="inputField"
-          v-model="email"
-          type="email"
-          required
-          placeholder="Enter email">
-        </b-form-input>
-      </b-form-group>
-
-      <br><br>
-        <span style="font-size: 1.2em;">
-          {{ cellphoneTitle }}
-        </span>
-            <b-form-group
-            id="input-group-1"
-            label-for="input-1"
-            >
-          </b-form-group>
-
-          <b-form-group>
-            <b-form-input
-            id="inputField"
-            v-model="cellphone"
-            type="text"
-            required
-            placeholder="Cellphone Number">
-          </b-form-input>
-        </b-form-group>
-      <br><br>
-
-      <span style="font-size: 1.2em;">
-        {{ instagramTitle }}
-      </span>
-      <b-form-group
-      id="input-group-1"
-      label-for="input-1"
-      >
-    </b-form-group>
-
-    <b-form-group>
-      <b-form-input
-      id="inputField"
-      v-model="instagram"
-      type="text"
-      required
-      placeholder="Instagram handle">
-    </b-form-input>
-  </b-form-group>
-
-  <span style="font-size: 0.8em;">If you don't have one, please enter @bombsquad</span>
-
-  <br><br><br>
-
-  <span style="font-size: 1.2em;">
-    Interested in getting promotional emails from Beat The Bomb?
-  </span>
-
-  <br><br>
-
-  <b-form-radio-group
-  v-model="selected"
-  :options="options"
-  class="mb-3"
-  value-field="item"
-  text-field="name"
-  ></b-form-radio-group>
-
-  </b-form>
-
-  <br>
-
-  <b-container class="bv-example-row">
-    <b-row>
-      <b-col>
-        <b-button variant="outline-primary" v-on:click="emailDiv = !emailDiv, reservationNameDiv = !reservationNameDiv">BACK</b-button>
-      </b-col>
-
-      <b-col></b-col>
-
-      <b-col>
-        <b-button variant="primary" v-on:click="emailDiv = !emailDiv, fullnameDiv = !fullnameDiv" v-bind:disabled="isDisableComputed">NEXT</b-button>
-      </b-col>
-    </b-row>
-  </b-container>
-
-  <br> <br>
-
-  </div>
 
 
   <div v-show="!fullnameDiv">
@@ -294,19 +188,143 @@
   <b-container class="bv-example-row">
     <b-row>
       <b-col>
-        <b-button variant="outline-primary" v-on:click="fullnameDiv = !fullnameDiv, emailDiv = !emailDiv">BACK</b-button>
+        <b-button variant="outline-primary" v-on:click="fullnameDiv = !fullnameDiv, reservationNameDiv = !reservationNameDiv">BACK</b-button>
       </b-col>
 
       <b-col></b-col>
 
       <b-col>
-        <b-button variant="primary" v-on:click="fullnameDiv = !fullnameDiv, genderDiv = !genderDiv" v-bind:disabled="isDisableFixedFirstName">NEXT</b-button>
+        <b-button variant="primary" v-on:click="fullnameDiv = !fullnameDiv, emailDiv = !emailDiv" v-bind:disabled="isDisableFixedFirstName">NEXT</b-button>
       </b-col>
     </b-row>
   </b-container>
 
   <br> <br>
 
+
+  </div>
+
+
+        <div v-show="!emailDiv">
+        <!-- <p>SAN 2</p> -->
+        <br><br>
+        <!-- <div style="margin-left: 1%; text-align: left; margin-right: 15%;">
+            <span style="font-size: 1.5em;">
+              What is your Email ?
+            </span>
+
+        </div> -->
+
+            <br>
+            <!-- <b-form @submit="onSubmit" @reset="onReset" v-if="show"> -->
+
+              <b-form-group
+      id="input-group-1"
+      label="Email Address"
+      label-for="input-1" class="nameTitle">
+    </b-form-group>
+
+            <b-form-group>
+              <b-form-input
+              id="inputField"
+              v-model="email"
+              type="email"
+              required
+              placeholder="Enter Email Address" >
+            </b-form-input>
+          </b-form-group>
+
+          <b-form-group
+              id="input-group-1"
+              label-for="input-1"
+              description="We will use this address to share your FREE photos & videos. Please ensure the information is accurate."
+              >
+            </b-form-group>
+
+          <br><br>
+            <b-form-group
+      id="input-group-1"
+      label="Phone Number"
+      label-for="input-1" class="nameTitle">
+    </b-form-group>
+
+              <b-form-group>
+                <b-form-input
+                id="inputField"
+                v-model="cellphone"
+                type="text"
+                required
+                placeholder="Enter Cell Phone Number">
+              </b-form-input>
+            </b-form-group>
+
+            <b-form-group
+              id="input-group-1"
+              label-for="input-1"
+              description="If you choose to share your number, we will text you your FREE photos & videos."
+              >
+            </b-form-group>
+
+            
+
+
+          <br><br>
+
+          <b-form-group
+      id="input-group-1"
+      label="Instagram Username"
+      label-for="input-1" class="nameTitle">
+    </b-form-group>
+
+        <b-form-group>
+          <b-form-input
+          id="inputField"
+          v-model="instagram"
+          type="text"
+          required
+          placeholder="Enter Instagram Handle">
+        </b-form-input>
+      </b-form-group>
+      <b-form-group id="input-group-1" label-for="input-1" description="Share your handle for a chance to be featured on our official Instagram channel.">
+      </b-form-group>
+
+  <!-- <span style="font-size: 0.8em;">If you don't have one, please enter @bombsquad</span> -->
+
+  <br><br>
+
+<b-form-group
+      id="input-group-1"
+      label="Interested in getting promotional emails from Beat The Bomb?"
+      label-for="input-1" class="nameTitle">
+    </b-form-group>
+
+  <b-form-radio-group
+  v-model="selected"
+  :options="options"
+  class="mb-3"
+  value-field="item"
+  text-field="name"
+  ></b-form-radio-group>
+
+  </b-form>
+
+  <br>
+
+  <b-container class="bv-example-row">
+    <b-row>
+      <b-col>
+        <b-button variant="outline-primary" v-on:click="fullnameDiv = !fullnameDiv, emailDiv = !emailDiv">BACK</b-button>
+      </b-col>
+
+      <b-col></b-col>
+
+      <b-col>
+        <b-button variant="primary" v-on:click="emailDiv = !emailDiv, genderDiv = !genderDiv" v-bind:disabled="isDisableComputed">NEXT</b-button>
+      </b-col>
+    </b-row>
+  </b-container>
+
+  <br> <br>
 
   </div>
 
@@ -337,7 +355,7 @@
     <b-container class="bv-example-row">
       <b-row>
         <b-col>
-          <b-button variant="outline-primary" v-on:click="genderDiv = !genderDiv, fullnameDiv = !fullnameDiv">BACK</b-button>
+          <b-button variant="outline-primary" v-on:click="genderDiv = !genderDiv, emailDiv = !emailDiv">BACK</b-button>
         </b-col>
 
         <b-col></b-col>
@@ -362,44 +380,38 @@
       <div class="form-check">
         <input class="form-check-input" type="checkbox" value="My friend (or loved one) invited me to come with them today" v-model="hearAboutUs">
         <label class="form-check-label" for="defaultCheck1">
-          My friend (or loved one) invited me to come with them today
+          Heard about it directly from a friend, family or colleague
         </label>
       </div>
       <div class="form-check">
         <input class="form-check-input" type="checkbox" value="From someone who had already done Beat The Bomb" v-model="hearAboutUs">
         <label class="form-check-label" for="defaultCheck2">
-          From someone who had already done Beat The Bomb
+          Saw it on a friend's social media 
         </label>
       </div>
       <div class="form-check">
         <input class="form-check-input" type="checkbox" value="I saw it on a friend's Instagram, FB, or Snapchat!" v-model="hearAboutUs">
         <label class="form-check-label" for="defaultCheck2">
-          I saw it on a friend's Instagram, FB, or Snapchat!
+          Advertisement on Facebook or Instagram
         </label>
       </div>
       <div class="form-check">
         <input class="form-check-input" type="checkbox" value="Beat The Bomb's advertisement on Instagram or Facebook" v-model="hearAboutUs">
         <label class="form-check-label" for="defaultCheck2">
-          Beat The Bomb's advertisement on Instagram or Facebook
+          Google search
         </label>
       </div>
       <div class="form-check">
         <input class="form-check-input" type="checkbox" value="I did a Google search for something fun to do, and it happened to popped up" v-model="hearAboutUs">
         <label class="form-check-label" for="defaultCheck2">
-          I did a Google search for something fun to do, and it happened to popped up
+          Trip Advisor, Yelp or other Review site 
         </label>
       </div>
       <div class="form-check">
         <input class="form-check-input" type="checkbox" value="I was searching Yelp / Trip Advisor / or another reviews site for something fun"
          v-model="hearAboutUs">
         <label class="form-check-label" for="defaultCheck2">
-          I was searching Yelp / Trip Advisor / or another reviews site for something fun
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="Other" v-model="hearAboutUs">
-        <label class="form-check-label" for="defaultCheck2">
-          Other
+         Other
         </label>
       </div>
 
@@ -526,7 +538,7 @@
   </div>
 
    <div>
-    <b-button v-b-modal.modal-scrollable variant="info">View Waiver</b-button>
+    <b-button v-b-modal.modal-scrollable variant="info">View Full Waiver</b-button>
 
       <b-modal id="modal-scrollable" scrollable title="Waiver Legal">
         <p class="my-4">
@@ -619,13 +631,13 @@
 
   <div v-show="!waiverSubmitted" class="waiverSubmittedClass">
 
-   <span> Thank you for signing out the waiver.<br><br>
+   <span> Thank you for completing the waiver.<br><br>
 
     When your team has all completed their waivers, please return to the front desk to finalize payment.
 
     <br/><br/>
 
-  This page will direct to waiver after 10 seconds. </span>
+  This app will reset in 10 seconds. </span>
 
   <br/> <br/>
 
@@ -677,7 +689,7 @@
 
     computed: {
       isDisableComputed() {
-       if (this.email.length > 6 && this.instagram.length > 3 && this.cellphone.length > 9 ) {
+       if (this.email.length > 6 && this.cellphone.length > 9 ) {
         return false;
       } else {
         return true;
@@ -721,19 +733,19 @@
 
    for(let i=0;i<5;i++){
 
-
     if(i<1){
           //  let currenttime2 = currentTime;
-          timetest.add(15, 'minutes');
-          timetest.minutes(Math.floor(timetest.minutes() / 15) * 15);
-          this.timeList.push(timetest.format('h:mm A'));
+          timetest1.subtract(15, 'minutes');
+           timetest1.minutes(Math.floor(timetest1.minutes() / 15) * 15);
+           this.timeList.push(timetest1.format('h:mm A'));
+          
           //this.timeList.push( moment().format("HH") + ":" + quaterMinute[i] );
            // current.subtract(15, "minutes");
          }
          else{
-           timetest1.subtract(15, 'minutes');
-           timetest1.minutes(Math.floor(timetest1.minutes() / 15) * 15);
-           this.timeList.push(timetest1.format('h:mm A'));
+            timetest.add(15, 'minutes');
+          timetest.minutes(Math.floor(timetest.minutes() / 15) * 15);
+          this.timeList.push(timetest.format('h:mm A'));
            // next15Minutes.format('HH:mm');
          // this.timeList.push( moment().format("HH") + ":" + quaterMinute[i] );
          //   current.add(15, "minutes");
@@ -761,6 +773,8 @@
      //axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime)+","+arrivalTime1
      axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime)
      .then(response => (this.posts = response.data.data));
+     this.posts.sort();
+     console.log(this.posts);
 
      setInterval(() => {
       this.date = moment(this.date.subtract(1, 'seconds'))
@@ -841,7 +855,7 @@
          {genderitem: 'Male', name: 'Male'},
          {genderitem: 'Female', name: 'Female'},
          {genderitem: 'Non-binary', name: 'Non-binary'},
-         {genderitem: 'Other', name: 'Other'}
+         {genderitem: 'Other', name: 'I would prefer not to answer'}
          ],
 
          signatureoptions:{
@@ -1116,6 +1130,12 @@
 
   .nameTitle{
     font-size: 1.1em;
+    text-align: left;
+    margin-left: 21%;
+  }
+
+  .fullNameTitle{
+    font-size: 1.3em;
     text-align: left;
     margin-left: 21%;
   }
