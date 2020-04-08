@@ -219,9 +219,7 @@
             <!-- <b-form @submit="onSubmit" @reset="onReset" v-if="show"> -->
 
               <b-form-group
-      id="input-group-1"
-      label="Email Address"
-      label-for="input-1" class="nameTitle">
+      id="input-group-1" class="nameTitle"> Enter Email Address <span style="color:red;">*</span>
     </b-form-group>
 
             <b-form-group>
