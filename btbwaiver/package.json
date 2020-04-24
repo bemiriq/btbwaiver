@@ -6,8 +6,8 @@
   "author": "sandesh phuyal <sandeshphuyalc6@gmail.com>",
   "scripts": {
     "build": "node build/build.js",
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "npm run dev"
+    "serve": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "start": "npm run serve"
   },
   "dependencies": {
     "bootstrap-vue": "^2.1.0",

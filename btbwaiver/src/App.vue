@@ -1,6 +1,16 @@
   <template>
 
     <div id="app">
+      <br/>
+
+      <!-- submit this form data to btb api -->
+      <!-- <form>
+        <label> Player Name </label>
+        <input type="text" v-model="first_name"/>
+        <button @click="submitForm()">ADD</button>
+      </form> -->
+
+
       <br>
       <div>
         <!-- <img alt="Vue logo" src="./assets/btb.png"> -->
@@ -130,13 +140,13 @@
       <b-form-group
       id="input-group-1"
       label="First Name"
-      label-for="input-1" class="nameTitle">
+      label-for="input-1" class="nameTitle" >
     </b-form-group>
 
     <b-form-group
     <b-form-input
     id="inputField"
-    v-model="firstname"
+    v-model="first_name"
     type="text"
     required
     placeholder="Enter your first name"
@@ -155,7 +165,7 @@
 
     <b-form-input
     id="inputField"
-    v-model="lastname"
+    v-model="last_name"
     type="text"
     required
     placeholder="Enter your last name"
@@ -177,7 +187,7 @@
     min="1940" 
     max="2020"
     :months-names="months" 
-    v-model="selectedDate" id="dateDropdownDesign">
+    v-model="date_of_birth" id="dateDropdownDesign">
   </date-dropdown>
   </b-form-group>
 
@@ -249,7 +259,7 @@
               <b-form-group>
                 <b-form-input
                 id="inputField"
-                v-model="cellphone"
+                v-model="phone"
                 type="text"
                 required
                 placeholder="Enter Cell Phone Number">
@@ -341,7 +351,7 @@
     :options="genderoptions"
     class="mb-3"
     type="text"
-    v-model="gender"
+    v-model="gender_id"
     value-field="genderitem"
     text-field="name"
     ></b-form-radio-group>
@@ -472,17 +482,27 @@
 
       <div class="work-experiences">
 
-      <div class="form-row" v-for="(experience, index) in minorsDetail" :key="index">
+      <div class="form-row" v-for="(minordatabase, index) in minorsDetail" :key="index">
 
-        <div class="col" style="margin-left: 8%;">
+       <!--  <div class="col" style="margin-left: 8%;">
           <label id="minorHeading">Minor's full name</label>
-          <input v-model="experience.company" :name="`minorsDetail[${index}][company]`" type="text" class="form-control" placeholder="Minor Full Name"/>
+          <input v-model="minorsDetail.first_name" :name="`minorsDetail[${index}][first_name]`" type="text" class="form-control" placeholder="Minor Full Name"/>
+        </div> -->
+
+         <div class="col" style="margin-left: 8%;">
+          <label id="minorHeading">Minor's full name</label>
+          <input v-model="minorsDetail.first_name" type="text" class="form-control" placeholder="Minor Full Name"/>
         </div>
+
+
+        <!-- <div class="col" style="margin-left: 8%;">
+          <input v-model="minordatabase.first_name" type="text" placeholder="Type your first name" />
+        </div> -->
 
         <div class="col" style="margin-left:10%;">
           <label id="minorHeading" style="margin-right: 35%;">Minor's date of birth</label>
           <!-- <input v-model="experience.title" :name="`minorsDetail[${index}][minordob]`" type="date" class="form-control" placeholder="DOB"> -->
-          <date-dropdown default="1993.01.10" min="1940" max="2020" :months-names="months" v-model="selectedDate">
+          <date-dropdown default="1993.01.10" min="1940" max="2020" :months-names="months" v-model="minorsDetail.date_of_birth">
           </date-dropdown>
 
         </div>
@@ -618,7 +638,8 @@
       <b-col></b-col>
 
       <b-col>
-        <b-button variant="primary" v-on:click="reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = ! waiverSubmitted;">DONE</b-button>
+        <b-button variant="primary" v-on:click="submitForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = ! waiverSubmitted;">DONE</b-button>
+        <!-- <b-button variant="primary" v-on:click="submitForm(); minorsignDiv = !minorsignDiv ; waiverSubmitted = ! waiverSubmitted;">DONE</b-button> -->
       </b-col>
     </b-row>
   </b-container>
@@ -687,7 +708,7 @@
 
     computed: {
       isDisableComputed() {
-       if (this.email.length > 6 && this.cellphone.length > 9 ) {
+       if (this.email.length > 6 && this.phone.length > 9 ) {
         return false;
       } else {
         return true;
@@ -697,7 +718,7 @@
 
 
     isDisableFixedFirstName(){
-     if (this.firstname.length > 1 && this.lastname.length > 1) {
+     if (this.first_name.length > 1 && this.last_name.length > 1) {
       return false;
     } else {
       return true;
@@ -705,7 +726,7 @@
   },
 
   validateGenderField(){
-    return this.gender.length < 1;
+    return this.gender_id.length < 0;
   },
 
   valiadateHearAboutUs(){
@@ -808,12 +829,12 @@
          { item: 'B', name: 'NO', value: 'B'},
          ],
 
-      email: '',
+      // email: '',
       firstname: '',
       lastname: '',
       gender: '',
-      instagram: '',
-      cellphone: '',
+      // instagram: '',
+      phone: '',
       hearAboutUs: [],
 
       greetings: 'Welcome to BEAT THE BOMB',
@@ -825,7 +846,7 @@
       signDivTitle: 'Please review our waiver and then sign below.',
       noBookingTitle: 'No booking name. Please go back and select your actual booking time.',
       instagramTitle: "Instagram Username ",
-      cellphoneTitle: "Phone number for Team Beat The Bomb Images",
+      phoneTitle: "Phone number for Team Beat The Bomb Images",
       hearAboutUsTitle: 'Where did you first hear about us ?',
       modalTimeDialog: false,
       modalNameDialog: false,
@@ -850,10 +871,10 @@
          ],
 
          genderoptions: [
-         {genderitem: 'Male', name: 'Male'},
-         {genderitem: 'Female', name: 'Female'},
-         {genderitem: 'Non-binary', name: 'Non-binary'},
-         {genderitem: 'Other', name: 'I would prefer not to answer'}
+         {genderitem: '2', name: 'Male'},
+         {genderitem: '1', name: 'Female'},
+         {genderitem: '3', name: 'Non-binary'},
+         {genderitem: '4', name: 'I would prefer not to answer'}
          ],
 
          signatureoptions:{
@@ -862,10 +883,28 @@
 
         minorsDetail: [
         {
-          minorsName: "",
+          first_name: "",
+          date_of_birth: "",
           title: "Date of Birth"
         }
         ],
+
+        /* post data to api*/
+        first_name:"",
+        last_name:"",
+        date_of_birth:"",
+        gender_id:"",
+        instagram:"",
+        email:"",
+        /* above are items posted for people table*/
+
+        /*below are the objects posted for player_minors table*/
+        minordatabase:
+        {
+          date_of_birth:"",
+          first_name:""
+        },
+        /* end of player_minors table*/
 
         file: "",
 
@@ -1047,7 +1086,7 @@
       return text.length > 3;
     },
 
-    validateCellphone(cellphone){
+    validatephone(phone){
       return text.length > 9;
     },
 
@@ -1063,14 +1102,68 @@
       return text.length > 0;
     },
 
-    valiadateHearAboutUs(hearAboutUs){
-      return text.length > 0;
-    },
+    // valiadateHearAboutUs(hearAboutUs){
+    //   return text.length > 0;
+    // },
 
     checkedMinor(){
       $('input.chk').on('change', function() {
       $('input.chk').not(this).prop('checked', false);  
   });
+    },
+
+    submitForm(){
+
+      // var db_first_name = this.first_name;
+
+      // axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate)
+      // .then(response => (this.posts = response.data.data));
+
+      // console.log("submit_form");
+      
+
+      // .then(function (response) {
+      //   console.log(response);
+      // })
+      // .catch(function (error) {
+      //   console.log(error);
+      // });
+      // var san = this.first_name;
+      // console.log(san);
+      axios.post('http://localhost:9090/player_minors',{
+        first_name: this.minorsDetail.first_name,
+        date_of_birth: this.minorsDetail.date_of_birth
+
+      })
+
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+      console.log("Vitra chiris");
+
+      axios.post('http://localhost:9090/people',{
+        first_name: this.first_name,
+        last_name: this.last_name,
+        date_of_birth: this.date_of_birth,
+        gender_id: this.gender_id,
+        phone: this.phone,
+        email: this.email,
+        instagram: this.instagram
+
+      })
+
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+      console.log("chirey chirey");
+
+
     }
 
 
