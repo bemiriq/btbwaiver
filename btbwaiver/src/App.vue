@@ -7,11 +7,12 @@
       <!-- <form>
         <label> Player Name </label>
         <input type="text" v-model="first_name"/>
-        <button @click="submitForm()">ADD</button>
+        <button @click="submitPlayerForm()">ADD</button>
       </form> -->
 
 
       <br>
+
       <div>
         <!-- <img alt="Vue logo" src="./assets/btb.png"> -->
         <a href="/"><img center src="./assets/btb.png" alt="BTB LOGO" style="width:50%;"></img></a>
@@ -443,7 +444,7 @@
   </div>
 
 
-  <div v-show="!minorsAddDiv">
+ <div v-show="!minorsAddDiv">
 
         <br><br>
 
@@ -451,32 +452,9 @@
 
     <br><br>
 
-<!--     <b-form-group label="Individual radios" v-model="selectedNo">
-      <b-form-radio v-model="minorsChecked" name="some-radios" value="A" name="NO"> NO </b-form-radio>
-      <b-form-radio v-model="minorsChecked" name="some-radios" value="B" name="YES"> YES </b-form-radio>
-    </b-form-group> -->
-
       <b-form-radio-group v-model="minorsChecked" :options="optionsSelectedNo" class="mb-3" value-field="item" text-field="name">
         
       </b-form-radio-group>
-
-
- <!--    <div>
-      <input type="checkbox" size="lg" class="chk" @change="checkedMinor">
-
-      <span style="font-size: 1.0em;" checked>&nbsp;&nbsp; NO </span>
-    </div>
-
-    <div>
-      <input type="checkbox" size="lg" name="shipper" v-model="minorsChecked" class="chk" @change="checkedMinor">
-
-      <span style="font-size: 1.0em;">&nbsp;&nbsp; YES </span>
-
-    </div> -->
-    
-        <!-- <div id="divForCustomBroker" v-show="minorsChecked">
-          <label>I'm a custom broker</label>
-        </div> -->
 
     <div v-show="minorsChecked  === 'A' ">
 
@@ -484,30 +462,12 @@
 
       <div class="form-row" v-for="(minordatabase, index) in minorsDetail" :key="index">
 
-       <!--  <div class="col" style="margin-left: 8%;">
-          <label id="minorHeading">Minor's full name</label>
-          <input v-model="minorsDetail.first_name" :name="`minorsDetail[${index}][first_name]`" type="text" class="form-control" placeholder="Minor Full Name"/>
-        </div> -->
-
-         <div class="col" style="margin-left: 8%;">
+        <div class="col" style="margin-left: 8%;">
           <label id="minorHeading">Minor's full name</label>
           <input v-model="minorsDetail.first_name" type="text" class="form-control" placeholder="Minor Full Name"/>
         </div>
 
-
-        <!-- <div class="col" style="margin-left: 8%;">
-          <input v-model="minordatabase.first_name" type="text" placeholder="Type your first name" />
-        </div> -->
-
-        <div class="col" style="margin-left:10%;">
-          <label id="minorHeading" style="margin-right: 35%;">Minor's date of birth</label>
-          <!-- <input v-model="experience.title" :name="`minorsDetail[${index}][minordob]`" type="date" class="form-control" placeholder="DOB"> -->
-          <date-dropdown default="1993.01.10" min="1940" max="2020" :months-names="months" v-model="minorsDetail.date_of_birth">
-          </date-dropdown>
-
-        </div>
-
-        </div>
+      </div>
         
       </div>
 
@@ -535,12 +495,11 @@
         <b-col></b-col>
 
         <b-col>
-          <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv, minorsAddDiv = !minorsAddDiv">NEXT</b-button>
+          <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm();">SUBMIT</b-button> -->
+          <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv, minorsAddDiv = !minorsAddDiv" v-bind:disabled="valiadateHearAboutUs">NEXT</b-button>
         </b-col>
       </b-row>
     </b-container>
-
-    <br> <br>
 
   </div>
 
@@ -638,8 +597,8 @@
       <b-col></b-col>
 
       <b-col>
-        <b-button variant="primary" v-on:click="submitForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = ! waiverSubmitted;">DONE</b-button>
-        <!-- <b-button variant="primary" v-on:click="submitForm(); minorsignDiv = !minorsignDiv ; waiverSubmitted = ! waiverSubmitted;">DONE</b-button> -->
+        <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = ! waiverSubmitted;">DONE</b-button>
+        <!-- <b-button variant="primary" v-on:click="submit();">DONE</b-button> -->
       </b-col>
     </b-row>
   </b-container>
@@ -735,11 +694,31 @@
 
   time: function(){
     return this.date.format('mm:ss');
-  }
-
   },
 
+  // formData(){
+
+  //   return{
+
+  //         first_name: this.first_name
+  //         // date_of_birth: this.date_of_birth
+        
+  //   }
+
+  // }
+
+},
+
   mounted: function(){
+
+
+  axios.get('http://localhost:9090/people/22').then(response => (this.playersresult = response.data)); // this get is for player_minor table id
+  console.log(this.playersresult);
+  console.log("SA");
+
+
+  // console.log(this.playerLastId);
+
    const current = new moment().format("hh:mm");
    var quaterMinute = ["15","30","30","45"];
 
@@ -793,7 +772,7 @@
      axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime)
      .then(response => (this.posts = response.data.data));
      this.posts.sort();
-     console.log(this.posts);
+     // console.log(this.posts);
 
      setInterval(() => {
       this.date = moment(this.date.subtract(1, 'seconds'))
@@ -855,6 +834,10 @@
       months: 'Jan, Feb, Mar, Apr, May, Jun, July, Aug, Sep, Oct, Nov, Dec',
       timeList: [],
       posts: [],
+
+      playersresult: [],
+      playerLastId:  '',
+
       form:{
         email: '',
         name: '',
@@ -883,14 +866,14 @@
 
         minorsDetail: [
         {
-          first_name: "",
-          date_of_birth: "",
-          title: "Date of Birth"
+          first_name: [],
+          // date_of_birth: "",
+          // title: "Date of Birth"
         }
         ],
 
         /* post data to api*/
-        first_name:"",
+        // first_name:"",
         last_name:"",
         date_of_birth:"",
         gender_id:"",
@@ -898,12 +881,16 @@
         email:"",
         /* above are items posted for people table*/
 
+        first_name:"",
+        // date_of_birth:[],
+
         /*below are the objects posted for player_minors table*/
-        minordatabase:
-        {
-          date_of_birth:"",
-          first_name:""
-        },
+        // minordatabase:[
+        // {
+        //   date_of_birth:"",
+        //   first_name:""
+        // }
+        // ],
         /* end of player_minors table*/
 
         file: "",
@@ -944,28 +931,36 @@
           }
 
         },
-                  immediate: true // This ensures the watcher is triggered upon creation
-                }
+        
+        immediate: true // This ensures the watcher is triggered upon creation
+      },
 
-              },
+      minorsChecked: function(){
+        console.log("inside optionsSelectedNo");
+      }
+
+    },
 
 
-              methods:{
-                onSubmit(evt) {
-                  evt.preventDefault()
-                  alert(JSON.stringify(this.form))
-                },
-                onReset(evt) {
-                  evt.preventDefault()
-          // Reset our form values
-          this.form.email = ''
-          this.form.name = ''
-          //this.form.food = null
-          this.form.checked = []
-          // Trick to reset/clear native browser form validation state
-          this.show = false
-          this.$nextTick(() => {
-            this.show = true
+    methods:{
+      
+      
+      onSubmit(evt) {
+      evt.preventDefault()
+        alert(JSON.stringify(this.form))
+        },
+      
+      onReset(evt) {
+        evt.preventDefault()
+        // Reset our form values
+        this.form.email = ''
+        this.form.name = ''
+        //this.form.food = null
+        this.form.checked = []
+        // Trick to reset/clear native browser form validation state
+        this.show = false
+        this.$nextTick(() => {
+        this.show = true
           })
         },
 
@@ -990,9 +985,12 @@
 
         addExperience(){
           this.minorsDetail.push({
-            minorsName: '',
-            minordob: ''
+            first_name: '',
+            // date_of_birth: ''
           })
+
+          // this.playerLastId = this.playersresult.id; // this is the line which passes value from playerresult to playerid
+
         },
 
         removeExperience: function(todo){
@@ -1006,6 +1004,7 @@
             minorsDetail: this.minorsDetail
           }
           alert(JSON.stringify(data, null, 2))
+          // alert(minordatabase.first_name)
         },
 
         removeDuplicates () {
@@ -1057,8 +1056,6 @@
       // var arrivalTime = this.militaryTimeFormat;
       axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+militaryTimeFormat)
       .then(response => (this.posts = response.data.data));
-
-
 
     },
 
@@ -1112,37 +1109,7 @@
   });
     },
 
-    submitForm(){
-
-      // var db_first_name = this.first_name;
-
-      // axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate)
-      // .then(response => (this.posts = response.data.data));
-
-      // console.log("submit_form");
-      
-
-      // .then(function (response) {
-      //   console.log(response);
-      // })
-      // .catch(function (error) {
-      //   console.log(error);
-      // });
-      // var san = this.first_name;
-      // console.log(san);
-      axios.post('http://localhost:9090/player_minors',{
-        first_name: this.minorsDetail.first_name,
-        date_of_birth: this.minorsDetail.date_of_birth
-
-      })
-
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-      console.log("Vitra chiris");
+    submitPlayerForm(){
 
       axios.post('http://localhost:9090/people',{
         first_name: this.first_name,
@@ -1163,7 +1130,35 @@
       });
       console.log("chirey chirey");
 
+    },
 
+    submitMinorForm(){
+
+      // console.log("submit minor form");
+
+      let payload = {
+        first_name: this.minorsDetail.first_name,
+        player_id: this.playersresult.id + 1
+      };
+
+      /** if function submits to different database if it contains value on it only **/
+      if (this.minorsDetail.first_name > '0') {
+
+        axios({
+        url: 'http://localhost:9090/player_minors',
+        method: 'post',
+        data: payload
+        })
+          .then(function (response) {
+          console.log(response);
+        })
+          .catch(function (error) {
+          console.log(error);
+        });
+
+      }
+      
+      
     }
 
 
