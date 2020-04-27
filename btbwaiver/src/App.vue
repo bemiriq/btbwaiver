@@ -21,6 +21,7 @@
 
       <br><br>
 
+  <br/>
       <div>
         <span style="font-size: 3em;">{{ greetings }}</span>
       </div>
@@ -444,7 +445,7 @@
   </div>
 
 
- <div v-show="!minorsAddDiv">
+   <div v-show="!minorsAddDiv">
 
         <br><br>
 
@@ -467,7 +468,18 @@
           <input v-model="minorsDetail.first_name" type="text" class="form-control" placeholder="Minor Full Name"/>
         </div>
 
+        <div class="col">
+            <label id="minorHeading">Minor's date of birth</label>
+            <!-- <input v-model="experience.title" :name="`minorsDetail[${index}][minordob]`" type="date" class="form-control" placeholder="DOB"> -->
+            <date-dropdown default="1993.01.10" min="1940" max="2020" :months-names="months" v-model="minorsDetail.date_of_birth" style="margin-left: 22%;">
+            </date-dropdown>
+
+        </div>
+
       </div>
+
+      
+
         
       </div>
 
@@ -495,11 +507,15 @@
         <b-col></b-col>
 
         <b-col>
-          <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm();">SUBMIT</b-button> -->
-          <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv, minorsAddDiv = !minorsAddDiv" v-bind:disabled="valiadateHearAboutUs">NEXT</b-button>
+          <!-- <b-button variant="primary" v-on:click="checkPlayerId();">SUBMIT</b-button> -->
+          
+          <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv, minorsAddDiv = !minorsAddDiv">NEXT</b-button>
+          <!-- {{lastPlayerData.id}} -->
         </b-col>
       </b-row>
     </b-container>
+    
+    <br/>
 
   </div>
 
@@ -588,6 +604,12 @@
 
   <br>
 
+  <!-- modal defined to pass value on mutiple database -->
+  <b-modal id="modal-1" ref="my-modal-submit-id" title="BTB Waiver Form" centered v-bind:hide-footer="true">
+    <p> Please click on submit to complete this waiver. If you want to go through your waiver again, please click on cross sign on top right. </p>
+      <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal();">SUBMIT</b-button>
+  </b-modal>
+
   <b-container class="bv-example-row">
     <b-row>
       <b-col>
@@ -597,8 +619,11 @@
       <b-col></b-col>
 
       <b-col>
-        <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = ! waiverSubmitted;">DONE</b-button>
-        <!-- <b-button variant="primary" v-on:click="submit();">DONE</b-button> -->
+        <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = ! waiverSubmitted;">NEXT</b-button> -->
+        <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); checkPlayerId();">NEXT</b-button> -->
+
+        <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkPlayerId();">NEXT</b-button>
+
       </b-col>
     </b-row>
   </b-container>
@@ -711,12 +736,6 @@
 
   mounted: function(){
 
-
-  axios.get('http://localhost:9090/people/22').then(response => (this.playersresult = response.data)); // this get is for player_minor table id
-  console.log(this.playersresult);
-  console.log("SA");
-
-
   // console.log(this.playerLastId);
 
    const current = new moment().format("hh:mm");
@@ -772,11 +791,13 @@
      axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime)
      .then(response => (this.posts = response.data.data));
      this.posts.sort();
-     // console.log(this.posts);
+     console.log(this.posts);
 
      setInterval(() => {
       this.date = moment(this.date.subtract(1, 'seconds'))
     }, 1000);
+
+     // axios.get('http://localhost:9090/people/').then(response => {this.playersresult = response.data.slice(-1)});  //this calls at the first
 
    },
 
@@ -837,6 +858,9 @@
 
       playersresult: [],
       playerLastId:  '',
+      lastPlayerData: [],
+      controlPlayerData: [],
+      show: false, // this one is for last submit button to close on click
 
       form:{
         email: '',
@@ -867,7 +891,7 @@
         minorsDetail: [
         {
           first_name: [],
-          // date_of_birth: "",
+          date_of_birth: "",
           // title: "Date of Birth"
         }
         ],
@@ -935,15 +959,18 @@
         immediate: true // This ensures the watcher is triggered upon creation
       },
 
-      minorsChecked: function(){
-        console.log("inside optionsSelectedNo");
-      }
+      // minorsChecked: function(){
+      //   console.log("inside optionsSelectedNo");
+      // }
 
     },
 
 
     methods:{
       
+      hideModal() {
+        this.$refs['my-modal-submit-id'].hide()
+      },
       
       onSubmit(evt) {
       evt.preventDefault()
@@ -1109,6 +1136,10 @@
   });
     },
 
+    checkPlayerId(){
+        axios.get('http://localhost:9090/people/').then(response => {this.playersresult = response.data.slice(-1)}); // this get is for player_minor table id
+      },
+
     submitPlayerForm(){
 
       axios.post('http://localhost:9090/people',{
@@ -1136,9 +1167,38 @@
 
       // console.log("submit minor form");
 
+      // axios.get('http://localhost:9090/people/').then(response => {this.controlPlayerData = response.data.slice(-1)});
+
+      // controlPlayerData = this.playersresult;
+      // console.log(response.data.slice(-1));
+
+      // var lastPlayerData = this.playersresult.slice(-1);
+      // console.log(this.playersresult.slice(-1));
+      // console.log(this.playersresult[0].id)
+      // var passLastPlayerData = lastPlayerData[1];
+      // console.log(passLastPlayerData);
+
+      // console.log(this.controlPlayerData[1]);
+      var controlPlayerData = this.playersresult[0];
+        var sand = controlPlayerData['id'];
+        console.log(sand);
+
+
+      axios.post('http://localhost:9090/players',{
+        person_id: sand + 1
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+
       let payload = {
         first_name: this.minorsDetail.first_name,
-        player_id: this.playersresult.id + 1
+        date_of_birth: this.minorsDetail.date_of_birth,
+        player_id: sand + 1
       };
 
       /** if function submits to different database if it contains value on it only **/
@@ -1155,6 +1215,8 @@
           .catch(function (error) {
           console.log(error);
         });
+
+        console.log(" minor id submitted");
 
       }
       
