@@ -445,7 +445,7 @@
   </div>
 
 
-   <div v-show="!minorsAddDiv">
+  <div v-show="!minorsAddDiv">
 
         <br><br>
 
@@ -465,13 +465,13 @@
 
         <div class="col" style="margin-left: 8%;">
           <label id="minorHeading">Minor's full name</label>
-          <input v-model="minorsDetail.first_name" type="text" class="form-control" placeholder="Minor Full Name"/>
+          <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minor Full Name"/>
         </div>
 
         <div class="col">
             <label id="minorHeading">Minor's date of birth</label>
             <!-- <input v-model="experience.title" :name="`minorsDetail[${index}][minordob]`" type="date" class="form-control" placeholder="DOB"> -->
-            <date-dropdown default="1993.01.10" min="1940" max="2020" :months-names="months" v-model="minorsDetail.date_of_birth" style="margin-left: 22%;">
+            <date-dropdown default="1993.01.10" min="1940" max="2020" :months-names="months" v-model="minordatabase.date_of_birth" style="margin-left: 22%;">
             </date-dropdown>
 
         </div>
@@ -509,7 +509,9 @@
         <b-col>
           <!-- <b-button variant="primary" v-on:click="checkPlayerId();">SUBMIT</b-button> -->
           
-          <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv, minorsAddDiv = !minorsAddDiv">NEXT</b-button>
+        <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv, minorsAddDiv = !minorsAddDiv">NEXT</b-button>
+        <!-- <b-button variant="primary" v-on:click="submitMinorForm();">SUBMIT</b-button> -->
+
           <!-- {{lastPlayerData.id}} -->
         </b-col>
       </b-row>
@@ -890,7 +892,7 @@
 
         minorsDetail: [
         {
-          first_name: [],
+          first_name: "",
           date_of_birth: "",
           // title: "Date of Birth"
         }
@@ -1165,7 +1167,7 @@
 
     submitMinorForm(){
 
-      // console.log("submit minor form");
+      console.log("submit minor form");
 
       // axios.get('http://localhost:9090/people/').then(response => {this.controlPlayerData = response.data.slice(-1)});
 
@@ -1178,7 +1180,7 @@
       // var passLastPlayerData = lastPlayerData[1];
       // console.log(passLastPlayerData);
 
-      // console.log(this.controlPlayerData[1]);
+      console.log(this.controlPlayerData[1]);
       var controlPlayerData = this.playersresult[0];
         var sand = controlPlayerData['id'];
         console.log(sand);
@@ -1195,30 +1197,65 @@
       });
 
 
-      let payload = {
-        first_name: this.minorsDetail.first_name,
-        date_of_birth: this.minorsDetail.date_of_birth,
-        player_id: sand + 1
-      };
-
       /** if function submits to different database if it contains value on it only **/
-      if (this.minorsDetail.first_name > '0') {
 
-        axios({
-        url: 'http://localhost:9090/player_minors',
-        method: 'post',
-        data: payload
-        })
-          .then(function (response) {
-          console.log(response);
-        })
-          .catch(function (error) {
-          console.log(error);
-        });
+      var arr = this.minorsDetail;
+      console.log(arr);
+      for(var i=0; i < arr.length; i++){
+       // console.log(`${property}: ${object[property]}`);
+       // let payload = {
+       //        first_name: object['first_name'],
+       //        date_of_birth: object['date_of_birth'],
+       //        // player_id: sand + 1
+       //        player_id: '2'
+       //    }
+         // console.log(payload);
 
-        console.log(" minor id submitted");
+         // console.log(arr[i]['first_name']);
+         // console.log(arr[i]['date_of_birth'])
 
+             axios.post('http://localhost:9090/player_minors',{
+              first_name: arr[i]['first_name'],
+              date_of_birth: arr[i]['date_of_birth'],
+              player_id: sand + 1
+            })
+
+            .then(function (response) {
+              console.log(response);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+            console.log("submiteed waiver");
       }
+
+
+
+   
+
+//       if (this.minorsDetail.length > 0) {
+//         this.minorsDetail.forEach((element, i)=>{
+
+    
+//   });
+// }
+
+        //     axios({
+        // url: 'http://localhost:9090/player_minors',
+        // method: 'post',
+        // data: payload
+        // })
+        //   .then(function (response) {
+        //   console.log(response);
+        // })
+        //   .catch(function (error) {
+        //   console.log(error);
+        // });
+        // })
+      
+
+        // console.log(" minor id submitted");
+
       
       
     }
