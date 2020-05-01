@@ -1228,34 +1228,6 @@
             });
             console.log("submiteed waiver");
       }
-
-
-
-   
-
-//       if (this.minorsDetail.length > 0) {
-//         this.minorsDetail.forEach((element, i)=>{
-
-    
-//   });
-// }
-
-        //     axios({
-        // url: 'http://localhost:9090/player_minors',
-        // method: 'post',
-        // data: payload
-        // })
-        //   .then(function (response) {
-        //   console.log(response);
-        // })
-        //   .catch(function (error) {
-        //   console.log(error);
-        // });
-        // })
-      
-
-        // console.log(" minor id submitted");
-
       
       
     }
