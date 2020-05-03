@@ -799,7 +799,7 @@
       this.date = moment(this.date.subtract(1, 'seconds'))
     }, 1000);
 
-     // axios.get('http://11.11.11.61:9090/people/').then(response => {this.playersresult = response.data.slice(-1)});  //this calls at the first
+     // axios.get('http://localhost:9090/people/').then(response => {this.playersresult = response.data.slice(-1)});  //this calls at the first
 
    },
 
@@ -1139,12 +1139,12 @@
     },
 
     checkPlayerId(){
-        axios.get(process.env.VUE_APP_DATABASE_PEOPLE).then(response => {this.playersresult = response.data.slice(-1)}); // this get is for player_minor table id
+        axios.get(process.env.VUE_APP_PEOPLE).then(response => {this.playersresult = response.data.slice(-1)}); // this get is for player_minor table id
       },
 
     submitPlayerForm(){
 
-      axios.post(process.env.VUE_APP_DATABASE_PEOPLE,{
+      axios.post(process.env.VUE_APP_PEOPLE,{
         first_name: this.first_name,
         last_name: this.last_name,
         date_of_birth: this.date_of_birth,
@@ -1169,7 +1169,7 @@
 
       console.log("submit minor form");
 
-      // axios.get('http://11.11.11.61:9090/people/').then(response => {this.controlPlayerData = response.data.slice(-1)});
+      // axios.get('http://localhost:9090/people/').then(response => {this.controlPlayerData = response.data.slice(-1)});
 
       // controlPlayerData = this.playersresult;
       // console.log(response.data.slice(-1));
@@ -1186,7 +1186,7 @@
         console.log(sand);
 
 
-      axios.post(process.env.VUE_APP_DATABASE_PLAYERS,{
+      axios.post(process.env.VUE_APP_PLAYERS,{
         person_id: sand + 1
       })
       .then(function (response) {
@@ -1214,7 +1214,7 @@
          // console.log(arr[i]['first_name']);
          // console.log(arr[i]['date_of_birth'])
 
-             axios.post('http://11.11.11.61:9090/player_minors',{
+             axios.post(process.env.VUE_APP_PLAYERMINOR,{
               first_name: arr[i]['first_name'],
               date_of_birth: arr[i]['date_of_birth'],
               player_id: sand + 1
