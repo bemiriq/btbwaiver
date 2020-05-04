@@ -1183,8 +1183,7 @@
       console.log(this.controlPlayerData[1]);
       var controlPlayerData = this.playersresult[0];
         var sand = controlPlayerData['id'];
-        console.log(sand);
-
+        // console.log(sand);
 
       axios.post(process.env.VUE_APP_PLAYERS,{
         person_id: sand + 1
