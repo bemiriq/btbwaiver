@@ -1195,7 +1195,6 @@
         console.log(error);
       });
 
-
       /** if function submits to different database if it contains value on it only **/
 
       var arr = this.minorsDetail;
