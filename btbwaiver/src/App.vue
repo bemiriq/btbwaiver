@@ -739,16 +739,23 @@
   mounted: function(){
 
   // console.log(this.playerLastId);
-
+ /** api key = Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo */
    // axios.post('https://sandbox.xola.com/api/users/5e724420e58f4934a532cebc/apiKey', {
-   //     email: 'sandesh.phuyal@beatthebomb.com', //varEmail is a variable which holds the email
-   //     password: 'xolaS@ndesh23'
+   //     // email: 'sandesh.phuyal@beatthebomb.com', //varEmail is a variable which holds the email
+   //     // password: 'xolasandesh23'
    //    },
    //    {
    //      headers: {
    //        Authorization: 'Bearer ' + varToken
    //      }
    //    });
+
+   // const headers = { Authorization: `Bearer ${Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo}` };
+   //  return axios.get(URLConstants.USER_URL, { headers });
+
+   // axios.defaults.headers.common['header'] = 'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo';
+
+   /** below are not api calls cocde **/
 
    const current = new moment().format("hh:mm");
    var quaterMinute = ["15","30","30","45"];
@@ -800,14 +807,43 @@
      // axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate&"arrivalTime="+arrivalTime)
      //the link below is for arrival time from one time to other
      //axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime)+","+arrivalTime1
-     axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime)
-     .then(response => (this.posts = response.data.data));
-     this.posts.sort();
-     console.log(this.posts);
+     
+     // const AuthStr = 'Bearer '.concat(Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo);
 
-     setInterval(() => {
-      this.date = moment(this.date.subtract(1, 'seconds'))
-    }, 1000);
+    axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime,
+     {headers: {'X-API-KEY': 'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo'}}) 
+    .then(response => 
+            (this.posts = response.data.data));
+            
+           this.posts.sort();
+           console.log(this.posts);
+
+          //  setInterval(() => {
+          //   this.date = moment(this.date.subtract(1, 'seconds'))
+          // }, 1000)
+
+          
+
+    //  axios.get(("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime), 
+    //  {
+    //   headers: {
+    //     'X-API-KEY': "Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo",
+    //     // 'username': "sandesh.phuyal@beatthebomb.com",
+    //     // 'password': "xolasandesh23"
+    //   },
+    // })
+      // .then
+
+     // axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime)
+    //  .then(response => 
+    //   (this.posts = response.data.data)
+    //   );
+    //  this.posts.sort();
+    //  console.log(this.posts);
+
+    //  setInterval(() => {
+    //   this.date = moment(this.date.subtract(1, 'seconds'))
+    // }, 1000);
 
      // axios.get('http://localhost:9090/people/').then(response => {this.playersresult = response.data.slice(-1)});  //this calls at the first
 
@@ -1093,7 +1129,8 @@
 
         var arrivalDate = moment().format('YYYY-MM-DD');
       // var arrivalTime = this.militaryTimeFormat;
-      axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+militaryTimeFormat)
+      axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+militaryTimeFormat,
+        {headers:{'X-API-KEY':'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo'}})
       .then(response => (this.posts = response.data.data));
 
     },
