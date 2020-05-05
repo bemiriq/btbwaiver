@@ -740,6 +740,16 @@
 
   // console.log(this.playerLastId);
 
+   // axios.post('https://sandbox.xola.com/api/users/5e724420e58f4934a532cebc/apiKey', {
+   //     email: 'sandesh.phuyal@beatthebomb.com', //varEmail is a variable which holds the email
+   //     password: 'xolaS@ndesh23'
+   //    },
+   //    {
+   //      headers: {
+   //        Authorization: 'Bearer ' + varToken
+   //      }
+   //    });
+
    const current = new moment().format("hh:mm");
    var quaterMinute = ["15","30","30","45"];
 
@@ -774,7 +784,7 @@
 
      this.timeList = [ ...new Set(this.timeList) ];
      this.timeList.sort(); //this will sort out the time from ascending to descending
-     this.timeList.reverse(); //used reverse to change asc/desc to desc/asc
+     // this.timeList.reverse(); //used reverse to change asc/desc to desc/asc
 
       // var arrivalDate = moment();
       // // console.log(arrivalDate);
@@ -1139,7 +1149,8 @@
     },
 
     checkPlayerId(){
-        axios.get(process.env.VUE_APP_PEOPLE).then(response => {this.playersresult = response.data.slice(-1)}); // this get is for player_minor table id
+        axios.get(process.env.VUE_APP_PEOPLE).then(response => {this.playersresult = response.data.slice(-1)}); // this get id for player_minor table id
+        console.log('inside check player');
       },
 
     submitPlayerForm(){
@@ -1169,7 +1180,7 @@
 
       console.log("submit minor form");
 
-      // axios.get('http://localhost:9090/people/').then(response => {this.controlPlayerData = response.data.slice(-1)});
+      // axios.get(process.env.VUE_APP_PEOPLE).then(response => {this.controlPlayerData = response.data.slice(-1)});
 
       // controlPlayerData = this.playersresult;
       // console.log(response.data.slice(-1));
@@ -1180,9 +1191,10 @@
       // var passLastPlayerData = lastPlayerData[1];
       // console.log(passLastPlayerData);
 
-      console.log(this.controlPlayerData[1]);
+      // console.log(this.controlPlayerData[1]);
       var controlPlayerData = this.playersresult[0];
         var sand = controlPlayerData['id'];
+        console.log(sand);
         // console.log(sand);
 
       axios.post(process.env.VUE_APP_PLAYERS,{
@@ -1246,7 +1258,7 @@
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
-    width: 50%; 
+    width: 70%; 
     margin-right:auto; 
     margin-left:auto;
     background-color: #f5f7fa;
