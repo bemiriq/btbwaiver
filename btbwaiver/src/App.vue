@@ -15,7 +15,7 @@
 
       <div>
         <!-- <img alt="Vue logo" src="./assets/btb.png"> -->
-        <a href="/"><img center src="./assets/btb.png" alt="BTB LOGO" style="width:35%;"></img></a>
+        <a href="/"><img center src="./assets/btb.png" alt="BTB LOGO" style="width:auto;"></img></a>
 
       </div>
 
@@ -23,7 +23,7 @@
 
   <br/>
       <div>
-        <span style="font-size: 3em;">{{ greetings }}</span>
+        <span style="font-size: 2.2em;">{{ greetings }}</span>
       </div>
 
       <hr>
