@@ -15,7 +15,7 @@
 
       <div>
         <!-- <img alt="Vue logo" src="./assets/btb.png"> -->
-        <a href="/"><img center src="./assets/btb.png" alt="BTB LOGO" style="width:50%;"></img></a>
+        <a href="/"><img center src="./assets/btb.png" alt="BTB LOGO" style="width:35%;"></img></a>
 
       </div>
 
@@ -1298,7 +1298,7 @@
     width: 70%; 
     margin-right:auto; 
     margin-left:auto;
-    background-color: #f5f7fa;
+    background-color: #fff;
     height: auto;
   }
 
