@@ -93,8 +93,8 @@
 
         <br><br>
         <div id="hideDiv" style="visibility:hidden;">
-          <div v-for="post in posts" :key="post.customerName">
-            <b-button block pill variant="outline-info" id="fetchButtonGap" v-on:click="reservationNameDiv = !reservationNameDiv, fullnameDiv = !fullnameDiv">
+          <div v-for="(post, index) in posts" :key="post.customerName">
+            <b-button block pill variant="outline-info" id="fetchButtonGap" v-on:click="bookerName(index);reservationNameDiv = !reservationNameDiv, fullnameDiv = !fullnameDiv">
               {{post.customerName}}
             </b-button>
           </div>
@@ -834,6 +834,7 @@
 
    data() {
     return {
+      // customerName: '',
       text: '',
       value: '',
       context: null,
@@ -854,6 +855,11 @@
       minorsChecked: null,
 
       showSignaturePad: false ,
+
+      bookername: '',
+      bookerId: '',
+      bookerTeamSize: '',
+      bookerAmount: '',
 
       minorsChecked: 'B',
          optionsSelectedNo: [
@@ -999,7 +1005,16 @@
 
 
     methods:{
-      
+
+      bookerName(index){
+          console.log(this.posts[index].id);
+          console.log(this.posts[index].customerName);
+          this.bookername = this.posts[index].customerName;
+          this.bookerId = this.posts[index].id;
+          this.bookerTeamSize = this.posts[index].items[0].quantity;
+          this.bookerAmount = this.posts[index].items[0].amount;
+        },
+              
       hideModal() {
         this.$refs['my-modal-submit-id'].hide()
       },
@@ -1212,6 +1227,35 @@
       .catch(function (error) {
         console.log(error);
       });
+
+      /** axios post the bookers table **/
+
+      axios.post(process.env.VUE_APP_BOOKERS,{
+        person_id: sand + 1,
+        xola_booker_id: this.bookerId
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+
+      /** axios post on reservation table **/
+      axios.post(process.env.VUE_APP_RESERVATIONS,{
+        // person_id: sand + 1,
+        size: this.bookerTeamSize,
+        final_dollar_amount: this.bookerAmount,
+        xola_order_id: this.bookerId
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
 
       /** if function submits to different database if it contains value on it only **/
 
