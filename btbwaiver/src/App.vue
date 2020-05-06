@@ -85,20 +85,22 @@
 
       <div v-show="!reservationNameDiv">
 
+        <!-- <div v-for="LoadingScreen"/> -->
+
         <br><br>
 
         <span style="font-size: 1.7em;">{{ reservationNameTitle }}</span>
 
         <br><br>
+        <div id="hideDiv" style="visibility:hidden;">
+          <div v-for="post in posts" :key="post.customerName">
+            <b-button block pill variant="outline-info" id="fetchButtonGap" v-on:click="reservationNameDiv = !reservationNameDiv, fullnameDiv = !fullnameDiv">
+              {{post.customerName}}
+            </b-button>
+          </div>
 
-        <div v-for="post in posts" :key="post.customerName">
-          <b-button block pill variant="outline-info" id="fetchButtonGap" v-on:click="reservationNameDiv = !reservationNameDiv, fullnameDiv = !fullnameDiv">
-            {{post.customerName}}
-          </b-button>
+          <div v-if="!posts.length"><br><span style="font-size:1.1em; color: #17a2b8;">{{ noBookingTitle }}</span><br/></div>
         </div>
-
-        <div v-if="!posts.length"><br><span style="font-size:1.1em; color: #17a2b8;">{{ noBookingTitle }}</span><br/></div>
-
         <br><br>
 
         <b-container class="bv-example-row">
@@ -253,10 +255,8 @@
 
           <br><br>
             <b-form-group
-      id="input-group-1"
-      label="Phone Number"
-      label-for="input-1" class="nameTitle">
-    </b-form-group>
+      id="input-group-1" class="nameTitle"> Phone Number <span style="color:red;">*</span>
+    </b-form-group> 
 
               <b-form-group>
                 <b-form-input
@@ -274,9 +274,6 @@
               description="If you choose to share your number, we will text you your FREE photos & videos."
               >
             </b-form-group>
-
-            
-
 
           <br><br>
 
@@ -584,20 +581,20 @@
       <div class="col-12 mt-2">
         <VueSignaturePad
         id="signature"
-        width="100%"
-        height="500px"
+        width="auto"
+        height="400px"
         ref="signaturePad"
-        :options="signatureoptions"
+        :options="signatureoptions" v-show="showSignaturePad" style="margin:auto;"
         />
       </div>
     </div>
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-3 mt-2">
         <button class="btn btn-outline-secondary" @click="undo">Undo</button>
 
-        <!-- <button class="btn btn-outline-primary" @click="change">Reset</button> -->
+         <button class="btn btn-outline-primary" @click="change">Reset</button> 
       </div>
-    </div>
+    </div> -->
   </div>
 
   <br><br>
@@ -676,13 +673,13 @@
   import moment from 'moment';
   import DateDropdown from 'vue-date-dropdown'; // this for the date dropdown
 
+  // import LoadingScreen from "./components/LoadingScreen";
+
 
   Vue.use(VueSignature);
   Vue.config.productionTip = false;
 
   Vue.use(DateDropdown);
-
-
 
   export default {
     name: 'App',
@@ -738,24 +735,9 @@
 
   mounted: function(){
 
-  // console.log(this.playerLastId);
- /** api key = Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo */
-   // axios.post('https://sandbox.xola.com/api/users/5e724420e58f4934a532cebc/apiKey', {
-   //     // email: 'sandesh.phuyal@beatthebomb.com', //varEmail is a variable which holds the email
-   //     // password: 'xolasandesh23'
-   //    },
-   //    {
-   //      headers: {
-   //        Authorization: 'Bearer ' + varToken
-   //      }
-   //    });
-
-   // const headers = { Authorization: `Bearer ${Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo}` };
-   //  return axios.get(URLConstants.USER_URL, { headers });
-
-   // axios.defaults.headers.common['header'] = 'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo';
-
-   /** below are not api calls cocde **/
+    this.showSignaturePad = true;
+    this.$refs.signaturePad.$refs.signaturePadCanvas.width = 400;
+    this.$refs.signaturePad.$refs.signaturePadCanvas.height = 400;
 
    const current = new moment().format("hh:mm");
    var quaterMinute = ["15","30","30","45"];
@@ -871,6 +853,8 @@
       timerCount: '10',
       minorsChecked: null,
 
+      showSignaturePad: false ,
+
       minorsChecked: 'B',
          optionsSelectedNo: [
          { item: 'A', name: 'YES', value: 'A'},
@@ -933,7 +917,7 @@
          ],
 
          signatureoptions:{
-          penColor: "#c0f"
+          penColor: "black"
         },
 
         minorsDetail: [
@@ -991,27 +975,27 @@
 
     },
 
-    watch: {
+    // watch: {
 
-      timerCount: {
-        handler(value) {
+    //   timerCount: {
+    //     handler(value) {
 
-          if (value > 0) {
-            setTimeout(() => {
-              this.timerCount--;
-            }, 1000);
-          }
+    //       if (value > 0) {
+    //         setTimeout(() => {
+    //           this.timerCount--;
+    //         }, 1000);
+    //       }
 
-        },
+    //     },
         
-        immediate: true // This ensures the watcher is triggered upon creation
-      },
+    //     immediate: true // This ensures the watcher is triggered upon creation
+    //   },
 
-      // minorsChecked: function(){
-      //   console.log("inside optionsSelectedNo");
-      // }
+    //   // minorsChecked: function(){
+    //   //   console.log("inside optionsSelectedNo");
+    //   // }
 
-    },
+    // },
 
 
     methods:{
@@ -1038,6 +1022,16 @@
         this.show = true
           })
         },
+
+        signatureLoad(){
+          this.showWithResize();
+        },
+
+        showWithResize() {
+          this.isShow = true
+          this.$refs.signaturePad.$refs.signaturePadCanvas.width = 250
+          this.$refs.signaturePad.$refs.signaturePadCanvas.height = 250
+          },
 
         undo() {
           this.$refs.signaturePad.undoSignature();
@@ -1086,34 +1080,6 @@
           this.timeList = [ ...new Set(this.timeList) ]
         },
 
-        addRecord: function(){
-
-         this.file = this.$refs.file.files[0];
-
-         let formData = new FormData();
-         formData.append('file', this.file);
-
-         axios.post('ajaxfile.php', formData,
-         {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
-         .then(function (response) {
-
-          if(!response.data){
-           alert('File not uploaded.');
-         }else{
-           alert('File uploaded successfully.');
-         }
-
-       })
-         .catch(function (error) {
-             // console.log(error);
-           });
-
-       },
-
        showTheTime: function (){
         // alert(this.selectedTime);
          // // console.log(event.target.value);
@@ -1133,6 +1099,9 @@
         {headers:{'X-API-KEY':'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo'}})
       .then(response => (this.posts = response.data.data));
 
+      document.getElementById("hideDiv").style.visibility="visible";
+      setTimeout("hideDiv",3000);
+
     },
 
     reloadfunction(){
@@ -1145,7 +1114,7 @@
 
       var arrivalDate = moment().format('YYYY-MM-DD');
 
-      axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate)
+      axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate,{headers:{'X-API-KEY':'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo'}})
       .then(response => (this.posts = response.data.data));
 
     },
@@ -1302,6 +1271,15 @@
     height: auto;
   }
 
+  #signature {
+  border: double 3px transparent;
+  border-radius: 5px;
+  background-image: linear-gradient(white, white),
+    radial-gradient(circle at top left, #4bc5e8, #9f6274);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+}
+
   .b-form-group .label{
     font-size: 6em;
   }
@@ -1374,15 +1352,6 @@
     margin-left: auto;
     margin-right: auto;
     width: 60%;
-  }
-
-  #signature {
-    border: double 3px transparent;
-    border-radius: 5px;
-    background-image: linear-gradient(white, white),
-    radial-gradient(circle at top left, #4bc5e8, #9f6274);
-    background-origin: border-box;
-    background-clip: content-box, border-box;
   }
 
   .work-experiences > div {
