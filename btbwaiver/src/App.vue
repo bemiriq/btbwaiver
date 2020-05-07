@@ -1241,6 +1241,31 @@
         console.log(error);
       });
 
+      /** axios post on reservation_people table**/
+
+      axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
+        person_id: sand + 1,
+        // xola_booker_id: this.bookerId
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+      /** axios post on waiver table **/
+      axios.post(process.env.VUE_APP_WAIVERS,{
+        // person_id: sand + 1,
+        // xola_booker_id: this.bookerId
+        waiver_url : this.randomNumber
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
       /** axios post on reservation table **/
       axios.post(process.env.VUE_APP_RESERVATIONS,{
