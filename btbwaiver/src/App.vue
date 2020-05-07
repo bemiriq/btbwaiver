@@ -606,7 +606,7 @@
   <!-- modal defined to pass value on mutiple database -->
   <b-modal id="modal-1" ref="my-modal-submit-id" title="BTB Waiver Form" centered v-bind:hide-footer="true">
     <p> Please click on submit to complete this waiver. If you want to go through your waiver again, please click on cross sign on top right. </p>
-      <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal();">SUBMIT</b-button>
+      <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal();">SUBMIT</b-button>
   </b-modal>
 
   <b-container class="bv-example-row">
@@ -1278,21 +1278,11 @@
       /** if function submits to different database if it contains value on it only **/
 
       var arr = this.minorsDetail;
-      // console.log(this.minorsDetail[0].first_name);
+      var minorvalue = this.minorsDetail[0].first_name;
       // console.log(this.minorsDetail);
 
-      for(var i=0; i < arr.length; i++){
-       // console.log(`${property}: ${object[property]}`);
-       // let payload = {
-       //        first_name: object['first_name'],
-       //        date_of_birth: object['date_of_birth'],
-       //        // player_id: sand + 1
-       //        player_id: '2'
-       //    }
-         // console.log(payload);
-
-         // console.log(arr[i]['first_name']);
-         // console.log(arr[i]['date_of_birth'])
+      if (minorvalue.length > 0) {
+        for(var i=0; i < arr.length; i++){
 
              axios.post(process.env.VUE_APP_PLAYERMINOR,{
               first_name: arr[i]['first_name'],
@@ -1306,8 +1296,15 @@
             .catch(function (error) {
               console.log(error);
             });
-            console.log("submiteed waiver");
+            console.log("Minors added");
+        }
       }
+
+      else{
+        console.log("No Minors");
+      }
+
+      
       
       
     }
