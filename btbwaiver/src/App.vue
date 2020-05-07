@@ -1100,6 +1100,7 @@
          // // console.log(event.target.value);
          var standardTimeFormat = event.target.value;
          this.reservationDateTime = standardTimeFormat +' '+ moment(moment.now()).format("YYYY/MM/DD");
+         console.log(this.reservationDateTime);
 
         var militaryTimeFormat = moment(standardTimeFormat, "h:mm A").format("HHmm");
 
@@ -1233,6 +1234,20 @@
         console.log(error);
       });
 
+      /** axios post on reservation table **/
+      axios.post(process.env.VUE_APP_RESERVATIONS,{
+        size: this.bookerTeamSize,
+        reservation_for: this.reservationDateTime,
+        final_dollar_amount: this.bookerAmount,
+        xola_order_id: this.bookerId
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
       /** axios post on reservation_people table**/
 
       axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
@@ -1251,20 +1266,6 @@
         // person_id: sand + 1,
         // xola_booker_id: this.bookerId
         waiver_url : this.randomNumber
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-
-      /** axios post on reservation table **/
-      axios.post(process.env.VUE_APP_RESERVATIONS,{
-        size: this.bookerTeamSize,
-        reservation_for: this.reservationDateTime,
-        final_dollar_amount: this.bookerAmount,
-        xola_order_id: this.bookerId
       })
       .then(function (response) {
         console.log(response);
