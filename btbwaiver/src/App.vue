@@ -859,6 +859,8 @@
       bookerTeamSize: '',
       bookerAmount: '',
 
+      reservationDateTime: '',
+
       minorsChecked: 'B',
          optionsSelectedNo: [
          { item: 'A', name: 'YES', value: 'A'},
@@ -1097,6 +1099,8 @@
         // alert(this.selectedTime);
          // // console.log(event.target.value);
          var standardTimeFormat = event.target.value;
+         this.reservationDateTime = standardTimeFormat +' '+ moment(moment.now()).format("YYYY/MM/DD");
+         // console.log(moment(moment.now()).format("YYYY/MM/DD"));
 
         // var standardTimeFormat = this.selectedTime;
         // // console.log(this.selectedTime);
@@ -1269,6 +1273,7 @@
       axios.post(process.env.VUE_APP_RESERVATIONS,{
         // person_id: sand + 1,
         size: this.bookerTeamSize,
+        reservation_for: this.reservationDateTime,
         final_dollar_amount: this.bookerAmount,
         xola_order_id: this.bookerId
       })
