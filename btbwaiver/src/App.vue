@@ -1263,7 +1263,7 @@
       axios.post(process.env.VUE_APP_RESERVATIONS,{
         // person_id: sand + 1,
         size: this.bookerTeamSize,
-        reservation_for: this.reservationDateTime,
+        // reservation_for: this.reservationDateTime,
         final_dollar_amount: this.bookerAmount,
         xola_order_id: this.bookerId
       })
