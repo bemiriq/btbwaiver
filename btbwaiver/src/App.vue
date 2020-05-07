@@ -618,8 +618,6 @@
       <b-col></b-col>
 
       <b-col>
-        <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = ! waiverSubmitted;">NEXT</b-button> -->
-        <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); checkPlayerId();">NEXT</b-button> -->
 
         <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkPlayerId();">NEXT</b-button>
 
