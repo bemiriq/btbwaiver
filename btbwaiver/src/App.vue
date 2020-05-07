@@ -1260,24 +1260,25 @@
       });
 
       /** axios post on reservation table **/
-      // axios.post(process.env.VUE_APP_RESERVATIONS,{
-      //   // person_id: sand + 1,
-      //   size: this.bookerTeamSize
-      //   // reservation_for: this.reservationDateTime,
-      //   // final_dollar_amount: this.bookerAmount,
-      //   // xola_order_id: this.bookerId
-      // })
-      // .then(function (response) {
-      //   console.log(response);
-      // })
-      // .catch(function (error) {
-      //   console.log(error);
-      // });
+      axios.post(process.env.VUE_APP_RESERVATIONS,{
+        size: this.bookerTeamSize,
+        reservation_for: this.reservationDateTime,
+        final_dollar_amount: this.bookerAmount,
+        xola_order_id: this.bookerId
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
 
       /** if function submits to different database if it contains value on it only **/
 
       var arr = this.minorsDetail;
+      // console.log(this.minorsDetail[0].first_name);
+      // console.log(this.minorsDetail);
 
       for(var i=0; i < arr.length; i++){
        // console.log(`${property}: ${object[property]}`);
