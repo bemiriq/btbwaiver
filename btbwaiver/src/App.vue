@@ -1100,15 +1100,8 @@
          // // console.log(event.target.value);
          var standardTimeFormat = event.target.value;
          this.reservationDateTime = standardTimeFormat +' '+ moment(moment.now()).format("YYYY/MM/DD");
-         // console.log(moment(moment.now()).format("YYYY/MM/DD"));
-
-        // var standardTimeFormat = this.selectedTime;
-        // // console.log(this.selectedTime);
-        // // console.log(standardTimeFormat);
 
         var militaryTimeFormat = moment(standardTimeFormat, "h:mm A").format("HHmm");
-        // var militaryTimeFormat = moment(this.selectedTime).format("HHMM");
-        // console.log(militaryTimeFormat);
 
         var arrivalDate = moment().format('YYYY-MM-DD');
       // var arrivalTime = this.militaryTimeFormat;
@@ -1195,13 +1188,10 @@
       .catch(function (error) {
         console.log(error);
       });
-      console.log("chirey chirey");
 
     },
 
     submitMinorForm(){
-
-      console.log("submit minor form");
 
       // axios.get(process.env.VUE_APP_PEOPLE).then(response => {this.controlPlayerData = response.data.slice(-1)});
 
@@ -1288,7 +1278,7 @@
       /** if function submits to different database if it contains value on it only **/
 
       var arr = this.minorsDetail;
-      console.log(arr);
+
       for(var i=0; i < arr.length; i++){
        // console.log(`${property}: ${object[property]}`);
        // let payload = {
