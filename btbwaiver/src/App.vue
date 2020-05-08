@@ -35,6 +35,7 @@
 
         <span style="font-size: 1.7em;">{{ reservationTimeTitle }}</span>
 
+        <input type="text" name="" v-model="checkTravelerId"/>
 
         <br> <br>
 
@@ -59,7 +60,7 @@
 
             <b-col>
 
-              <b-button variant="primary" v-on:click="showAllTime(); reservationNameDiv = !reservationNameDiv, reservationTimeDiv = !reservationTimeDiv">DONT KNOW</b-button>
+              <b-button variant="primary" v-on:click="showAllTime(); reservationNameDiv = !reservationNameDiv, reservationTimeDiv = !reservationTimeDiv; dontknow();">DONT KNOW</b-button>
 
 
             </b-col>
@@ -606,6 +607,7 @@
   <!-- modal defined to pass value on mutiple database -->
   <b-modal id="modal-1" ref="my-modal-submit-id" title="BTB Waiver Form" centered v-bind:hide-footer="true">
     <p> Please click on submit to complete this waiver. If you want to go through your waiver again, please click on cross sign on top right. </p>
+      <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal();">SUBMIT</b-button> -->
       <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal();">SUBMIT</b-button>
   </b-modal>
 
@@ -798,6 +800,11 @@
            this.posts.sort();
            console.log(this.posts);
 
+
+    axios.get(process.env.VUE_APP_BOOKERS).then(response => {this.allPlayerList = response.data}); 
+
+
+
           //  setInterval(() => {
           //   this.date = moment(this.date.subtract(1, 'seconds'))
           // }, 1000)
@@ -853,6 +860,8 @@
       minorsChecked: null,
 
       showSignaturePad: false ,
+      allPlayerList: [],
+      checkTravelerId: '',
 
       bookername: '',
       bookerId: '',
@@ -916,8 +925,8 @@
          ],
 
          genderoptions: [
-         {genderitem: '2', name: 'Male'},
          {genderitem: '1', name: 'Female'},
+         {genderitem: '2', name: 'Male'},
          {genderitem: '3', name: 'Non-binary'},
          {genderitem: '4', name: 'I would prefer not to answer'}
          ],
@@ -1223,16 +1232,38 @@
 
       /** axios post the bookers table **/
 
-      axios.post(process.env.VUE_APP_BOOKERS,{
-        person_id: sand + 1,
-        xola_booker_id: this.bookerId
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
+      // axios.post(process.env.VUE_APP_BOOKERS,{
+      //   person_id: sand + 1,
+      //   xola_booker_id: this.bookerId
+      // })
+      // .then(function (response) {
+      //   console.log(response);
+      // })
+      // .catch(function (error) {
+      //   console.log(error);
+      // });
+
+        console.log(this.checkTravelerId);
+        this.allPlayerList.forEach(player => {
+        var allPList = player.xola_booker_id;
+        
+        if(this.bookerId === allPList){
+          console.log("already inserted");
+        }
+        else{
+            axios.post(process.env.VUE_APP_BOOKERS,{
+            person_id: sand + 1,
+            xola_booker_id: this.bookerId
+          })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        }
       });
+
 
       /** axios post on reservation table **/
       axios.post(process.env.VUE_APP_RESERVATIONS,{
