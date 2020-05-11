@@ -95,7 +95,7 @@
         <br><br>
         <div id="hideDiv" style="visibility:hidden;">
           <div v-for="(post, index) in posts" :key="post.customerName">
-            <b-button block pill variant="outline-info" id="fetchButtonGap" v-on:click="bookerName(index);reservationNameDiv = !reservationNameDiv, fullnameDiv = !fullnameDiv">
+            <b-button block pill variant="outline-info" id="fetchButtonGap" v-on:click="bookerName(index); checkOldReservationId(); reservationNameDiv = !reservationNameDiv, fullnameDiv = !fullnameDiv">
               {{post.customerName}}
             </b-button>
           </div>
@@ -209,7 +209,7 @@
       <b-col></b-col>
 
       <b-col>
-        <b-button variant="primary" v-on:click="fullnameDiv = !fullnameDiv, emailDiv = !emailDiv" v-bind:disabled="isDisableFixedFirstName">NEXT</b-button>
+        <b-button variant="primary" v-on:click="fullnameDiv = !fullnameDiv; emailDiv = !emailDiv;" v-bind:disabled="isDisableFixedFirstName" >NEXT</b-button>
       </b-col>
     </b-row>
   </b-container>
@@ -607,8 +607,8 @@
   <!-- modal defined to pass value on mutiple database -->
   <b-modal id="modal-1" ref="my-modal-submit-id" title="BTB Waiver Form" centered v-bind:hide-footer="true">
     <p> Please click on submit to complete this waiver. If you want to go through your waiver again, please click on cross sign on top right. </p>
-      <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal();">SUBMIT</b-button>
-      <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal();">SUBMIT</b-button> -->
+      <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal();">SUBMIT</b-button> -->
+      <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal();">SUBMIT</b-button>
   </b-modal>
 
   <b-container class="bv-example-row">
@@ -621,7 +621,7 @@
 
       <b-col>
 
-        <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkPlayerId(); checkBookerId();">NEXT</b-button>
+        <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkPlayerId(); checkBookerId(); checkReservationId();">NEXT</b-button>
 
       </b-col>
     </b-row>
@@ -870,6 +870,8 @@
       bookerTeamSize: '',
       bookerAmount: '',
       bookerTravelerId: '',
+      xolaIdReservation: '',
+      consistsreservationresult:'',
       // inputBookerId: '',
 
       reservationDateTime: '',
@@ -909,6 +911,7 @@
 
       playersresult: [],
       bookerresult: [],
+      reservationrresult: [],
       playerLastId:  '',
       lastPlayerData: [],
       controlPlayerData: [],
@@ -1024,10 +1027,11 @@
           console.log(this.posts[index].id);
           console.log(this.posts[index].customerName);
           this.bookername = this.posts[index].customerName;
-          this.bookerId = this.posts[index].id;
+          this.bookerId = this.bookerId;
           this.bookerTeamSize = this.posts[index].items[0].quantity;
           this.bookerAmount = this.posts[index].items[0].amount;
           this.bookerTravelerId = this.posts[index].travelers[0].id;
+          this.xolaIdReservation = this.posts[index].id;
         },
               
       hideModal() {
@@ -1187,8 +1191,22 @@
 
     checkBookerId(){
         axios.get(process.env.VUE_APP_BOOKERS).then(response => {this.bookerresult = response.data.slice(-1)}); // this get id for player_minor table id
-        console.log('inside bookers');
+        // console.log('inside bookers');
       },
+
+    checkReservationId(){
+      axios.get(process.env.VUE_APP_RESERVATIONS).then(response => {this.reservationrresult = response.data.slice(-1)}); 
+      console.log('inside reservation');
+
+      // axios.get(process.env.VUE_APP_RESERVATIONS+'').then(response => {this.samereservationresult = response.data.slice(-1)});
+      // console.log(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+san);
+    },
+
+    checkOldReservationId(){
+      var reservationOrderId = this.xolaIdReservation;
+      axios.get(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+reservationOrderId).then(response => {this.consistsreservationresult = response.data});
+      console.log(this.xolaIdReservation);
+    },
 
     submitPlayerForm(){
 
@@ -1212,6 +1230,7 @@
 
     },
 
+
     submitMinorForm(){
 
       // axios.get(process.env.VUE_APP_PEOPLE).then(response => {this.controlPlayerData = response.data.slice(-1)});
@@ -1231,8 +1250,12 @@
       // variable defined for booker id
       var bookerDataId = this.bookerresult[0];
       var bookerwithid = bookerDataId['id'];
-      console.log(sand);
-      console.log(bookerwithid);
+
+      var reservationDataId = this.consistsreservationresult[0];
+      var reservationwithid = reservationDataId['id'];
+      // console.log(sand);
+      // console.log(bookerwithid);
+      console.log(reservationwithid);
         // console.log(sand);
 
       axios.post(process.env.VUE_APP_PLAYERS,{
@@ -1284,8 +1307,24 @@
       // If nothing is foundTravelId, Array.find() returns undefined, which is false-y
 
       if (foundTravelId) {
-        console.log("already inserted travel id")
-          } 
+        // console.log("already inserted travel id");
+        console.log(reservationwithid);
+        
+        /** axios post on reservation_people table**/
+
+          axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
+            person_id: sand + 1,
+            reservation_id: reservationwithid
+          })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+      } 
+      
       else {
         
         console.log("new  travel id");
@@ -1294,8 +1333,8 @@
             xola_order_id: this.bookerTravelerId,
             size: this.bookerTeamSize,
             booker_id: bookerwithid + 1,
-            final_dollar_amount: this.bookerAmount
-
+            final_dollar_amount: this.bookerAmount,
+            reservation_for: this.reservationDateTime
           })
           .then(function (response) {
             console.log(response);
@@ -1303,71 +1342,24 @@
           .catch(function (error) {
             console.log(error);
           });
+
+          /** axios post on reservation_people table**/
+
+          axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
+            person_id: sand + 1,
+            reservation_id: reservationwithid + 1
+          })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
         }
 
         /** end of bookers table **/
 
-
-
-      // axios.post(process.env.VUE_APP_BOOKERS,{
-      //   person_id: sand + 1,
-      //   xola_booker_id: this.bookerId
-      // })
-      // .then(function (response) {
-      //   console.log(response);
-      // })
-      // .catch(function (error) {
-      //   console.log(error);
-      // });
-
-      //   console.log(this.checkTravelerId);
-      //   this.allPlayerList.forEach(player => {
-      //   var allPList = player.xola_booker_id;
-        
-      //   if(this.bookerId === allPList){
-      //     console.log("already inserted");
-      //   }
-      //   else{
-      //       axios.post(process.env.VUE_APP_BOOKERS,{
-      //       person_id: sand + 1,
-      //       xola_booker_id: this.bookerId
-      //     })
-      //     .then(function (response) {
-      //       console.log(response);
-      //     })
-      //     .catch(function (error) {
-      //       console.log(error);
-      //     });
-      //   }
-      // });
-
-
-      /** axios post on reservation table **/
-      // axios.post(process.env.VUE_APP_RESERVATIONS,{
-      //   size: this.bookerTeamSize,
-      //   reservation_for: this.reservationDateTime,
-      //   final_dollar_amount: this.bookerAmount,
-      //   xola_order_id: this.bookerId
-      // })
-      // .then(function (response) {
-      //   console.log(response);
-      // })
-      // .catch(function (error) {
-      //   console.log(error);
-      // });
-
-      /** axios post on reservation_people table**/
-
-      axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
-        person_id: sand + 1,
-        // xola_booker_id: this.bookerId
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
 
       /** axios post on waiver table **/
       axios.post(process.env.VUE_APP_WAIVERS,{
