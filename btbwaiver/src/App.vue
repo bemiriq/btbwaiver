@@ -35,7 +35,7 @@
 
         <span style="font-size: 1.7em;">{{ reservationTimeTitle }}</span>
 
-        <input type="text" name="" v-model="checkTravelerId"/>
+        <!-- <input type="text" name="" v-model="checkTravelerId"/> -->
 
         <br> <br>
 
@@ -607,8 +607,8 @@
   <!-- modal defined to pass value on mutiple database -->
   <b-modal id="modal-1" ref="my-modal-submit-id" title="BTB Waiver Form" centered v-bind:hide-footer="true">
     <p> Please click on submit to complete this waiver. If you want to go through your waiver again, please click on cross sign on top right. </p>
-      <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal();">SUBMIT</b-button> -->
       <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal();">SUBMIT</b-button>
+      <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal();">SUBMIT</b-button> -->
   </b-modal>
 
   <b-container class="bv-example-row">
@@ -621,7 +621,7 @@
 
       <b-col>
 
-        <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkPlayerId();">NEXT</b-button>
+        <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkPlayerId(); checkBookerId();">NEXT</b-button>
 
       </b-col>
     </b-row>
@@ -801,7 +801,9 @@
            console.log(this.posts);
 
 
-    axios.get(process.env.VUE_APP_BOOKERS).then(response => {this.allPlayerList = response.data}); 
+    axios.get(process.env.VUE_APP_BOOKERS).then(response => {this.allPlayerList = response.data});
+
+    axios.get(process.env.VUE_APP_RESERVATIONS).then(response => {this.allReservationList = response.data}); 
 
 
 
@@ -861,12 +863,14 @@
 
       showSignaturePad: false ,
       allPlayerList: [],
-      checkTravelerId: '',
+      allReservationList: [],
 
       bookername: '',
       bookerId: '',
       bookerTeamSize: '',
       bookerAmount: '',
+      bookerTravelerId: '',
+      // inputBookerId: '',
 
       reservationDateTime: '',
 
@@ -904,6 +908,7 @@
       posts: [],
 
       playersresult: [],
+      bookerresult: [],
       playerLastId:  '',
       lastPlayerData: [],
       controlPlayerData: [],
@@ -1022,6 +1027,7 @@
           this.bookerId = this.posts[index].id;
           this.bookerTeamSize = this.posts[index].items[0].quantity;
           this.bookerAmount = this.posts[index].items[0].amount;
+          this.bookerTravelerId = this.posts[index].travelers[0].id;
         },
               
       hideModal() {
@@ -1179,6 +1185,11 @@
         console.log('inside check player');
       },
 
+    checkBookerId(){
+        axios.get(process.env.VUE_APP_BOOKERS).then(response => {this.bookerresult = response.data.slice(-1)}); // this get id for player_minor table id
+        console.log('inside bookers');
+      },
+
     submitPlayerForm(){
 
       axios.post(process.env.VUE_APP_PEOPLE,{
@@ -1216,8 +1227,12 @@
 
       // console.log(this.controlPlayerData[1]);
       var controlPlayerData = this.playersresult[0];
-        var sand = controlPlayerData['id'];
-        console.log(sand);
+      var sand = controlPlayerData['id'];
+      // variable defined for booker id
+      var bookerDataId = this.bookerresult[0];
+      var bookerwithid = bookerDataId['id'];
+      console.log(sand);
+      console.log(bookerwithid);
         // console.log(sand);
 
       axios.post(process.env.VUE_APP_PLAYERS,{
@@ -1232,6 +1247,68 @@
 
       /** axios post the bookers table **/
 
+      var found = this.allPlayerList.find((todo) => {
+        return todo.xola_booker_id == this.bookerId
+      })
+
+      // If nothing is found, Array.find() returns undefined, which is false-y
+
+      if (found) {
+        console.log("already inserted")
+          } 
+      else {
+        
+        console.log("new id");
+          axios.post(process.env.VUE_APP_BOOKERS,{
+            person_id: sand + 1,
+            xola_booker_id: this.bookerId
+          })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        }
+
+        /** end of bookers table **/
+
+
+        /** axios post the bookers table **/
+
+      var foundTravelId = this.allReservationList.find((todo) => {
+        return todo.xola_order_id == this.bookerTravelerId
+        // console.log(todo.travelers.id);
+      })
+
+      // If nothing is foundTravelId, Array.find() returns undefined, which is false-y
+
+      if (foundTravelId) {
+        console.log("already inserted travel id")
+          } 
+      else {
+        
+        console.log("new  travel id");
+          axios.post(process.env.VUE_APP_RESERVATIONS,{
+            // person_id: sand + 1,
+            xola_order_id: this.bookerTravelerId,
+            size: this.bookerTeamSize,
+            booker_id: bookerwithid + 1,
+            final_dollar_amount: this.bookerAmount
+
+          })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        }
+
+        /** end of bookers table **/
+
+
+
       // axios.post(process.env.VUE_APP_BOOKERS,{
       //   person_id: sand + 1,
       //   xola_booker_id: this.bookerId
@@ -1243,41 +1320,41 @@
       //   console.log(error);
       // });
 
-        console.log(this.checkTravelerId);
-        this.allPlayerList.forEach(player => {
-        var allPList = player.xola_booker_id;
+      //   console.log(this.checkTravelerId);
+      //   this.allPlayerList.forEach(player => {
+      //   var allPList = player.xola_booker_id;
         
-        if(this.bookerId === allPList){
-          console.log("already inserted");
-        }
-        else{
-            axios.post(process.env.VUE_APP_BOOKERS,{
-            person_id: sand + 1,
-            xola_booker_id: this.bookerId
-          })
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-        }
-      });
+      //   if(this.bookerId === allPList){
+      //     console.log("already inserted");
+      //   }
+      //   else{
+      //       axios.post(process.env.VUE_APP_BOOKERS,{
+      //       person_id: sand + 1,
+      //       xola_booker_id: this.bookerId
+      //     })
+      //     .then(function (response) {
+      //       console.log(response);
+      //     })
+      //     .catch(function (error) {
+      //       console.log(error);
+      //     });
+      //   }
+      // });
 
 
       /** axios post on reservation table **/
-      axios.post(process.env.VUE_APP_RESERVATIONS,{
-        size: this.bookerTeamSize,
-        reservation_for: this.reservationDateTime,
-        final_dollar_amount: this.bookerAmount,
-        xola_order_id: this.bookerId
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      // axios.post(process.env.VUE_APP_RESERVATIONS,{
+      //   size: this.bookerTeamSize,
+      //   reservation_for: this.reservationDateTime,
+      //   final_dollar_amount: this.bookerAmount,
+      //   xola_order_id: this.bookerId
+      // })
+      // .then(function (response) {
+      //   console.log(response);
+      // })
+      // .catch(function (error) {
+      //   console.log(error);
+      // });
 
       /** axios post on reservation_people table**/
 
