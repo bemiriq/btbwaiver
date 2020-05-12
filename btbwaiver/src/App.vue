@@ -805,6 +805,8 @@
 
     axios.get(process.env.VUE_APP_RESERVATIONS).then(response => {this.allReservationList = response.data}); 
 
+    axios.get(process.env.VUE_APP_WAIVERS).then(response => {this.allwaiversList = response.data.slice(-1)}); 
+
 
 
           //  setInterval(() => {
@@ -864,6 +866,7 @@
       showSignaturePad: false ,
       allPlayerList: [],
       allReservationList: [],
+      allwaiversList: [],
 
       bookername: '',
       bookerId: '',
@@ -1210,6 +1213,25 @@
 
     submitPlayerForm(){
 
+      var waiverDataId = this.allwaiversList[0];
+       if(waiverDataId == null){
+          var waiverid = '0';
+        }
+        else{
+          var waiverid = waiverDataId['id'];
+        }
+
+      /** axios post on waiver table **/
+      axios.post(process.env.VUE_APP_WAIVERS,{
+        waiver_url : this.randomNumber
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
       axios.post(process.env.VUE_APP_PEOPLE,{
         first_name: this.first_name,
         last_name: this.last_name,
@@ -1217,8 +1239,8 @@
         gender_id: this.gender_id,
         phone: this.phone,
         email: this.email,
-        instagram: this.instagram
-
+        instagram: this.instagram,
+        waiver_id: waiverid + 1
       })
 
       .then(function (response) {
@@ -1380,20 +1402,6 @@
         })
 
         /** end of reservation_people table **/
-
-
-      /** axios post on waiver table **/
-      axios.post(process.env.VUE_APP_WAIVERS,{
-        // person_id: sand + 1,
-        // xola_booker_id: this.bookerId
-        waiver_url : this.randomNumber
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
 
 
       /** if function submits to different database if it contains value on it only **/
