@@ -1233,24 +1233,12 @@
 
     submitMinorForm(){
 
-      // axios.get(process.env.VUE_APP_PEOPLE).then(response => {this.controlPlayerData = response.data.slice(-1)});
-
-      // controlPlayerData = this.playersresult;
-      // console.log(response.data.slice(-1));
-
-      // var lastPlayerData = this.playersresult.slice(-1);
-      // console.log(this.playersresult.slice(-1));
-      // console.log(this.playersresult[0].id)
-      // var passLastPlayerData = lastPlayerData[1];
-      // console.log(passLastPlayerData);
-
-      // console.log(this.controlPlayerData[1]);
       var controlPlayerData = this.playersresult[0];
       if(controlPlayerData == null){
         var sand = '0';
       }
       else{
-        var san = controlPlayerData['id'];
+        var sand = controlPlayerData['id'];
       }
 
       // var sand = controlPlayerData['id'];
@@ -1383,6 +1371,15 @@
         }
 
         /** end of bookers table **/
+
+        /** check the reservation id for reservation_people table **/
+
+        var foundReservationId = this.reservationrresult.find((todo) => {
+          return todo.xola_order_id == this.bookerTravelerId
+          // console.log(todo.travelers.id);
+        })
+
+        /** end of reservation_people table **/
 
 
       /** axios post on waiver table **/
