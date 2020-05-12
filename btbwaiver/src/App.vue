@@ -1027,7 +1027,7 @@
           console.log(this.posts[index].id);
           console.log(this.posts[index].customerName);
           this.bookername = this.posts[index].customerName;
-          this.bookerId = this.bookerId;
+          this.bookerId = this.posts[index].id;
           this.bookerTeamSize = this.posts[index].items[0].quantity;
           this.bookerAmount = this.posts[index].items[0].amount;
           this.bookerTravelerId = this.posts[index].travelers[0].id;
@@ -1246,17 +1246,41 @@
 
       // console.log(this.controlPlayerData[1]);
       var controlPlayerData = this.playersresult[0];
-      var sand = controlPlayerData['id'];
+      if(controlPlayerData == null){
+        var sand = '0';
+      }
+      else{
+        var san = controlPlayerData['id'];
+      }
+
+      // var sand = controlPlayerData['id'];
       // variable defined for booker id
       var bookerDataId = this.bookerresult[0];
-      var bookerwithid = bookerDataId['id'];
+      // var checkEmptyBooking = Object.keys(bookerDataId).length;
+
+      if(bookerDataId == null){
+        var bookerwithid = '0';
+      }
+      else{
+        var bookerwithid = bookerDataId['id'];
+      }
 
       var reservationDataId = this.consistsreservationresult[0];
-      var reservationwithid = reservationDataId['id'];
-      // console.log(sand);
-      // console.log(bookerwithid);
-      console.log(reservationwithid);
-        // console.log(sand);
+      if(reservationDataId == null){
+        var reservationwithid = '0';
+      }
+      else{
+        var reservationwithid = reservationDataId['id'];
+      }
+
+      var reservationNewDataId = this.reservationrresult[0];
+       if(reservationNewDataId == null){
+          var reservationwithnewid = '0';
+        }
+        else{
+          var reservationwithnewid = reservationNewDataId['id'];
+        }
+      
 
       axios.post(process.env.VUE_APP_PLAYERS,{
         person_id: sand + 1
@@ -1309,7 +1333,7 @@
       if (foundTravelId) {
         // console.log("already inserted travel id");
         console.log(reservationwithid);
-        
+
         /** axios post on reservation_people table**/
 
           axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
@@ -1347,7 +1371,7 @@
 
           axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
             person_id: sand + 1,
-            reservation_id: reservationwithid + 1
+            reservation_id: reservationwithnewid + 1
           })
           .then(function (response) {
             console.log(response);
