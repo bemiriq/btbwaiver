@@ -60,7 +60,7 @@
 
             <b-col>
 
-              <b-button variant="primary" v-on:click="showAllTime(); reservationNameDiv = !reservationNameDiv, reservationTimeDiv = !reservationTimeDiv;">Don’t Know</b-button>
+              <b-button variant="primary" v-on:click="showAllTime(); reservationNameDiv = !reservationNameDiv, reservationTimeDiv = !reservationTimeDiv;">Need Help?</b-button>
 
 
             </b-col>
@@ -115,7 +115,7 @@
 
             <b-col>
               <div id="bookingNameModal">
-                <b-button v-b-modal="'modalName'">Don’t Know</b-button>
+                <b-button v-b-modal="'modalName'">Need Help?</b-button>
 
                 <b-modal id="modalName" centered title="Booking Name Required">
                   <p class="my-4">Please ask the front desk staff for assistance.</p>
@@ -188,7 +188,7 @@
 
   <b-form-group>
     <date-dropdown 
-    default="1993.01.10" 
+    default="01-10-1993" 
     min="1940" 
     max="2020"
     :months-names="months" 
@@ -266,7 +266,7 @@
             <b-form-group
               id="input-group-1"
               label-for="input-1"
-              description="If you choose to share your number, we will text you your FREE photos & videos."
+              description="We will use this address to share your FREE photos & videos. Please ensure the information is accurate."
               >
             </b-form-group>
 
@@ -302,13 +302,10 @@
       label-for="input-1" class="nameTitle">
     </b-form-group>
 
-  <b-form-radio-group
-  v-model="selected"
-  :options="options"
-  class="mb-3"
-  value-field="item"
-  text-field="name"
-  ></b-form-radio-group>
+  <b-form-radio-group v-model="promotional_item" class="mb-3" value-field="promotionalitem" text-field="name">
+    <b-form-radio value="1">YES</b-form-radio>
+    <b-form-radio value="0">NO</b-form-radio>
+  </b-form-radio-group>
 
   </b-form>
 
@@ -323,7 +320,7 @@
       <b-col></b-col>
 
       <b-col>
-        <b-button variant="primary" v-on:click="emailDiv = !emailDiv, genderDiv = !genderDiv" v-bind:disabled="isDisableComputed">NEXT</b-button>
+        <b-button variant="primary" v-on:click="emailDiv = !emailDiv; genderDiv = !genderDiv;" v-bind:disabled="isDisableComputed">NEXT</b-button>
       </b-col>
     </b-row>
   </b-container>
@@ -364,7 +361,7 @@
         <b-col></b-col>
 
         <b-col>
-          <b-button variant="primary" v-on:click="genderDiv = !genderDiv, hearAboutUsDiv = !hearAboutUsDiv" v-bind:disabled="validateGenderField">NEXT</b-button>
+          <b-button variant="primary" v-on:click="genderDiv = !genderDiv; hearAboutUsDiv = !hearAboutUsDiv;checkMissionId();" v-bind:disabled="validateGenderField">NEXT</b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -471,7 +468,7 @@
 
       <br>
 
-      <div class="form-group">>
+      <div class="form-group">
         <button @click="addExperience" type="button" class="btn btn-info" style="margin-right:1.5%;">Add Another Minor</button>
         <button @click="removeExperience" type="button" class="btn btn-outline-info">Remove Minor</button>
       </div>
@@ -495,7 +492,7 @@
         <b-col>
           <!-- <b-button variant="primary" v-on:click="checkPlayerId();">SUBMIT</b-button> -->
           
-        <b-button variant="primary" v-on:click="postReservationData(); minorsignDiv = !minorsignDiv; minorsAddDiv = !minorsAddDiv;">NEXT</b-button>
+        <b-button variant="primary" v-on:click="postReservationData(); postPeopleData(); minorsignDiv = !minorsignDiv; minorsAddDiv = !minorsAddDiv;">NEXT</b-button>
         <!-- <b-button variant="primary" v-on:click="submitMinorForm();">SUBMIT</b-button> -->
 
           <!-- {{lastPlayerData.id}} -->
@@ -609,7 +606,7 @@
 
       <b-col>
 
-        <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkPlayerId(); checkBookerId(); checkWaiverId(); checkReservationId();">NEXT</b-button>
+        <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkPlayerId(); checkBookerId(); checkWaiverId(); checkReservationId(); checkPeopleId();">NEXT</b-button>
 
       </b-col>
     </b-row>
@@ -859,8 +856,12 @@
       bookerTeamSize: '',
       bookerAmount: '',
       bookerTravelerId: '',
+      bookerEmail: '',
+      bookerExperineceId: '', /** this one is tracked down as for mission id **/
+      mission_id: '', /** converts bookerExperineceId into 1,2,3 **/
       // bookerTravelerId: '',
       consistsreservationresult:'',
+      consistspeopleresult: '', /* this is to pass people id into booking id */
       // inputBookerId: '',
 
       reservationDateTime: '',
@@ -881,7 +882,8 @@
 
       greetings: 'Welcome to BEAT THE BOMB',
       reservationTimeTitle: 'Please select your reservation time:',
-      reservationNameTitle: 'Please select your reservation name:',
+      // reservationNameTitle: 'Please select name of the person <br> who booked your reservation:',
+      reservationNameTitle: 'Please select name of the person who booked your reservation:',
       genderNameTitle: 'Whats your gender ?',
       minorNameTitle: 'Are you responsible for any minors in your group today?',
       minorNameTitle1: 'Do you have any minors you are signing a waiver for today?',
@@ -902,6 +904,7 @@
       playersresult: [],
       bookerresult: [],
       reservationrresult: [],
+      peoplresult: [],
       waiverresult: [],
       playerLastId:  '',
       lastPlayerData: [],
@@ -917,11 +920,11 @@
            // food: ''
          },
          show: true,
-         selected: 'A',
-         options: [
-         { item: 'A', name: 'YES' },
-         { item: 'B', name: 'NO' },
-         ],
+         selected: '1',
+         // options: [
+         // { promotionalitem: 'A', name: 'YES' },
+         // { promotionalitem: 'B', name: 'NO' },
+         // ],
 
          genderoptions: [
          {genderitem: '1', name: 'Female'},
@@ -947,6 +950,7 @@
         last_name:"",
         date_of_birth:"",
         gender_id:"",
+        promotional_item:"1",
         instagram:"",
         email:"",
         /* above are items posted for people table*/
@@ -992,6 +996,20 @@
 
     methods:{
 
+      checkMissionId(){
+        console.log("print mission id");
+        console.log(this.bookerAmount);
+        console.log(this.bookerExperineceId);
+        if(this.bookerExperineceId == "5e2077dfdbc7032265381d36"){
+          this.mission_id = 1;
+          console.log(this.mission_id);
+        }
+        if(this.bookerExperineceId == "5e207a68e86c5039be447ecc"){
+          this.mission_id = 2;
+          console.log(this.mission_id);
+        }
+      },
+
       clickedTimer(){
         var time = 11;
         var duration = moment.duration(time, "seconds");
@@ -1005,14 +1023,17 @@
       },
 
       bookerName(index){
-          console.log(this.posts[index].id);
-          console.log(this.posts[index].customerName);
-          console.log(this.posts[index].travelers[0].id);
+
+          console.log(this.posts[index].items[0].experience.id);
+
           this.bookername = this.posts[index].customerName;
           this.bookerId = this.posts[index].id;
           this.bookerTeamSize = this.posts[index].items[0].quantity;
           this.bookerAmount = this.posts[index].items[0].amount;
           this.bookerTravelerId = this.posts[index].travelers[0].id;
+          this.bookerExperineceId = this.posts[index].items[0].experience.id;
+          this.bookerEmail = this.posts[index].customerEmail;
+          // this.bookerPhoneNumber = this.post[index].customerNumber;
           // this.bookerTravelerId = this.posts[index].id;
         },
               
@@ -1209,7 +1230,28 @@
             booker_id: bookerwithid + 1,
             final_dollar_amount: this.bookerAmount,
             reservation_for: this.reservationDateTime,
-            location_id: 1
+            location_id: 1,
+            mission_id: this.mission_id
+          })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+    postPeopleData(){
+      var reservationOrderByEmail = this.bookerEmail;
+      axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail,{
+            // person_id: sand + 1,
+            email: this.bookerEmail,
+            first_name: this.bookerName,
+            // booker_id: bookerwithid + 1,
+            // final_dollar_amount: this.bookerAmount,
+            // reservation_for: this.reservationDateTime,
+            // location_id: 1,
+            // mission_id: this.mission_id
           })
           .then(function (response) {
             console.log(response);
@@ -1223,6 +1265,12 @@
       var reservationOrderId = this.bookerTravelerId;
       axios.post(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+reservationOrderId).then(response => {this.consistsreservationresult = response.data});
       console.log(this.bookerTravelerId);
+    },
+
+    checkPeopleId(){
+      var reservationOrderByEmail = this.bookerEmail;
+      axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail).then(response => {this.consistspeopleresult = response.data});
+      console.log(this.bookerEmail);
     },
 
     submitPlayerForm(){
@@ -1246,15 +1294,17 @@
         console.log(error);
       });
 
-      axios.post(process.env.VUE_APP_PEOPLE,{
-        first_name: this.first_name,
-        last_name: this.last_name,
+      var reservationOrderByEmail = this.bookerEmail;
+      axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail,{
+        first_name: this.bookername,
+        // last_name: this.last_name,
         date_of_birth: this.date_of_birth,
         gender_id: this.gender_id,
+        marketing_consent: this.promotional_item,
         phone: this.phone,
-        email: this.email,
+        email: this.bookerEmail,
         instagram: this.instagram,
-        waiver_id: waiverid + 1
+        // waiver_id: waiverid + 1
       })
 
       .then(function (response) {
@@ -1268,6 +1318,14 @@
 
 
     submitMinorForm(){
+
+      var waiverDataId = this.waiverresult[0];
+       if(waiverDataId == null){
+          var waiverid = '0';
+        }
+        else{
+          var waiverid = waiverDataId['id'];
+        }
 
       var controlPlayerData = this.playersresult[0];
       if(controlPlayerData == null){
@@ -1297,6 +1355,14 @@
         var reservationwithid = reservationDataId['id'];
       }
 
+      var peopleDataId = this.consistspeopleresult[0];
+      if(peopleDataId == null){
+        var peoplewithid = '0';
+      }
+      else{
+        var peoplewithid = peopleDataId['id'];
+      }
+
       var reservationNewDataId = this.reservationrresult[0];
        if(reservationNewDataId == null){
           var reservationwithnewid = '0';
@@ -1305,6 +1371,32 @@
           var reservationwithnewid = reservationNewDataId['id'];
         }
       
+      /** axios post the bookers table **/
+          var found = this.allPlayerList.find((todo) => {
+            return todo.xola_booker_id == this.bookerId
+          })
+
+          // If nothing is found, Array.find() returns undefined, which is false-y
+
+          if (found) {
+            console.log("already inserted")
+              } 
+          else {
+            
+            console.log("new id");
+              axios.post(process.env.VUE_APP_BOOKERS,{
+                person_id: peoplewithid,
+                xola_booker_id: this.bookerId
+              })
+              .then(function (response) {
+                console.log(response);
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+            }
+          /** end of bookers table **/
+
 
       axios.post(process.env.VUE_APP_PLAYERS,{
         person_id: sand + 1
@@ -1316,24 +1408,53 @@
         console.log(error);
       });
 
-      /** axios post the bookers table **/
-
-      var found = this.allPlayerList.find((todo) => {
-        return todo.xola_booker_id == this.bookerId
+      console.log(this.email);
+      console.log(this.consistspeopleresult);
+      var foundPeopleEmailId = this.consistspeopleresult.find((todo)=>{
+        return todo.email == this.bookerEmail
       })
+      if(foundPeopleEmailId){
+        console.log("Found Email");
+        /** this inserts the new player under booking name **/
+        var reservationOrderByEmail = this.email;
+        axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail,{
+          first_name: this.first_name,
+          last_name: this.last_name,
+          date_of_birth: this.date_of_birth,
+          gender_id: this.gender_id,
+          marketing_consent: this.promotional_item,
+          phone: this.phone,
+          // email: this.bookerEmail,
+          instagram: this.instagram,
+          waiver_id: waiverid + 1
+        })
 
-      // If nothing is found, Array.find() returns undefined, which is false-y
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+        /** end of player booking inserts **/
 
-      if (found) {
-        console.log("already inserted")
-          } 
-      else {
-        
-        console.log("new id");
-          axios.post(process.env.VUE_APP_BOOKERS,{
-            person_id: sand + 1,
-            xola_booker_id: this.bookerId
+        /** if booker is player as well **/
+        if(this.email == this.bookerEmail){
+          console.log("same email used");
+          // var reservationBookerEmail = this.email;
+          console.log(peoplewithid);
+          console.log(process.env.VUE_APP_PEOPLE+'/'+peoplewithid);
+          axios.put(process.env.VUE_APP_PEOPLE+'/'+peoplewithid,{
+          first_name: this.first_name,
+          last_name: this.last_name,
+          date_of_birth: this.date_of_birth,
+          gender_id: this.gender_id,
+          marketing_consent: this.promotional_item,
+          phone: this.phone,
+          // email: this.bookerEmail,
+          instagram: this.instagram,
+          waiver_id: waiverid + 1
           })
+
           .then(function (response) {
             console.log(response);
           })
@@ -1341,9 +1462,13 @@
             console.log(error);
           });
         }
-
-        /** end of bookers table **/
-
+        
+        /** end of booker who is player as well */
+      }
+      else{
+          /** checks the booker was inserted before or not then only inserts **/
+          console.log("email not found");
+      }
 
         /** axios post the bookers table **/
 
