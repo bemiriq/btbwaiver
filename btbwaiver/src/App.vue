@@ -60,7 +60,7 @@
 
             <b-col>
 
-              <b-button variant="primary" v-on:click="showAllTime(); reservationNameDiv = !reservationNameDiv, reservationTimeDiv = !reservationTimeDiv; dontknow();">DONT KNOW</b-button>
+              <b-button variant="primary" v-on:click="showAllTime(); reservationNameDiv = !reservationNameDiv, reservationTimeDiv = !reservationTimeDiv;">Don’t Know</b-button>
 
 
             </b-col>
@@ -115,7 +115,7 @@
 
             <b-col>
               <div id="bookingNameModal">
-                <b-button v-b-modal="'modalName'">DONT KNOW</b-button>
+                <b-button v-b-modal="'modalName'">Don’t Know</b-button>
 
                 <b-modal id="modalName" centered title="Booking Name Required">
                   <p class="my-4">Please ask the front desk staff for assistance.</p>
@@ -154,7 +154,7 @@
     v-model="first_name"
     type="text"
     required
-    placeholder="Enter your first name"
+    placeholder="Enter your first name" size="lg"
     ></b-form-input>
   </b-form-group>
 
@@ -173,7 +173,7 @@
     v-model="last_name"
     type="text"
     required
-    placeholder="Enter your last name"
+    placeholder="Enter your last name" size="lg"
     ></b-form-input>
 
     <br/>
@@ -192,7 +192,7 @@
     min="1940" 
     max="2020"
     :months-names="months" 
-    v-model="date_of_birth" id="dateDropdownDesign">
+    v-model="date_of_birth" id="dateDropdownDesign" size="lg">
   </date-dropdown>
   </b-form-group>
 
@@ -243,7 +243,7 @@
               v-model="email"
               type="email"
               required
-              placeholder="Enter Email Address" >
+              placeholder="Enter Email Address" size="lg">
             </b-form-input>
           </b-form-group>
 
@@ -263,9 +263,9 @@
                 <b-form-input
                 id="inputField"
                 v-model="phone"
-                type="text"
+                type="number"
                 required
-                placeholder="Enter Cell Phone Number">
+                placeholder="Enter Cell Phone Number" size="lg">
               </b-form-input>
             </b-form-group>
 
@@ -284,14 +284,16 @@
       label-for="input-1" class="nameTitle">
     </b-form-group>
 
-        <b-form-group>
+      <b-form-group class="instagramField">
+        <b-input-group prepend="@" size="lg">
           <b-form-input
-          id="inputField"
-          v-model="instagram"
-          type="text"
-          required
-          placeholder="Enter Instagram Handle">
-        </b-form-input>
+            id="inline-form-input-name"
+            v-model="instagram"
+            type="text"
+            required
+            placeholder="Enter Instagram Handle">
+          </b-form-input>
+        </b-input-group>
       </b-form-group>
       <b-form-group id="input-group-1" label-for="input-1" description="Share your handle for a chance to be featured on our official Instagram channel.">
       </b-form-group>
@@ -342,18 +344,17 @@
 
     <br><br>
 
-    <span style="font-size: 1.5em;">{{ genderNameTitle }}</span>
+    <span style="font-size: 1.6em;">{{ genderNameTitle }}</span>
 
     <br><br>
 
 
     <b-form-radio-group
     :options="genderoptions"
-    class="mb-3"
     type="text"
     v-model="gender_id"
     value-field="genderitem"
-    text-field="name"
+    text-field="name" id="genderText"
     ></b-form-radio-group>
 
 
@@ -382,45 +383,38 @@
   <div v-show="!hearAboutUsDiv" id="hearAboutUsDiv">
 
     <br><br>
-    <span style="font-size: 1.5em;">{{ hearAboutUsTitle }}</span>
+    <span style="font-size: 1.6em;">{{ hearAboutUsTitle }}</span>
     <br><br>
 
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="My friend (or loved one) invited me to come with them today" v-model="hearAboutUs">
-        <label class="form-check-label" for="defaultCheck1">
+        <b-form-radio class="form-check-input" id="radio-group-6" type="radio" value="Heard about it directly from a friend, family or colleague" v-model="hearAboutUs">
           Heard about it directly from a friend, family or colleague
-        </label>
+        </b-form-radio>
       </div>
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="From someone who had already done Beat The Bomb" v-model="hearAboutUs">
-        <label class="form-check-label" for="defaultCheck2">
+        <b-form-radio class="form-check-input" id="radio-group-1" type="radio" value="Saw it on a friend's social media" v-model="hearAboutUs">
           Saw it on a friend's social media 
-        </label>
+        </b-form-radio>
       </div>
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="I saw it on a friend's Instagram, FB, or Snapchat!" v-model="hearAboutUs">
-        <label class="form-check-label" for="defaultCheck2">
+        <b-form-radio class="form-check-input" id="radio-group-2" type="radio" value="Advertisement on Facebook or Instagram" v-model="hearAboutUs">
           Advertisement on Facebook or Instagram
-        </label>
+        </b-form-radio>
       </div>
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="Beat The Bomb's advertisement on Instagram or Facebook" v-model="hearAboutUs">
-        <label class="form-check-label" for="defaultCheck2">
+        <b-form-radio class="form-check-input" id="radio-group-3" type="radio" value="Google search" v-model="hearAboutUs">
           Google search
-        </label>
+        </b-form-radio>
       </div>
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="I did a Google search for something fun to do, and it happened to popped up" v-model="hearAboutUs">
-        <label class="form-check-label" for="defaultCheck2">
+        <b-form-radio class="form-check-input" id="radio-group-4" type="radio" value="Trip Advisor, Yelp or other Review site " v-model="hearAboutUs">
           Trip Advisor, Yelp or other Review site 
-        </label>
+        </b-form-radio>
       </div>
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="I was searching Yelp / Trip Advisor / or another reviews site for something fun"
-         v-model="hearAboutUs">
-        <label class="form-check-label" for="defaultCheck2">
+        <b-form-radio class="form-check-input" id="radio-group-5" type="radio" value="Other" v-model="hearAboutUs">
          Other
-        </label>
+        </b-form-radio>
       </div>
 
       <br><br>
@@ -463,13 +457,13 @@
 
         <div class="col" style="margin-left: 8%;">
           <label id="minorHeading">Minor's full name</label>
-          <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minor Full Name"/>
+          <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minor Full Name" size="lg"/>
         </div>
 
         <div class="col">
             <label id="minorHeading">Minor's date of birth</label>
             <!-- <input v-model="experience.title" :name="`minorsDetail[${index}][minordob]`" type="date" class="form-control" placeholder="DOB"> -->
-            <date-dropdown default="1993.01.10" min="1940" max="2020" :months-names="months" v-model="minordatabase.date_of_birth" style="margin-left: 22%;">
+            <date-dropdown default="1993.01.10" min="1940" max="2020" :months-names="months" v-model="minordatabase.date_of_birth" style="margin-left: 22%;" size="lg">
             </date-dropdown>
 
         </div>
@@ -483,8 +477,8 @@
 
       <br>
 
-      <div class="form-group">
-        <button @click="addExperience" type="button" class="btn btn-info">Add Minor</button>
+      <div class="form-group">>
+        <button @click="addExperience" type="button" class="btn btn-info" style="margin-right:1.5%;">Add Another Minor</button>
         <button @click="removeExperience" type="button" class="btn btn-outline-info">Remove Minor</button>
       </div>
 
@@ -607,7 +601,7 @@
   <!-- modal defined to pass value on mutiple database -->
   <b-modal id="modal-1" ref="my-modal-submit-id" title="BTB Waiver Form" centered v-bind:hide-footer="true">
     <p> Please click on submit to complete this waiver. If you want to go through your waiver again, please click on cross sign on top right. </p>
-      <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal();">SUBMIT</b-button>
+      <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer();">SUBMIT</b-button>
       <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); checkReservationId(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal();">SUBMIT</b-button> -->
   </b-modal>
 
@@ -639,7 +633,7 @@
 
     <br/><br/>
 
-  This app will reset in 10 seconds. </span>
+  This app will reset in {{countdownTimer}} seconds. </span>
 
   <br/> <br/>
 
@@ -898,7 +892,7 @@
       minorNameTitle: 'Are you responsible for any minors in your group today?',
       minorNameTitle1: 'Do you have any minors you are signing a waiver for today?',
       signDivTitle: 'Please review our waiver and then sign below.',
-      noBookingTitle: 'No booking name. Please go back and select your actual booking time.',
+      noBookingTitle: 'No booking name. Please go back and select your booking time.',
       instagramTitle: "Instagram Username ",
       phoneTitle: "Phone number for Team Beat The Bomb Images",
       hearAboutUsTitle: 'Where did you first hear about us ?',
@@ -909,6 +903,7 @@
       months: 'Jan, Feb, Mar, Apr, May, Jun, July, Aug, Sep, Oct, Nov, Dec',
       timeList: [],
       posts: [],
+      countdownTimer:'',
 
       playersresult: [],
       bookerresult: [],
@@ -1024,6 +1019,18 @@
 
 
     methods:{
+
+      clickedTimer(){
+        var time = 11;
+        var duration = moment.duration(time, "seconds");
+        var interval = 1000;
+
+        setInterval(function(){
+          duration.subtract(interval, "milliseconds"); //using momentjs substract function
+          this.countdownTimer = moment(duration.asMilliseconds()).format('s'); 
+          // console.log(moment(duration.asMilliseconds()).format('s')); 
+        }, interval );
+      },
 
       bookerName(index){
           console.log(this.posts[index].id);
@@ -1519,6 +1526,10 @@
     width: 30%;
   }
 
+  #genderText{
+    font-size: 1.2em;
+  }
+
   .nameTitle{
     font-size: 1.1em;
     text-align: left;
@@ -1534,6 +1545,11 @@
   .reservationTimeOption{
     width: 50%;
     font-size: 1.3em;
+  }
+
+  .instagramField{
+    width: 60%;
+    margin: auto;
   }
 
   .selectedBookingTime{
@@ -1561,6 +1577,7 @@
     margin-left: auto;
     margin-right: auto;
     width: 60%;
+    font-size: 1.2em;
   }
 
   .work-experiences > div {
