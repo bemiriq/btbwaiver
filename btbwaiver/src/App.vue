@@ -188,10 +188,10 @@
 
   <b-form-group>
     <date-dropdown 
-    default="01-10-1993" 
+    default="1993.02.27" 
     min="1940" 
     max="2020"
-    :months-names="months" 
+    :months-names="months" :format="'YYYY.MM.DD'"
     v-model="date_of_birth" id="dateDropdownDesign" size="lg">
   </date-dropdown>
   </b-form-group>
@@ -266,7 +266,7 @@
             <b-form-group
               id="input-group-1"
               label-for="input-1"
-              description="We will use this address to share your FREE photos & videos. Please ensure the information is accurate."
+              description="We will use this phone number to share your FREE photos & videos. Please ensure the information is accurate."
               >
             </b-form-group>
 
@@ -948,7 +948,7 @@
         /* post data to api*/
         // first_name:"",
         last_name:"",
-        date_of_birth:"",
+        date_of_birth:"1993-10-25",
         gender_id:"",
         promotional_item:"1",
         instagram:"",
@@ -1018,7 +1018,7 @@
         setInterval(function(){
           duration.subtract(interval, "milliseconds"); //using momentjs substract function
           this.countdownTimer = moment(duration.asMilliseconds()).format('s'); 
-          // console.log(moment(duration.asMilliseconds()).format('s')); 
+          console.log(moment(duration.asMilliseconds()).format('s')); 
         }, interval );
       },
 
