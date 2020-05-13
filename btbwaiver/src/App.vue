@@ -223,12 +223,6 @@
         <div v-show="!emailDiv">
         <!-- <p>SAN 2</p> -->
         <br><br>
-        <!-- <div style="margin-left: 1%; text-align: left; margin-right: 15%;">
-            <span style="font-size: 1.5em;">
-              What is your Email ?
-            </span>
-
-        </div> -->
 
             <br>
             <!-- <b-form @submit="onSubmit" @reset="onReset" v-if="show"> -->
