@@ -593,7 +593,7 @@
   <b-modal id="modal-1" ref="my-modal-submit-id" title="BTB Waiver Form" centered v-bind:hide-footer="true">
     <p> Please click on submit to complete this waiver. If you want to go through your waiver again, please click on cross sign on top right. </p>
       <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer();">SUBMIT</b-button>
-      <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); checkReservationId(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal();">SUBMIT</b-button> -->
+      <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); checkReservationId(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer();">SUBMIT</b-button> -->
   </b-modal>
 
   <b-container class="bv-example-row">
@@ -899,7 +899,7 @@
       months: 'Jan, Feb, Mar, Apr, May, Jun, July, Aug, Sep, Oct, Nov, Dec',
       timeList: [],
       posts: [],
-      countdownTimer:'',
+      countdownTimer:'10',
 
       playersresult: [],
       bookerresult: [],
@@ -1015,10 +1015,10 @@
         var duration = moment.duration(time, "seconds");
         var interval = 1000;
 
-        setInterval(function(){
+        setInterval(() => {
           duration.subtract(interval, "milliseconds"); //using momentjs substract function
           this.countdownTimer = moment(duration.asMilliseconds()).format('s'); 
-          console.log(moment(duration.asMilliseconds()).format('s')); 
+          // console.log(moment(duration.asMilliseconds()).format('s'));
         }, interval );
       },
 
