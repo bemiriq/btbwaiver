@@ -61,7 +61,7 @@
             <b-col>
 
               <!-- <b-button variant="primary" v-on:click="showAllTime(); allreservationamediv = !allreservationamediv, reservationTimeDiv = !reservationTimeDiv; getallreservation();">Need Help?</b-button> -->
-              <b-button variant="primary" v-on:click="allreservationamediv = !allreservationamediv, reservationTimeDiv = !reservationTimeDiv; getallreservation();">Need Help?</b-button>
+              <b-button variant="primary" v-on:click="allreservationamediv = !allreservationamediv, reservationTimeDiv = !reservationTimeDiv;">Need Help?</b-button>
 
 
 
@@ -85,9 +85,55 @@
 
       </div>
 
+      <!-- this div list all the name of reservation -->
       <div v-show="!allreservationamediv">
-        <p>SAN</p>
+        <!-- <p>SAN</p> -->
+        <!-- <div id="hideDiv"> -->
+        <br><br>
+
+        <span style="font-size: 1.7em;">{{ reservationNameTitle }}</span>
+
+        <br><br>
+
+        <div>
+          <div v-for="(post, index) in allbookings" :key="post.customerName">
+            <b-button block pill variant="outline-info" id="fetchButtonGap" v-on:click="bookerName(index); allreservationamediv = !allreservationamediv, fullnameDiv = !fullnameDiv">
+              {{post.customerName}}
+            </b-button>
+          </div>
+
+          <div v-if="!allbookings.length"><br><span style="font-size:1.1em; color: #17a2b8;">{{ noBookingTitle }}</span><br/></div>
+
+        </div>
+
+        <br><br>
+         <b-container class="bv-example-row">
+          <b-row>
+            <b-col>
+              <b-button variant="outline-info" v-on:click="allreservationamediv = !allreservationamediv, reservationTimeDiv = !reservationTimeDiv">BACK</b-button>
+            </b-col>
+
+            <b-col></b-col>
+
+
+            <b-col>
+              <div id="bookingNameModal">
+                <b-button v-b-modal="'modalNameList1'">Need Help?</b-button>
+
+                <b-modal id="modalNameList1" centered title="Booking Name Required">
+                  <p class="my-4">Please ask the front desk staff for assistance.</p>
+                </b-modal>
+              </div>
+
+            </b-col>
+
+
+          </b-row>
+
+        </b-container>
+
       </div>
+      <!-- end of list all name of reservation  -->
 
 
       <div v-show="!reservationNameDiv">
