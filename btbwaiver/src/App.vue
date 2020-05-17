@@ -60,7 +60,9 @@
 
             <b-col>
 
-              <b-button variant="primary" v-on:click="showAllTime(); reservationNameDiv = !reservationNameDiv, reservationTimeDiv = !reservationTimeDiv;">Need Help?</b-button>
+              <!-- <b-button variant="primary" v-on:click="showAllTime(); allreservationamediv = !allreservationamediv, reservationTimeDiv = !reservationTimeDiv; getallreservation();">Need Help?</b-button> -->
+              <b-button variant="primary" v-on:click="allreservationamediv = !allreservationamediv, reservationTimeDiv = !reservationTimeDiv; getallreservation();">Need Help?</b-button>
+
 
 
             </b-col>
@@ -81,6 +83,10 @@
 
         <br> <br>
 
+      </div>
+
+      <div v-show="!allreservationamediv">
+        <p>SAN</p>
       </div>
 
 
@@ -676,8 +682,11 @@
 
     computed: {
       isDisableComputed() {
-       if (this.email.length > 6 && this.phone.length > 9 ) {
-        return false;
+        var specialChar = "@.";
+       if (this.email.includes(specialChar) && this.phone.length > 9) {
+        // if(this.email.length > 6){
+          return false;
+        // }
       } else {
         return true;
       }
@@ -686,10 +695,12 @@
 
 
     isDisableFixedFirstName(){
-     if (this.first_name.length > 1 && this.last_name.length > 1) {
-      return false;
-    } else {
+      var specialChar = "@";
+     if (this.first_name.includes(specialChar) || this.last_name.includes(specialChar) || this.first_name < 1 || this.last_name < 1) {
       return true;
+    } 
+    else {
+      return false;
     }
   },
 
@@ -777,6 +788,13 @@
      
      // const AuthStr = 'Bearer '.concat(Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo);
 
+     axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate,
+     {headers: {'X-API-KEY': 'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo'}}) 
+     .then(response => 
+            (this.allbookings = response.data.data));
+           this.allbookings.sort();
+           console.log(this.allbookings);
+
     axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime,
      {headers: {'X-API-KEY': 'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo'}}) 
     .then(response => 
@@ -842,6 +860,7 @@
       minorsAddDiv: true,
       waiverSubmitted: true,
       hearAboutUsDiv: true,
+      allreservationamediv: true,
       date: moment(60 * 10 * 1000),
       timerCount: '10',
       minorsChecked: null,
@@ -850,6 +869,8 @@
       allPlayerList: [],
       allReservationList: [],
       // allwaiversList: [],
+
+      allbookings: [],
 
       bookername: '',
       bookerId: '',
@@ -995,6 +1016,17 @@
 
 
     methods:{
+
+      // getallreservation(){
+      //   console.log("san");
+      //   var arrivalDate = moment().format('YYYY-MM-DD');
+      //   axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+,
+      //   {headers: {'X-API-KEY': 'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo'}}) 
+      //   .then(response => 
+      //       (this.allbookings = response.data.data));
+      //      this.allbookings.sort();
+      //   console.log(this.allbookings);
+      // },
 
       checkMissionId(){
         console.log("print mission id");
