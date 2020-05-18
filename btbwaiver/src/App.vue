@@ -309,7 +309,7 @@
                 <b-form-input
                 id="inputField"
                 v-model="phone"
-                type="number"
+                type="tel"
                 required
                 placeholder="Enter Cell Phone Number" size="lg">
               </b-form-input>
