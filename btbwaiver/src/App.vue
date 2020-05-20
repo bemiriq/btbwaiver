@@ -1476,6 +1476,7 @@
 
       console.log(this.email);
       console.log(this.consistspeopleresult);
+
       var foundPeopleEmailId = this.consistspeopleresult.find((todo)=>{
         return todo.email == this.bookerEmail
       })
@@ -1483,6 +1484,11 @@
         console.log("Found Email");
         /** this inserts the new player under booking name **/
         var reservationOrderByEmail = this.email;
+
+        console.log(reservationOrderByEmail);
+        console.log(this.first_name);
+        console.log(this.last_name);
+        
         axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail,{
           first_name: this.first_name,
           last_name: this.last_name,
