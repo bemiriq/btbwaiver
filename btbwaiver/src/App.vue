@@ -1405,6 +1405,8 @@
       // variable defined for booker id
       var bookerDataId = this.bookerresult[0];
       // var checkEmptyBooking = Object.keys(bookerDataId).length;
+      
+      console.log(bookerDataId);
 
       if(bookerDataId == null){
         var bookerwithid = '0';
@@ -1422,6 +1424,9 @@
       }
 
       var peopleDataId = this.consistspeopleresult[0];
+
+      console.log(peopleDataId);
+
       if(peopleDataId == null){
         var peoplewithid = '0';
       }
@@ -1481,7 +1486,7 @@
         return todo.email == this.bookerEmail
       })
       if(foundPeopleEmailId){
-        console.log("Found Email");
+        // console.log("Found Email");
         /** this inserts the new player under booking name **/
         var reservationOrderByEmail = this.email;
 
@@ -1514,12 +1519,37 @@
         /** if booker is player as well **/
         console.log(this.email);
         console.log(this.bookerEmail);
-        
+
         if(this.email == this.bookerEmail){
           console.log("same email used");
           // var reservationBookerEmail = this.email;
           console.log(peoplewithid);
           console.log(process.env.VUE_APP_PEOPLE+'/'+peoplewithid);
+          axios.put(process.env.VUE_APP_PEOPLE+'/'+peoplewithid,{
+          first_name: this.first_name,
+          last_name: this.last_name,
+          date_of_birth: this.date_of_birth,
+          gender_id: this.gender_id,
+          marketing_consent: this.promotional_item,
+          phone: this.phone,
+          // email: this.bookerEmail,
+          instagram: this.instagram,
+          waiver_id: waiverid + 1
+          })
+
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        }
+
+        if(this.email !== this.bookerEmail){
+          console.log("different email booker");
+          // var reservationBookerEmail = this.email;
+          console.log(peoplewithid);
+          // console.log(process.env.VUE_APP_PEOPLE+'/'+peoplewithid);
           axios.put(process.env.VUE_APP_PEOPLE+'/'+peoplewithid,{
           first_name: this.first_name,
           last_name: this.last_name,
