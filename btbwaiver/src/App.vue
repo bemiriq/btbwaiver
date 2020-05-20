@@ -1488,6 +1488,8 @@
         console.log(reservationOrderByEmail);
         console.log(this.first_name);
         console.log(this.last_name);
+
+        console.log(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail);
         
         axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail,{
           first_name: this.first_name,
