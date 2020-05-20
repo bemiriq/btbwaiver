@@ -1490,7 +1490,7 @@
         console.log(this.last_name);
 
         console.log(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail);
-        
+
         axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail,{
           first_name: this.first_name,
           last_name: this.last_name,
@@ -1512,6 +1512,9 @@
         /** end of player booking inserts **/
 
         /** if booker is player as well **/
+        console.log(this.email);
+        console.log(this.bookerEmail);
+        
         if(this.email == this.bookerEmail){
           console.log("same email used");
           // var reservationBookerEmail = this.email;
