@@ -1499,7 +1499,7 @@
         axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail,{
           first_name: this.first_name,
           last_name: this.last_name,
-          date_of_birth: this.date_of_birth,
+          // date_of_birth: this.date_of_birth,
           gender_id: this.gender_id,
           marketing_consent: this.promotional_item,
           phone: this.phone,
