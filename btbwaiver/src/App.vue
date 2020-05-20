@@ -77,8 +77,6 @@
 
       <!-- this div list all the name of reservation -->
       <div v-show="!allreservationamediv">
-        <!-- <p>SAN</p> -->
-        <!-- <div id="hideDiv"> -->
         <br><br>
 
         <span style="font-size: 1.7em;">{{ reservationNameTitle }}</span>
