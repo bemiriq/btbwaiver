@@ -3,14 +3,6 @@
     <div id="app">
       <br/>
 
-      <!-- submit this form data to btb api -->
-      <!-- <form>
-        <label> Player Name </label>
-        <input type="text" v-model="first_name"/>
-        <button @click="submitPlayerForm()">ADD</button>
-      </form> -->
-
-
       <br>
 
       <div>
@@ -34,8 +26,6 @@
         <br>
 
         <span style="font-size: 1.7em;">{{ reservationTimeTitle }}</span>
-
-        <!-- <input type="text" name="" v-model="checkTravelerId"/> -->
 
         <br> <br>
 
@@ -728,8 +718,8 @@
 
     computed: {
       isDisableComputed() {
-        var specialChar = "@.";
-       if (this.email.includes(specialChar) && this.phone.length > 9) {
+        var specialChar = "@";
+       if (this.email.includes(specialChar) && this.phone.length > 9 && this.email.length > 6) {
         // if(this.email.length > 6){
           return false;
         // }
