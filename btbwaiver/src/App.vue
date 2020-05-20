@@ -1545,30 +1545,30 @@
           });
         }
 
-        if(this.email !== this.bookerEmail){
-          console.log("different email booker");
-          // var reservationBookerEmail = this.email;
-          console.log(peoplewithid);
-          // console.log(process.env.VUE_APP_PEOPLE+'/'+peoplewithid);
-          axios.put(process.env.VUE_APP_PEOPLE+'/'+peoplewithid,{
-          first_name: this.first_name,
-          last_name: this.last_name,
-          date_of_birth: this.date_of_birth,
-          gender_id: this.gender_id,
-          marketing_consent: this.promotional_item,
-          phone: this.phone,
-          // email: this.bookerEmail,
-          instagram: this.instagram,
-          waiver_id: waiverid + 1
-          })
+        // if(this.email !== this.bookerEmail){
+        //   console.log("different email booker");
+        //   // var reservationBookerEmail = this.email;
+        //   console.log(peoplewithid);
+        //   // console.log(process.env.VUE_APP_PEOPLE+'/'+peoplewithid);
+        //   axios.put(process.env.VUE_APP_PEOPLE+'/'+peoplewithid,{
+        //   first_name: this.first_name,
+        //   last_name: this.last_name,
+        //   // date_of_birth: this.date_of_birth,
+        //   gender_id: this.gender_id,
+        //   marketing_consent: this.promotional_item,
+        //   phone: this.phone,
+        //   // email: this.bookerEmail,
+        //   instagram: this.instagram,
+        //   waiver_id: waiverid + 1
+        //   })
 
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-        }
+        //   .then(function (response) {
+        //     console.log(response);
+        //   })
+        //   .catch(function (error) {
+        //     console.log(error);
+        //   });
+        // }
         
         /** end of booker who is player as well */
       }
