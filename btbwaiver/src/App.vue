@@ -1267,8 +1267,6 @@
       axios.get(process.env.VUE_APP_RESERVATIONS).then(response => {this.reservationrresult = response.data.slice(-1)}); 
       console.log('inside reservation');
 
-      // axios.get(process.env.VUE_APP_RESERVATIONS+'').then(response => {this.samereservationresult = response.data.slice(-1)});
-      // console.log(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+san);
     },
 
     checkWaiverId(){
