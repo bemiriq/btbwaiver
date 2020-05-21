@@ -458,7 +458,7 @@
         <b-col></b-col>
 
         <b-col>
-          <b-button variant="primary" v-on:click="hearAboutUsDiv = !hearAboutUsDiv, minorsAddDiv = !minorsAddDiv" v-bind:disabled="valiadateHearAboutUs">NEXT</b-button>
+          <b-button variant="primary" v-on:click="hearAboutUsDiv = !hearAboutUsDiv; minorsAddDiv = !minorsAddDiv; checkBookerId();" v-bind:disabled="valiadateHearAboutUs">NEXT</b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -632,8 +632,8 @@
   <!-- modal defined to pass value on mutiple database -->
   <b-modal id="modal-1" ref="my-modal-submit-id" title="BTB Waiver Form" centered v-bind:hide-footer="true">
     <p> Please click on submit to complete this waiver. If you want to go through your waiver again, please click on cross sign on top right. </p>
-      <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer();">SUBMIT</b-button>
-      <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); checkReservationId(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer();">SUBMIT</b-button> -->
+      <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer();">SUBMIT</b-button> -->
+      <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); checkReservationId(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer();">SUBMIT</b-button>
   </b-modal>
 
   <b-container class="bv-example-row">
@@ -1281,11 +1281,16 @@
       var bookerDataId = this.bookerresult[0];
       // var checkEmptyBooking = Object.keys(bookerDataId).length;
 
+      console.log(this.bookerresult[0]);
+
       if(bookerDataId == null){
         var bookerwithid = '0';
+        // console.log("booker was null");
       }
       else{
         var bookerwithid = bookerDataId['id'];
+        console.log(bookerDataId['id']);
+        console.log('not null');
       }
 
         console.log(reservationOrderId);
