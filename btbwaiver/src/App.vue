@@ -231,7 +231,7 @@
     default="1993.02.27" 
     min="1940" 
     max="2020"
-    :months-names="months" :format="'YYYY.MM.DD'"
+    :months-names="months"
     v-model="date_of_birth" id="dateDropdownDesign" size="lg">
   </date-dropdown>
   </b-form-group>
@@ -1061,8 +1061,7 @@
         var position = 2;
         
         if(this.reservationDateTime == 0){
-          console.log("it was zero");
-
+          // console.log("it was zero");
           this.reservationDateTime = moment(bookerTimeFetched).add(1,'hour').format("YYYY-MM-DD H:mm:ss");
         }
       },
@@ -1320,15 +1319,19 @@
 
     postPeopleData(){
       var reservationOrderByEmail = this.bookerEmail;
+      console.log(this.bookername);
+
+      var fullName = this.bookername;
+      var firstName = fullName.split(' ').slice(0, -1).join(' ');
+      var lastName = fullName.split(' ').slice(-1).join(' ');
+
+      console.log(firstName);
+      console.log(lastName);
+
       axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail,{
-            // person_id: sand + 1,
             email: this.bookerEmail,
-            last_name: this.bookername,
-            // booker_id: bookerwithid + 1,
-            // final_dollar_amount: this.bookerAmount,
-            // reservation_for: this.reservationDateTime,
-            // location_id: 1,
-            // mission_id: this.mission_id
+            first_name: firstName,
+            last_name: lastName
           })
           .then(function (response) {
             console.log(response);
