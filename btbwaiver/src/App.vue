@@ -249,7 +249,7 @@
       <b-col></b-col>
 
       <b-col>
-        <b-button variant="primary" v-on:click="fullnameDiv = !fullnameDiv; emailDiv = !emailDiv;" v-bind:disabled="isDisableFixedFirstName" >NEXT</b-button>
+        <b-button variant="primary" v-on:click="fullnameDiv = !fullnameDiv; emailDiv = !emailDiv; convertArrivalTime();" v-bind:disabled="isDisableFixedFirstName" >NEXT</b-button>
       </b-col>
     </b-row>
   </b-container>
@@ -906,6 +906,8 @@
 
       allbookings: [],
 
+      bookerArrivalTime: '',
+
       bookername: '',
       bookerId: '',
       bookerTeamSize: '',
@@ -1051,16 +1053,19 @@
 
     methods:{
 
-      // getallreservation(){
-      //   console.log("san");
-      //   var arrivalDate = moment().format('YYYY-MM-DD');
-      //   axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+,
-      //   {headers: {'X-API-KEY': 'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo'}}) 
-      //   .then(response => 
-      //       (this.allbookings = response.data.data));
-      //      this.allbookings.sort();
-      //   console.log(this.allbookings);
-      // },
+      convertArrivalTime(index){
+        console.log(this.bookerArrivalTime);
+        console.log("vitra chirey hai");
+        var bookerTimeFetched = this.bookerArrivalTime;
+        var character = ":";
+        var position = 2;
+        
+        if(this.reservationDateTime == 0){
+          console.log("it was zero");
+
+          this.reservationDateTime = moment(bookerTimeFetched).add(1,'hour').format("YYYY-MM-DD H:mm:ss");
+        }
+      },
 
       checkMissionId(){
         console.log("print mission id");
@@ -1099,6 +1104,7 @@
           this.bookerTravelerId = this.posts[index].travelers[0].id;
           this.bookerExperineceId = this.posts[index].items[0].experience.id;
           this.bookerEmail = this.posts[index].customerEmail;
+          this.bookerArrivalTime = this.posts[index].items[0].arrivalDatetime;
           // this.bookerPhoneNumber = this.post[index].customerNumber;
           // this.bookerTravelerId = this.posts[index].id;
         },
@@ -1191,6 +1197,8 @@
          console.log(this.reservationDateTime);
 
         var militaryTimeFormat = moment(standardTimeFormat, "h:mm A").format("HHmm");
+
+        // console.log(militaryTimeFormat);
 
         var arrivalDate = moment().format('YYYY-MM-DD');
       // var arrivalTime = this.militaryTimeFormat;
