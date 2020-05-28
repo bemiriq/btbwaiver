@@ -490,12 +490,12 @@
       <div class="form-row" v-for="(minordatabase, index) in minorsDetail" :key="index">
 
         <div class="col" style="margin-left: 8%;">
-          <label id="minorHeading">Minor's full name</label>
-          <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minor Full Name" size="lg"/>
+          <label id="minorHeading">Minors First Name and Last Initial</label>
+          <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name and Last Initial" size="lg"/>
         </div>
 
         <div class="col">
-            <label id="minorHeading">Minor's date of birth</label>>
+            <label id="minorHeading">Minor's date of birth</label>
             <!-- <date-dropdown default="1993.01.10" min="1940" max="2020" :months-names="months" v-model="minordatabase.date_of_birth" style="margin-left: 22%;" size="lg"> -->
             <!-- </date-dropdown> -->
             <dropdown-datepicker display-format="mdy" id="dateDropdownDesign" size="lg" v-model="minordatabase.date_of_birth" v-bind:min-age="6" default-date="2005-01-17"></dropdown-datepicker>
@@ -503,10 +503,7 @@
 
       </div>
 
-      
-
-        
-      </div>
+    </div>
 
       <br>
 
@@ -1615,8 +1612,46 @@
       axios.post(process.env.VUE_APP_PLAYERS,{
         person_id: this.newPlayerLastId
       })
-      .then(function (response) {
+      .then(response => {
         console.log(response);
+
+        // console.log(response.data[0].id);
+        console.log(response.data.id);
+        console.log(response.data);
+
+        var playerIdForMinor = response.data.id;
+        console.log(playerIdForMinor);
+        /** this will submit to minor table **/
+         var arr = this.minorsDetail;
+          var minorvalue = this.minorsDetail[0].first_name;
+          console.log(this.minorsDetail);
+          console.log(this.minorsDetail[0].first_name);
+
+          if (minorvalue.length > 0) {
+            console.log("INSIDE MINOR");
+            for(var i=0; i < arr.length; i++){
+
+                 axios.post(process.env.VUE_APP_PLAYERMINOR,{
+                  first_name: arr[i]['first_name'],
+                  date_of_birth: arr[i]['date_of_birth'],
+                  player_id: playerIdForMinor
+                })
+
+                .then(function (response) {
+                  console.log(response);
+                })
+                .catch(function (error) {
+                  console.log(error);
+                });
+                console.log("Minors added");
+            }
+          }
+
+          else{
+            console.log("No Minors");
+          }
+          /** end of minor table **/
+
       })
       .catch(function (error) {
         console.log(error);
@@ -1683,33 +1718,6 @@
 
 
       /** if function submits to different database if it contains value on it only **/
-
-      var arr = this.minorsDetail;
-      var minorvalue = this.minorsDetail[0].first_name;
-      // console.log(this.minorsDetail);
-
-      if (minorvalue.length > 0) {
-        for(var i=0; i < arr.length; i++){
-
-             axios.post(process.env.VUE_APP_PLAYERMINOR,{
-              first_name: arr[i]['first_name'],
-              date_of_birth: arr[i]['date_of_birth'],
-              player_id: this.newPlayerLastId
-            })
-
-            .then(function (response) {
-              console.log(response);
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-            console.log("Minors added");
-        }
-      }
-
-      else{
-        console.log("No Minors");
-      }
 
       
       
