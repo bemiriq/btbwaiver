@@ -461,7 +461,7 @@
         <b-col></b-col>
 
         <b-col>
-          <b-button variant="primary" v-on:click="hearAboutUsDiv = !hearAboutUsDiv; minorsAddDiv = !minorsAddDiv; checkBookerId(); postReservationData(); postPeopleData();" v-bind:disabled="valiadateHearAboutUs">NEXT</b-button>
+          <b-button variant="primary" v-on:click="hearAboutUsDiv = !hearAboutUsDiv; minorsAddDiv = !minorsAddDiv; checkBookerId(); postWaiverId();" v-bind:disabled="valiadateHearAboutUs">NEXT</b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -534,7 +534,7 @@
         <b-col>
           <!-- <b-button variant="primary" v-on:click="checkPlayerId();">SUBMIT</b-button> -->
           
-        <b-button variant="primary" v-on:click=" minorsignDiv = !minorsignDiv; minorsAddDiv = !minorsAddDiv;">NEXT</b-button>
+        <b-button variant="primary" v-on:click=" minorsignDiv = !minorsignDiv; minorsAddDiv = !minorsAddDiv; postReservationData(); postPeopleData();">NEXT</b-button>
         <!-- <b-button variant="primary" v-on:click="submitMinorForm();">SUBMIT</b-button> -->
 
           <!-- {{lastPlayerData.id}} -->
@@ -978,6 +978,7 @@
 
       lastPeopleDataId:[],
       newPlayerLastId:'',
+      waiverIdSinged: '',
 
       form:{
         email: '',
@@ -1089,6 +1090,21 @@
           this.mission_id = 2;
           console.log(this.mission_id);
         }
+      },
+
+      postWaiverId(){
+        /** axios post on waiver table **/
+        axios.post(process.env.VUE_APP_WAIVERS,{
+          waiver_url : this.randomNumber
+        })
+        .then(response => {
+          console.log(response.data.id);
+          // console.log(response.data.id);
+          this.waiverIdSinged = response.data.id;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
       },
 
       clickedTimer(){
@@ -1300,7 +1316,7 @@
     checkPeopleId(){
       var reservationOrderByEmail = this.bookerEmail;
       axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail).then(response => {this.consistspeopleresult = response.data});
-      console.log(this.bookerEmail);
+      // console.log(this.bookerEmail);
     },
 
     checkLastPeopleId(){
@@ -1331,6 +1347,7 @@
             // person_id: sand + 1,
             xola_order_id: this.bookerTravelerId,
             size: this.bookerTeamSize,
+            // booker_id: bookerwithid + 1,
             booker_id: bookerwithid + 1,
             final_dollar_amount: this.bookerAmount,
             reservation_for: this.reservationDateTime,
@@ -1359,7 +1376,13 @@
       axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail,{
             email: this.bookerEmail,
             first_name: firstName,
-            last_name: lastName
+            last_name: lastName,
+            date_of_birth: this.date_of_birth,
+            gender_id: this.gender_id,
+            marketing_consent: this.promotional_item,
+            phone: this.phone,
+            instagram: this.instagram,
+            waiver_id: this.waiverIdSinged
           })
           .then(response => {
             console.log(response);
@@ -1371,28 +1394,10 @@
           .catch(function (error) {
             console.log(error);
           });
+
     },
 
     submitPlayerForm(){
-
-      var waiverDataId = this.waiverresult[0];
-       if(waiverDataId == null){
-          var waiverid = '0';
-        }
-        else{
-          var waiverid = waiverDataId['id'];
-        }
-
-      /** axios post on waiver table **/
-      axios.post(process.env.VUE_APP_WAIVERS,{
-        waiver_url : this.randomNumber
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
 
       var reservationOrderByEmail = this.bookerEmail;
       axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail,{
@@ -1404,7 +1409,7 @@
         phone: this.phone,
         email: this.bookerEmail,
         instagram: this.instagram,
-        // waiver_id: waiverid + 1
+        waiver_id: this.waiverIdSinged
       })
 
       .then(response => {
@@ -1441,7 +1446,7 @@
           phone: this.phone,
           // email: this.bookerEmail,
           instagram: this.instagram,
-          waiver_id: waiverid + 1
+          waiver_id: this.waiverIdSinged
         })
 
         .then(response => {
@@ -1477,7 +1482,7 @@
           phone: this.phone,
           // email: this.bookerEmail,
           instagram: this.instagram,
-          waiver_id: waiverid + 1
+          waiver_id: this.waiverIdSinged
           })
 
           .then(response => {
