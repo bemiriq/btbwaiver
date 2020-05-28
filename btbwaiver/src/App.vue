@@ -532,9 +532,7 @@
           <!-- <b-button variant="primary" v-on:click="checkPlayerId();">SUBMIT</b-button> -->
           
         <b-button variant="primary" v-on:click=" minorsignDiv = !minorsignDiv; minorsAddDiv = !minorsAddDiv; postReservationData(); postPeopleData();">NEXT</b-button>
-        <!-- <b-button variant="primary" v-on:click="submitMinorForm();">SUBMIT</b-button> -->
 
-          <!-- {{lastPlayerData.id}} -->
         </b-col>
       </b-row>
     </b-container>
@@ -751,18 +749,7 @@
 
   time: function(){
     return this.date.format('mm:ss');
-  },
-
-  // formData(){
-
-  //   return{
-
-  //         first_name: this.first_name
-  //         // date_of_birth: this.date_of_birth
-        
-  //   }
-
-  // }
+  }
 
 },
 
