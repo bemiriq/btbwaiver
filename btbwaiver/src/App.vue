@@ -831,7 +831,7 @@
      .then(response => 
             (this.allbookings = response.data.data));
            this.allbookings.sort();
-           console.log(this.allbookings);
+           // console.log(this.allbookings);
 
     axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime,
      {headers: {'X-API-KEY': 'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo'}}) 
@@ -839,7 +839,7 @@
             (this.posts = response.data.data));
             
            this.posts.sort();
-           console.log(this.posts);
+           // console.log(this.posts);
 
 
     axios.get(process.env.VUE_APP_BOOKERS).then(response => {this.allPlayerList = response.data});
@@ -1063,8 +1063,8 @@
     methods:{
 
       convertArrivalTime(index){
-        console.log(this.bookerArrivalTime);
-        console.log("vitra chirey hai");
+        // console.log(this.bookerArrivalTime);
+        // console.log("vitra chirey hai");
         var bookerTimeFetched = this.bookerArrivalTime;
         var character = ":";
         var position = 2;
@@ -1076,16 +1076,16 @@
       },
 
       checkMissionId(){
-        console.log("print mission id");
-        console.log(this.bookerAmount);
-        console.log(this.bookerExperineceId);
+        // console.log("print mission id");
+        // console.log(this.bookerAmount);
+        // console.log(this.bookerExperineceId);
         if(this.bookerExperineceId == "5e2077dfdbc7032265381d36"){
           this.mission_id = 1;
-          console.log(this.mission_id);
+          // console.log(this.mission_id);
         }
         if(this.bookerExperineceId == "5e207a68e86c5039be447ecc"){
           this.mission_id = 2;
-          console.log(this.mission_id);
+          // console.log(this.mission_id);
         }
       },
 
@@ -1095,7 +1095,7 @@
           waiver_url : this.randomNumber
         })
         .then(response => {
-          console.log(response.data.id);
+          // console.log(response.data.id);
           // console.log(response.data.id);
           this.waiverIdSinged = response.data.id;
         })
@@ -1118,7 +1118,7 @@
 
       bookerName(index){
 
-          console.log(this.posts[index].items[0].experience.id);
+          // console.log(this.posts[index].items[0].experience.id);
 
           this.bookername = this.posts[index].customerName;
           this.bookerId = this.posts[index].id;
@@ -1217,7 +1217,7 @@
          // // console.log(event.target.value);
          var standardTimeFormat = event.target.value;
          this.reservationDateTime = standardTimeFormat +' '+ moment(moment.now()).format("YYYY/MM/DD");
-         console.log(this.reservationDateTime);
+         // console.log(this.reservationDateTime);
 
         var militaryTimeFormat = moment(standardTimeFormat, "h:mm A").format("HHmm");
 
@@ -1286,7 +1286,7 @@
 
     checkPlayerId(){
         axios.get(process.env.VUE_APP_PEOPLE).then(response => {this.playersresult = response.data.slice(0)}); // this get id for player_minor table id
-        console.log('inside check player');
+        // console.log('inside check player');
       },
 
     checkBookerId(){
@@ -1296,7 +1296,7 @@
 
     checkReservationId(){
       axios.get(process.env.VUE_APP_RESERVATIONS).then(response => {this.reservationrresult = response.data.slice(-1)}); 
-      console.log('inside reservation');
+      // console.log('inside reservation');
 
     },
 
@@ -1307,7 +1307,7 @@
     checkReservationId(){
       var reservationOrderId = this.bookerTravelerId;
       axios.post(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+reservationOrderId).then(response => {this.consistsreservationresult = response.data});
-      console.log(this.bookerTravelerId);
+      // console.log(this.bookerTravelerId);
     },
 
     checkPeopleId(){
@@ -1327,7 +1327,7 @@
       var bookerDataId = this.bookerresult[0];
       // var checkEmptyBooking = Object.keys(bookerDataId).length;
 
-      console.log(this.bookerresult[0]);
+      // console.log(this.bookerresult[0]);
 
       if(bookerDataId == null){
         var bookerwithid = '0';
@@ -1335,11 +1335,11 @@
       }
       else{
         var bookerwithid = bookerDataId['id'];
-        console.log(bookerDataId['id']);
-        console.log('not null');
+        // console.log(bookerDataId['id']);
+        // console.log('not null');
       }
 
-        console.log(reservationOrderId);
+        // console.log(reservationOrderId);
         axios.post(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+reservationOrderId,{
             // person_id: sand + 1,
             xola_order_id: this.bookerTravelerId,
@@ -1352,7 +1352,7 @@
             mission_id: this.mission_id
           })
           .then(function (response) {
-            console.log(response);
+            // console.log(response);
           })
           .catch(function (error) {
             console.log(error);
@@ -1367,8 +1367,8 @@
       var firstName = fullName.split(' ').slice(0, -1).join(' ');
       var lastName = fullName.split(' ').slice(-1).join(' ');
 
-      console.log(firstName);
-      console.log(lastName);
+      // console.log(firstName);
+      // console.log(lastName);
 
       axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail,{
             email: this.bookerEmail,
@@ -1382,7 +1382,7 @@
             waiver_id: this.waiverIdSinged
           })
           .then(response => {
-            console.log(response);
+            // console.log(response);
             // console.log(response.data[0].id);
             // this.lastPeopleDataId = response.data[0].id;
             // console.log(this.lastPeopleDataId)
@@ -1410,7 +1410,7 @@
       })
 
       .then(response => {
-            console.log(response.data);
+            // console.log(response.data);
            // this.list2rfidcontainer = response.data[0].id;
             console.log(response.data[0].id);
 
@@ -1428,11 +1428,11 @@
         /** this inserts the new player under booking name **/
         var reservationOrderByEmail = this.email;
 
-        console.log(reservationOrderByEmail);
-        console.log(this.first_name);
-        console.log(this.last_name);
+        // console.log(reservationOrderByEmail);
+        // console.log(this.first_name);
+        // console.log(this.last_name);
 
-        console.log(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail);
+        // console.log(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail);
 
         axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail,{
           first_name: this.first_name,
@@ -1447,10 +1447,10 @@
         })
 
         .then(response => {
-            console.log(response.data[0].id);
+            // console.log(response.data[0].id);
             this.newPlayerLastId = response.data[0].id;
             // const lastPlayerIdHo = response.data[0].id;
-            console.log(this.newPlayerLastId);
+            // console.log(this.newPlayerLastId);
             // axios.get(process.env.VUE_APP_PEOPLE).then(response => {
             //   this.newPlayerLastId = response.data.slice(-1);
             // });
@@ -1462,14 +1462,14 @@
         /** end of player booking inserts **/
 
         /** if booker is player as well **/
-        console.log(this.email);
-        console.log(this.bookerEmail);
+        // console.log(this.email);
+        // console.log(this.bookerEmail);
 
         if(this.email == this.bookerEmail){
-          console.log("same email used");
+          // console.log("same email used");
           // var reservationBookerEmail = this.email;
-          console.log(peoplewithid);
-          console.log(process.env.VUE_APP_PEOPLE+'/'+peoplewithid);
+          // console.log(peoplewithid);
+          // console.log(process.env.VUE_APP_PEOPLE+'/'+peoplewithid);
           axios.put(process.env.VUE_APP_PEOPLE+'/'+peoplewithid,{
           first_name: this.first_name,
           last_name: this.last_name,
@@ -1483,10 +1483,10 @@
           })
 
           .then(response => {
-            console.log(response.data[0].id);
+            // console.log(response.data[0].id);
             this.newPlayerLastId = response.data[0].id;
             // const lastPlayerIdHo = response.data[0].id;
-            console.log(this.newPlayerLastId);
+            // console.log(this.newPlayerLastId);
 
           })
           .catch(function (error) {
@@ -1530,8 +1530,8 @@
       }
       else{
         var sand = controlPlayerData;
-        console.log(this.newPlayerLastId);
-        console.log(sand);
+        // console.log(this.newPlayerLastId);
+        // console.log(sand);
       }
 
       // var sand = controlPlayerData['id'];
@@ -1539,7 +1539,7 @@
       var bookerDataId = this.bookerresult[0];
       // var checkEmptyBooking = Object.keys(bookerDataId).length;
       
-      console.log(bookerDataId);
+      // console.log(bookerDataId);
 
       if(bookerDataId == null){
         var bookerwithid = '0';
@@ -1558,7 +1558,7 @@
 
       var peopleDataId = this.consistspeopleresult[0];
 
-      console.log(peopleDataId);
+      // console.log(peopleDataId);
 
       if(peopleDataId == null){
         var peoplewithid = '0';
@@ -1578,7 +1578,7 @@
 
 
   
-    console.log(this.newPlayerLastId);
+    // console.log(this.newPlayerLastId);
     // console.log(lastPlayerIdHo);
 
       
@@ -1613,22 +1613,22 @@
         person_id: this.newPlayerLastId
       })
       .then(response => {
-        console.log(response);
+        // console.log(response);
 
         // console.log(response.data[0].id);
-        console.log(response.data.id);
-        console.log(response.data);
+        // console.log(response.data.id);
+        // console.log(response.data);
 
         var playerIdForMinor = response.data.id;
-        console.log(playerIdForMinor);
+        // console.log(playerIdForMinor);
         /** this will submit to minor table **/
          var arr = this.minorsDetail;
           var minorvalue = this.minorsDetail[0].first_name;
-          console.log(this.minorsDetail);
-          console.log(this.minorsDetail[0].first_name);
+          // console.log(this.minorsDetail);
+          // console.log(this.minorsDetail[0].first_name);
 
           if (minorvalue.length > 0) {
-            console.log("INSIDE MINOR");
+            // console.log("INSIDE MINOR");
             for(var i=0; i < arr.length; i++){
 
                  axios.post(process.env.VUE_APP_PLAYERMINOR,{
@@ -1638,17 +1638,17 @@
                 })
 
                 .then(function (response) {
-                  console.log(response);
+                  // console.log(response);
                 })
                 .catch(function (error) {
                   console.log(error);
                 });
-                console.log("Minors added");
+                // console.log("Minors added");
             }
           }
 
           else{
-            console.log("No Minors");
+            // console.log("No Minors");
           }
           /** end of minor table **/
 
@@ -1657,8 +1657,8 @@
         console.log(error);
       });
 
-      console.log(this.email);
-      console.log(this.consistspeopleresult);
+      // console.log(this.email);
+      // console.log(this.consistspeopleresult);
 
         /** axios post the bookers table **/
 
@@ -1671,7 +1671,7 @@
 
       if (foundTravelId) {
         // console.log("already inserted travel id");
-        console.log(reservationwithid);
+        // console.log(reservationwithid);
 
         /** axios post on reservation_people table**/
 
@@ -1680,7 +1680,7 @@
             reservation_id: reservationwithid
           })
           .then(function (response) {
-            console.log(response);
+            // console.log(response);
           })
           .catch(function (error) {
             console.log(error);
@@ -1697,7 +1697,7 @@
             reservation_id: reservationwithnewid + 1
           })
           .then(function (response) {
-            console.log(response);
+            // console.log(response);
           })
           .catch(function (error) {
             console.log(error);
