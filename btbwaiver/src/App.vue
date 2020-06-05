@@ -395,20 +395,21 @@
     <br><br>
 
 
-    <b-container class="bv-example-row">
-      <b-row>
-        <b-col>
-          <b-button variant="outline-primary" v-on:click="genderDiv = !genderDiv, emailDiv = !emailDiv">BACK</b-button>
-        </b-col>
+    <div v-if="gender_id > '0'">
+      <b-container class="bv-example-row">
+        <b-row>
+          <b-col>
+            <b-button variant="outline-primary" v-on:click="genderDiv = !genderDiv, emailDiv = !emailDiv">BACK</b-button>
+          </b-col>
 
-        <b-col></b-col>
+          <b-col></b-col>
 
-        <b-col>
-          <b-button variant="primary" v-on:click="genderDiv = !genderDiv; hearAboutUsDiv = !hearAboutUsDiv;checkMissionId();" v-bind:disabled="validateGenderField">NEXT</b-button>
-        </b-col>
-      </b-row>
-    </b-container>
-
+          <b-col>
+            <b-button variant="primary" v-on:click="genderDiv = !genderDiv; hearAboutUsDiv = !hearAboutUsDiv;checkMissionId();" v-bind:disabled="validateGenderField">NEXT</b-button>
+          </b-col>
+        </b-row>
+      </b-container>
+    </div>
     <br> <br>
 
   </div>
@@ -420,7 +421,7 @@
     <span style="font-size: 1.6em;">{{ hearAboutUsTitle }}</span>
     <br><br>
 
-      <div class="form-check">
+    <!--   <div class="form-check">
         <b-form-radio class="form-check-input" id="radio-group-6" type="radio" value="Heard about it directly from a friend, family or colleague" v-model="hearAboutUs">
           Heard about it directly from a friend, family or colleague
         </b-form-radio>
@@ -448,8 +449,35 @@
       <div class="form-check">
         <b-form-radio class="form-check-input" id="radio-group-5" type="radio" value="Other" v-model="hearAboutUs">
          Other
-        </b-form-radio>
-      </div>
+        </b-form-radio> -->
+
+        <div v-for="surveylist in surveyQuestionAnswersList.Survey_set_questions" :key="surveylist.id" style="text-align:left;">
+            <!-- {{surveylist.id}} use v-model and this will be the survey_id -->
+            <!-- <input type="text" v-model="surveylistid" :name="name1" :value="surveylist.id"/> -->
+            <!-- <br> -->
+            <!-- {{surveylist.Survey_question.id}} use v-model and pass this value to data and fetch on method now as for question_id -->
+            <div v-for="surveyanswer in surveylist.Survey_set_question_answer_options" :key="surveyanswer.id">
+              <!-- {{surveyanswer.id}} {{surveyanswer.Survey_answer_option.answer}} -->
+
+              <!-- <b-form-radio class="form-check-input" id="radio-group-6" type="radio" v-model="hearAboutUs"> -->
+
+              <!-- <b-form-radio class="form-check-input" id="radio-group-6" type="radio" :value="surveyanswer.survey_answer_option_id" v-model="hearAboutUs">
+                {{surveyanswer.Survey_answer_option.answer}}
+              </b-form-radio> -->
+
+              <input type="radio" class="form-check-input" v-model="hearAboutUs" :value="surveyanswer.survey_answer_option_id"> {{surveyanswer.Survey_answer_option.answer}}<br></input>
+
+              <!-- <span>Picked: {{ hearAboutUs }}</span> -->
+
+            </div>
+
+        </div>
+
+        <div v-if="hearAboutUs == '6'">
+          <!-- <p>SELECTED OTHER</p> -->
+          <b-form-input placeholder="How did you hear about us?" v-model="surveyOtherInput"></b-form-input>
+        </div>
+      <!-- </div> -->
 
       <br><br>
     <b-container class="bv-example-row">
@@ -846,7 +874,9 @@
 
     axios.get(process.env.VUE_APP_RESERVATIONS).then(response => {this.allReservationList = response.data});  
 
-
+    var surveyid1 = '1';
+    axios.get(process.env.VUE_APP_SURVEY+'/'+surveyid1).then(response => {this.surveyQuestionAnswersList = response.data});
+    console.log(process.env.VUE_APP_SURVEY+'/'+surveyid1).then(response => {this.surveyQuestionAnswersList = response.data});
 
           //  setInterval(() => {
           //   this.date = moment(this.date.subtract(1, 'seconds'))
@@ -908,8 +938,12 @@
       allPlayerList: [],
       allReservationList: [],
       // allwaiversList: [],
+      surveyOtherInput: '',
 
       allbookings: [],
+
+      surveyQuestionAnswersList:[],
+      surveylistid:'',
 
       bookerArrivalTime: '',
 
@@ -1216,6 +1250,7 @@
         // alert(this.selectedTime);
          // // console.log(event.target.value);
          var standardTimeFormat = event.target.value;
+         // console.log(event.target.value);
          this.reservationDateTime = standardTimeFormat +' '+ moment(moment.now()).format("YYYY/MM/DD");
          // console.log(this.reservationDateTime);
 
@@ -1607,6 +1642,61 @@
               });
             }
           /** end of bookers table **/
+
+      var lastPlayerIdNew = this.newPlayerLastId;
+      var answerId = this.hearAboutUs;
+      var surveyOtherText = this.surveyOtherInput;
+      // console.log(lastPlayerIdNew);
+      console.log(answerId);
+      /* post to post_survey_answers */
+
+      if(answerId = '6'){
+        console.log("answer Id was 6");
+          axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
+          person_id: lastPlayerIdNew,
+          survey_id: 1,
+          answer_id: answerId,
+          question_id: 1,
+          other: surveyOtherText
+        })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(function(error){
+          console.log(error);
+        })
+      }
+      else{
+        console.log("not 6");
+          axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
+          person_id: lastPlayerIdNew,
+          survey_id: 1,
+          answer_id: answerId,
+          question_id: 1
+        })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(function(error){
+          console.log(error);
+        })
+      }
+
+      // console.log("not 6");
+      //     axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
+      //     person_id: lastPlayerIdNew,
+      //     survey_id: 1,
+      //     answer_id: answerId,
+      //     question_id: 1
+      //   })
+      //   .then(response => {
+      //     console.log(response);
+      //   })
+      //   .catch(function(error){
+      //     console.log(error);
+      //   })
+
+      /* end of post survey answers */
 
 
       axios.post(process.env.VUE_APP_PLAYERS,{
