@@ -1650,37 +1650,37 @@
       console.log(answerId);
       /* post to post_survey_answers */
 
-      if(answerId = '6'){
-        console.log("answer Id was 6");
-          axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
-          person_id: lastPlayerIdNew,
-          survey_id: 1,
-          answer_id: answerId,
-          question_id: 1,
-          other: surveyOtherText
-        })
-        .then(response => {
-          console.log(response);
-        })
-        .catch(function(error){
-          console.log(error);
-        })
-      }
-      else{
-        console.log("not 6");
-          axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
-          person_id: lastPlayerIdNew,
-          survey_id: 1,
-          answer_id: answerId,
-          question_id: 1
-        })
-        .then(response => {
-          console.log(response);
-        })
-        .catch(function(error){
-          console.log(error);
-        })
-      }
+      // if(answerId = '6'){
+      //   console.log("answer Id was 6");
+      //     axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
+      //     person_id: lastPlayerIdNew,
+      //     survey_id: 1,
+      //     answer_id: answerId,
+      //     question_id: 1,
+      //     other: surveyOtherText
+      //   })
+      //   .then(response => {
+      //     console.log(response);
+      //   })
+      //   .catch(function(error){
+      //     console.log(error);
+      //   })
+      // }
+      // else{
+      //   console.log("not 6");
+      //     axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
+      //     person_id: lastPlayerIdNew,
+      //     survey_id: 1,
+      //     answer_id: answerId,
+      //     question_id: 1
+      //   })
+      //   .then(response => {
+      //     console.log(response);
+      //   })
+      //   .catch(function(error){
+      //     console.log(error);
+      //   })
+      // }
 
       // console.log("not 6");
       //     axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
