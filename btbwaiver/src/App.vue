@@ -874,9 +874,10 @@
 
     axios.get(process.env.VUE_APP_RESERVATIONS).then(response => {this.allReservationList = response.data});  
 
+    cnsole.log("below is axios post url");
     var surveyid1 = '1';
-    axios.get(process.env.VUE_APP_SURVEY+'/'+surveyid1).then(response => {this.surveyQuestionAnswersList = response.data});
     console.log(process.env.VUE_APP_SURVEY+'/'+surveyid1).then(response => {this.surveyQuestionAnswersList = response.data});
+    axios.get(process.env.VUE_APP_SURVEY+'/'+surveyid1).then(response => {this.surveyQuestionAnswersList = response.data});
 
           //  setInterval(() => {
           //   this.date = moment(this.date.subtract(1, 'seconds'))
