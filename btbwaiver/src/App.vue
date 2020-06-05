@@ -474,9 +474,9 @@
         </div>
 
         <div v-if="hearAboutUs == '6'">
-          <!-- <p>SELECTED OTHER</p> -->
           <b-form-input placeholder="How did you hear about us?" v-model="surveyOtherInput"></b-form-input>
         </div>
+
       <!-- </div> -->
 
       <br><br>
@@ -876,11 +876,22 @@
 
     console.log("below is axios post url");
     var surveyid1 = '1';
-    console.log(process.env.VUE_APP_SURVEY+'/'+surveyid1).then(response => {this.surveyQuestionAnswersList = response.data});
-    axios.get(process.env.VUE_APP_SURVEY+'/'+surveyid1).then(response => {this.surveyQuestionAnswersList = response.data});
+    // console.log(process.env.VUE_APP_SURVEY+'/'+surveyid1).then(response => {this.surveyQuestionAnswersList = response.data});
+    // axios.get(process.env.VUE_APP_SURVEY+'/'+surveyid1).then(response => {this.surveyQuestionAnswersList = response.data});
+
+    axios.get(process.env.VUE_APP_SURVEY+'/'+surveyid1,{
+
+          })
+          .then(response => {
+            this.surveyQuestionAnswersList = response.data;
+            console.log(response.data);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
 
     console.log(this.surveyQuestionAnswersList);
-    
+
           //  setInterval(() => {
           //   this.date = moment(this.date.subtract(1, 'seconds'))
           // }, 1000)
@@ -1653,51 +1664,51 @@
       console.log(answerId);
       /* post to post_survey_answers */
 
-      // if(answerId = '6'){
-      //   console.log("answer Id was 6");
-      //     axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
-      //     person_id: lastPlayerIdNew,
-      //     survey_id: 1,
-      //     answer_id: answerId,
-      //     question_id: 1,
-      //     other: surveyOtherText
-      //   })
-      //   .then(response => {
-      //     console.log(response);
-      //   })
-      //   .catch(function(error){
-      //     console.log(error);
-      //   })
-      // }
-      // else{
-      //   console.log("not 6");
-      //     axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
-      //     person_id: lastPlayerIdNew,
-      //     survey_id: 1,
-      //     answer_id: answerId,
-      //     question_id: 1
-      //   })
-      //   .then(response => {
-      //     console.log(response);
-      //   })
-      //   .catch(function(error){
-      //     console.log(error);
-      //   })
-      // }
+      if(answerId = '6'){
+        console.log("answer Id was 6");
+          axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
+          person_id: lastPlayerIdNew,
+          survey_id: 1,
+          answer_id: answerId,
+          question_id: 1,
+          open_text: surveyOtherText
+        })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(function(error){
+          console.log(error);
+        })
+      }
+      else{
+        console.log("not 6");
+          axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
+          person_id: lastPlayerIdNew,
+          survey_id: 1,
+          answer_id: answerId,
+          question_id: 1
+        })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(function(error){
+          console.log(error);
+        })
+      }
 
       // console.log("not 6");
-      //     axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
-      //     person_id: lastPlayerIdNew,
-      //     survey_id: 1,
-      //     answer_id: answerId,
-      //     question_id: 1
-      //   })
-      //   .then(response => {
-      //     console.log(response);
-      //   })
-      //   .catch(function(error){
-      //     console.log(error);
-      //   })
+        //   axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
+        //   person_id: lastPlayerIdNew,
+        //   survey_id: 1,
+        //   answer_id: answerId,
+        //   question_id: 1
+        // })
+        // .then(response => {
+        //   console.log(response);
+        // })
+        // .catch(function(error){
+        //   console.log(error);
+        // })
 
       /* end of post survey answers */
 
