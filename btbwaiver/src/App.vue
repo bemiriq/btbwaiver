@@ -1178,6 +1178,9 @@
           this.bookerArrivalTime = this.posts[index].items[0].arrivalDatetime;
           // this.bookerPhoneNumber = this.post[index].customerNumber;
           // this.bookerTravelerId = this.posts[index].id;
+
+          console.log("below booker id = ");
+          console.log(this.bookerId);
         },
               
       hideModal() {
@@ -1644,10 +1647,12 @@
     // console.log(this.newPlayerLastId);
     // console.log(lastPlayerIdHo);
 
-      
+      var selectedBookerId = this.bookerId;
+      console.log(selectedBookerId);
+
       /** axios post the bookers table **/
           var found = this.allPlayerList.find((todo) => {
-            return todo.xola_booker_id == this.bookerId
+            return todo.xola_booker_id == selectedBookerId
           })
 
           // If nothing is found, Array.find() returns undefined, which is false-y
@@ -1656,11 +1661,10 @@
             console.log("already inserted")
               } 
           else {
-            
             console.log("new id");
               axios.post(process.env.VUE_APP_BOOKERS,{
                 person_id: peoplewithid,
-                xola_booker_id: this.bookerId
+                xola_booker_id: selectedBookerId
               })
               .then(function (response) {
                 console.log(response);
