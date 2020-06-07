@@ -235,7 +235,7 @@
     v-model="date_of_birth" id="dateDropdownDesign" size="lg">
   </date-dropdown> -->
 
-  <dropdown-datepicker display-format="mdy" id="dateDropdownDesign" size="lg" v-model="date_of_birth" v-bind:min-age="6" default-date="2005-01-17"></dropdown-datepicker>
+  <dropdown-datepicker display-format="mdy" v-model="date_of_birth" v-bind:min-age="6" default-date="2005-01-17"></dropdown-datepicker>
 
   </b-form-group>
 
@@ -1411,6 +1411,9 @@
     postPeopleData(){
       var reservationOrderByEmail = this.bookerEmail;
       console.log(this.bookername);
+      console.log(reservationOrderByEmail);
+      console.log(firstName);
+      console.log(lastName);
 
       var fullName = this.bookername;
       var firstName = fullName.split(' ').slice(0, -1).join(' ');
@@ -1420,15 +1423,15 @@
       // console.log(lastName);
 
       axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail,{
-            email: this.bookerEmail,
+            email: reservationOrderByEmail,
             first_name: firstName,
             last_name: lastName,
-            date_of_birth: this.date_of_birth,
-            gender_id: this.gender_id,
-            marketing_consent: this.promotional_item,
-            phone: this.phone,
-            instagram: this.instagram,
-            waiver_id: this.waiverIdSinged
+            // date_of_birth: this.date_of_birth,
+            // gender_id: this.gender_id,
+            // marketing_consent: this.promotional_item,
+            // phone: this.phone,
+            // instagram: this.instagram,
+            // waiver_id: this.waiverIdSinged
           })
           .then(response => {
             // console.log(response);
@@ -1515,32 +1518,43 @@
         // console.log(this.bookerEmail);
 
         if(this.email == this.bookerEmail){
-          // console.log("same email used");
+          console.log("same email used");
           // var reservationBookerEmail = this.email;
           // console.log(peoplewithid);
-          // console.log(process.env.VUE_APP_PEOPLE+'/'+peoplewithid);
-          axios.put(process.env.VUE_APP_PEOPLE+'/'+peoplewithid,{
-          first_name: this.first_name,
-          last_name: this.last_name,
-          date_of_birth: this.date_of_birth,
-          gender_id: this.gender_id,
-          marketing_consent: this.promotional_item,
-          phone: this.phone,
-          // email: this.bookerEmail,
-          instagram: this.instagram,
-          waiver_id: this.waiverIdSinged
-          })
 
+          var sameemailused = this.bookerEmail;
+          console.log(sameemailused);
+
+          console.log(this.email);
+          console.log(this.bookerEmail);
+          console.log(this.first_name);
+          console.log(this.date_of_birth);
+          console.log(this.gender_id);
+          console.log(this.promotional_item);
+          console.log(this.waiverIdSinged);
+
+          console.log(process.env.VUE_APP_PEOPLE+'/find_or_create/'+sameemailused);
+
+          axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/'+sameemailused,{
+            first_name: this.first_name,
+            last_name: this.last_name,
+            date_of_birth: this.date_of_birth,
+            gender_id: this.gender_id,
+            marketing_consent: this.promotional_item,
+            phone: this.phone,
+            // email: this.bookerEmail,
+            instagram: this.instagram,
+            waiver_id: this.waiverIdSinged
+          })
           .then(response => {
-            // console.log(response.data[0].id);
+            console.log(response);
+            // console.log(response.data);
+            console.log(response.data[0].id);
             this.newPlayerLastId = response.data[0].id;
-            // const lastPlayerIdHo = response.data[0].id;
-            // console.log(this.newPlayerLastId);
-
           })
-          .catch(function (error) {
+          .catch(function (error){
             console.log(error);
-          });
+          })
         }
         /** end of booker who is player as well */
       }
@@ -1664,37 +1678,37 @@
       console.log(answerId);
       /* post to post_survey_answers */
 
-      // if(answerId = '6'){
-      //   console.log("answer Id was 6");
-      //     axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
-      //     person_id: lastPlayerIdNew,
-      //     survey_id: 1,
-      //     answer_id: answerId,
-      //     question_id: 1,
-      //     open_text: surveyOtherText
-      //   })
-      //   .then(response => {
-      //     console.log(response);
-      //   })
-      //   .catch(function(error){
-      //     console.log(error);
-      //   })
-      // }
-      // else{
-      //   console.log("not 6");
-      //     axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
-      //     person_id: lastPlayerIdNew,
-      //     survey_id: 1,
-      //     answer_id: answerId,
-      //     question_id: 1
-      //   })
-      //   .then(response => {
-      //     console.log(response);
-      //   })
-      //   .catch(function(error){
-      //     console.log(error);
-      //   })
-      // }
+      if(answerId = '6'){
+        console.log("answer Id was 6");
+          axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
+          person_id: lastPlayerIdNew,
+          survey_id: 1,
+          answer_id: answerId,
+          question_id: 1,
+          open_text: surveyOtherText
+        })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(function(error){
+          console.log(error);
+        })
+      }
+      else{
+        console.log("not 6");
+          axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
+          person_id: lastPlayerIdNew,
+          survey_id: 1,
+          answer_id: answerId,
+          question_id: 1
+        })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(function(error){
+          console.log(error);
+        })
+      }
 
       // console.log("not 6");
         //   axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
