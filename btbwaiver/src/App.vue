@@ -1539,21 +1539,36 @@
           console.log(process.env.VUE_APP_PEOPLE+'/find_or_create/'+sameemailused);
 
           axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/'+sameemailused,{
-            first_name: this.first_name,
-            last_name: this.last_name,
-            date_of_birth: this.date_of_birth,
-            gender_id: this.gender_id,
-            marketing_consent: this.promotional_item,
-            phone: this.phone,
-            // email: this.bookerEmail,
-            instagram: this.instagram,
-            waiver_id: this.waiverIdSinged
+            
           })
           .then(response => {
             console.log(response);
             // console.log(response.data);
             console.log(response.data[0].id);
             this.newPlayerLastId = response.data[0].id;
+
+            var peopleid = response.data[0].id;
+            console.log("people id :"+peopleid);
+            /** this will get the people id and update it **/
+            axios.put(process.env.VUE_APP_PEOPLE+'/'+peopleid,{
+              first_name: this.first_name,
+              last_name: this.last_name,
+              date_of_birth: this.date_of_birth,
+              gender_id: this.gender_id,
+              marketing_consent: this.promotional_item,
+              phone: this.phone,
+              // email: this.bookerEmail,
+              instagram: this.instagram,
+              waiver_id: this.waiverIdSinged
+            })
+            .then(response => {
+              console.log(response);
+              console.log("above 1564 should display data inserted to database");
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+
           })
           .catch(function (error){
             console.log(error);
