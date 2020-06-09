@@ -30,13 +30,31 @@
         <br> <br>
 
 
-        <div v-for="(year,index) in timeList" v-model="selectedTime">
+      <div v-for="todo in sortedArray" v-model="selectedTime">
+        <p v-if="todo.items[0].arrivalTime >= momentFirstTime && todo.items[0].arrivalTime <= momentLastTime">
+          <b-button block pill variant="outline-info" id="fetchButtonGap" v-model:value="todo.items[0].arrivalTime" v-on:click="showTheTime(); reservationTimeDiv = !reservationTimeDiv ; reservationNameDiv = !reservationNameDiv ;">
+            {{todo.items[0].arrivalTime}}
+          </b-button>
+
+
+        </p>
+
+        <!-- <p v-else>No booking for one hour so its cleaning time at 247 . </p> -->
+        <!-- <div v-for="time in allbookings" :key="time.id">
+          <div v-for="alltime in time.items" :key="alltime.id">
+            {{alltime.arrivalTime}}
+          </div>
+        </div> -->
+      </div>
+
+
+       <!--  <div v-for="(year,index) in timeList" v-model="selectedTime">
 
           <b-button block pill variant="outline-info" id="fetchButtonGap" v-model:value="index,year" v-on:click="showTheTime(); reservationTimeDiv = !reservationTimeDiv ; reservationNameDiv = !reservationNameDiv ;">
             {{year}}<br>
           </b-button>
 
-        </div>
+        </div> -->
 
 
         <br><br>
@@ -90,7 +108,7 @@
             </b-button>
           </div>
 
-          <div v-if="!allbookings.length"><br><span style="font-size:1.1em; color: #17a2b8;">{{ noBookingTitle }}</span><br/></div>
+          <!-- <div v-if="!allbookings.length"><br><span style="font-size:1.1em; color: #17a2b8;">{{ noBookingTitle }}</span><br/></div> -->
 
         </div>
 
@@ -140,7 +158,8 @@
             </b-button>
           </div>
 
-          <div v-if="!posts.length"><br><span style="font-size:1.1em; color: #17a2b8;">{{ noBookingTitle }}</span><br/></div>
+          <!-- <div v-if="!posts.length"><br><span style="font-size:1.1em; color: #17a2b8;">{{ noBookingTitle }}</span><br/></div> -->
+
         </div>
         <br><br>
 
@@ -499,7 +518,7 @@
   </div>
 
 
-  <div v-show="!minorsAddDiv">
+  <div v-show="minorsAddDiv">
 
         <br><br>
 
@@ -507,11 +526,11 @@
 
     <br><br>
 
-      <b-form-radio-group v-model="minorsChecked" :options="optionsSelectedNo" class="mb-3" value-field="item" text-field="name">
+      <b-form-radio-group v-model="minorsChecked" :options="optionsSelectedNo" class="mb-3" value-field="item" text-field="name" v-on:change="validateMinorFieldFunction">
         
       </b-form-radio-group>
 
-    <div v-show="minorsChecked  === 'A' ">
+    <div v-show="minorsChecked  === 'A' " >
 
       <div class="work-experiences">
 
@@ -519,7 +538,7 @@
 
         <div class="col" style="margin-left: 8%;">
           <label id="minorHeading">Minors First Name and Last Initial</label>
-          <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name and Last Initial" size="lg"/>
+          <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name and Last Initial" size="lg" v-on:input="validateMinorFieldFunction"/>
         </div>
 
         <div class="col">
@@ -559,7 +578,7 @@
         <b-col>
           <!-- <b-button variant="primary" v-on:click="checkPlayerId();">SUBMIT</b-button> -->
           
-        <b-button variant="primary" v-on:click=" minorsignDiv = !minorsignDiv; minorsAddDiv = !minorsAddDiv; postReservationData(); postPeopleData();">NEXT</b-button>
+        <b-button variant="primary" v-on:click=" minorsignDiv = !minorsignDiv; minorsAddDiv = !minorsAddDiv; postReservationData(); postPeopleData();" v-bind:disabled="validateMinorField">NEXT</b-button>
         <!-- <b-button variant="primary" v-on:click="submitMinorForm();">SUBMIT</b-button> -->
 
           <!-- {{lastPlayerData.id}} -->
@@ -576,11 +595,11 @@
 
    <br><br>
 
-      <div style="text-align: left; margin-left: 2%; margin-right: 2%; text-align:justify;">
-    <span style="font-size: 1.0em;">{{ waiverParagraph1 }}</span><br/><br/>
-    <span style="font-size: 1.0em; ">{{ waiverParagraph2 }}</span><br/><br/>
-    <span style="font-size: 1.0em;">{{ waiverParagraph3 }}</span><br/><br/>
-  </div>
+    <!-- <div style="text-align: left; margin-left: 2%; margin-right: 2%; text-align:justify;">
+      <span style="font-size: 1.0em;">{{ waiverParagraph1 }}</span><br/><br/>
+      <span style="font-size: 1.0em; ">{{ waiverParagraph2 }}</span><br/><br/>
+      <span style="font-size: 1.0em;">{{ waiverParagraph3 }}</span><br/><br/>
+    </div> -->
 
    <div>
     <b-button v-b-modal.modal-scrollable variant="info">View Full Waiver</b-button>
@@ -755,6 +774,21 @@
       } else {
         return true;
       }
+    },
+
+    sortedArray: function() {
+      // console.log("inside sortedArray");
+      // function compare(a, b) {
+      //   if (a.items[0].arrivalTime < b.items[0].arrivalTime)
+      //     return -1;
+      //   if (a.items[0].arrivalTime > b.items[0].arrivalTime)
+      //     return 1;
+      //   return -1;
+      //     }
+
+      // return this.allbookings.sort(compare);
+
+      return this.allbookings.sort((a, b) => a.items[0].arrivalTime < b.items[0].arrivalTime? -1:1)
 
     },
 
@@ -779,7 +813,7 @@
 
   time: function(){
     return this.date.format('mm:ss');
-  },
+  }
 
   // formData(){
 
@@ -807,7 +841,8 @@
 
    let next15Minutes = moment().add(15, 'minutes');
    next15Minutes.minutes(Math.floor(next15Minutes.minutes() / 15) * 15);
-   this.timeList.push(next15Minutes.format('h:mm A'));
+   this.timeList.push(next15Minutes.format('Hmm'));
+   // this.timeList.push(next15Minutes.format('H:mm A'));
    const timetest = next15Minutes;
    const timetest1 = next15Minutes;
 
@@ -817,57 +852,50 @@
           //  let currenttime2 = currentTime;
           timetest1.subtract(15, 'minutes');
            timetest1.minutes(Math.floor(timetest1.minutes() / 15) * 15);
-           this.timeList.push(timetest1.format('h:mm A'));
-          
-          //this.timeList.push( moment().format("HH") + ":" + quaterMinute[i] );
-           // current.subtract(15, "minutes");
+           this.timeList.push(timetest1.format('Hmm'));
+            // console.log(this.timeList.push(timetest1.format('Hmm')));
          }
          else{
             timetest.add(15, 'minutes');
           timetest.minutes(Math.floor(timetest.minutes() / 15) * 15);
-          this.timeList.push(timetest.format('h:mm A'));
-           // next15Minutes.format('HH:mm');
-         // this.timeList.push( moment().format("HH") + ":" + quaterMinute[i] );
-         //   current.add(15, "minutes");
+          this.timeList.push(timetest.format('Hmm'));
+          // console.log(this.timeList.push(timetest.format('Hmm')));
        }
 
      }
 
      this.timeList = [ ...new Set(this.timeList) ];
      this.timeList.sort(); //this will sort out the time from ascending to descending
-     // this.timeList.reverse(); //used reverse to change asc/desc to desc/asc
+     console.log(this.timeList);
+     console.log(this.timeList[0]);
+     console.log(this.timeList[4]);
 
-      // var arrivalDate = moment();
-      // // console.log(arrivalDate);
-      // console.log(this.selectedTime);
-       // // console.log(this.arrivalTime1);
+     this.momentFirstTime = this.timeList[0];
+     this.momentLastTime = this.timeList[4];
+
        var arrivalDate = moment().format('YYYY-MM-DD');
        var arrivalTime = this.arrivalTime1;
-      // // console.log(arrivalTime1);
 
-      // var arrivalTime = '1530';
-      // var arrivalTime1 = '1715';
 
-     // axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate&"arrivalTime="+arrivalTime)
-     //the link below is for arrival time from one time to other
-     //axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime)+","+arrivalTime1
-     
-     // const AuthStr = 'Bearer '.concat(Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo);
 
      axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate,
      {headers: {'X-API-KEY': 'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo'}}) 
      .then(response => 
-            (this.allbookings = response.data.data));
-           this.allbookings.sort();
+            (this.allbookings = response.data.data,
+              // console.log(response.data.data[0].items[0].arrivalTime),
+              this.allbookings.sort()
+            )
+          );
+           // this.allbookings.sort();
+           // console.log(this.allbookings.items[0].arrivalTime);
            // console.log(this.allbookings);
 
-    axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime,
-     {headers: {'X-API-KEY': 'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo'}}) 
-    .then(response => 
-            (this.posts = response.data.data));
+    // axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime,
+    //  {headers: {'X-API-KEY': 'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo'}}) 
+    // .then(response => 
+    //         (this.posts = response.data.data));
             
-           this.posts.sort();
-           // console.log(this.posts);
+    //        this.posts.sort();
 
 
     axios.get(process.env.VUE_APP_BOOKERS).then(response => {this.allPlayerList = response.data});
@@ -948,6 +976,8 @@
       timerCount: '10',
       minorsChecked: null,
 
+      validateMinorField: false,
+
       showSignaturePad: false ,
       allPlayerList: [],
       allReservationList: [],
@@ -955,6 +985,8 @@
       surveyOtherInput: '',
 
       allbookings: [],
+      momentFirstTime:'',
+      momentLastTime:'',
 
       surveyQuestionAnswersList:[],
       surveylistid:'',
@@ -1110,6 +1142,16 @@
 
     methods:{
 
+      fromMilTime: function(time){
+      if(parseInt(time) <= 1259){
+       return `${time.slice(0,2).padStart(2, '0')}:${time.slice(2).padStart(2, '0')} AM`
+      }else if (parseInt(time) >= 1300 && parseInt(time) <= 2359){
+        let math = parseInt(time) - 1200
+        let temp = math.toString()
+        return `${temp.slice(0,1).padStart(2, '0')}:${temp.slice(2,3).padStart(2, '0')} PM`
+      }
+    },
+
       convertArrivalTime(index){
         // console.log(this.bookerArrivalTime);
         // console.log("vitra chirey hai");
@@ -1122,6 +1164,10 @@
           this.reservationDateTime = moment(bookerTimeFetched).add(1,'hour').format("YYYY-MM-DD H:mm:ss");
         }
       },
+
+      sortArrays(sortTime) {
+            return _.orderBy(sortTime, 'items.arrivalTime', 'asc');
+        },
 
       checkMissionId(){
         // console.log("print mission id");
@@ -1240,8 +1286,9 @@
             first_name: '',
             // date_of_birth: ''
           })
-
           // this.playerLastId = this.playersresult.id; // this is the line which passes value from playerresult to playerid
+
+          this.validateMinorFieldFunction();
 
         },
 
@@ -1249,7 +1296,58 @@
 
           var index = this.minorsDetail.indexOf(todo)
           this.minorsDetail.splice(index, 1)
+          this.removeMinorFieldFunction();
         },
+
+          validateMinorFieldFunction: function(){
+
+            // console.log(this.minorsDetail);
+
+            // console.log(this.minorsDetail[0].first_name);
+
+           var firstminorname = this.minorsDetail[0].first_name;
+
+            this.validateMinorField = true;
+
+            if(firstminorname.length > 3){
+              // console.log("greater than 3 man");
+              this.validateMinorField = false;
+            }
+
+            if(this.minorsDetail.length <= 1){
+              // console.log("empty");
+              console.log(this.minorsDetail.length);
+              // this.validateMinorField = true;
+            }
+
+            else{
+              var minordetail = this.minorsDetail;
+              var minordetaillength = this.minorsDetail.length;
+              console.log(minordetaillength-1);
+              this.validateMinorField = true;
+
+              if(minordetail[minordetaillength-1].first_name.length > 2){
+                // console.log("less than 2");
+                this.validateMinorField = false;
+              }
+            }
+
+          },
+
+          removeMinorFieldFunction(){
+            // console.log("inside minor function");
+
+            var minordetail = this.minorsDetail;
+              var minordetaillength = this.minorsDetail.length;
+              // console.log(minordetaillength-1);
+              this.validateMinorField = true;
+
+              if(minordetail[minordetaillength-1].first_name.length > 2){
+                // console.log("less than 2");
+                this.validateMinorField = false;
+              }
+
+          },
 
         submit () {
           const data = {
@@ -1267,7 +1365,8 @@
         // alert(this.selectedTime);
          // // console.log(event.target.value);
          var standardTimeFormat = event.target.value;
-         // console.log(event.target.value);
+         console.log(event.target.value);
+
          this.reservationDateTime = standardTimeFormat +' '+ moment(moment.now()).format("YYYY/MM/DD");
          // console.log(this.reservationDateTime);
 
@@ -1325,6 +1424,7 @@
     validateGender(gender){
       return text.length > 0;
     },
+
 
     // valiadateHearAboutUs(hearAboutUs){
     //   return text.length > 0;
