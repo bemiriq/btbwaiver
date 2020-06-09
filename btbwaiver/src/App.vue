@@ -30,7 +30,7 @@
         <br> <br>
 
 
-      <div v-for="todo in sortedArray" v-model="selectedTime">
+      <div v-for="todo in sortedArray">
         <p v-if="todo.items[0].arrivalTime >= momentFirstTime && todo.items[0].arrivalTime <= momentLastTime">
           <b-button block pill variant="outline-info" id="fetchButtonGap" v-model:value="todo.items[0].arrivalTime" v-on:click="showTheTime(); reservationTimeDiv = !reservationTimeDiv ; reservationNameDiv = !reservationNameDiv ;">
             {{todo.items[0].arrivalTime}}
@@ -816,9 +816,9 @@
 
     },
 
-    fromMilTime: function(todo){
-      console.log('Sa');
-    },
+    // fromMilTime: function(todo){
+    //   console.log('Sa');
+    // },
 
 
     isDisableFixedFirstName(){
@@ -1170,15 +1170,15 @@
 
     methods:{
 
-      fromMilTime: function(time){
-      if(parseInt(time) <= 1259){
-       return `${time.slice(0,2).padStart(2, '0')}:${time.slice(2).padStart(2, '0')} AM`
-      }else if (parseInt(time) >= 1300 && parseInt(time) <= 2359){
-        let math = parseInt(time) - 1200
-        let temp = math.toString()
-        return `${temp.slice(0,1).padStart(2, '0')}:${temp.slice(2,3).padStart(2, '0')} PM`
-      }
-    },
+    //   fromMilTime: function(time){
+    //   if(parseInt(time) <= 1259){
+    //    return `${time.slice(0,2).padStart(2, '0')}:${time.slice(2).padStart(2, '0')} AM`
+    //   }else if (parseInt(time) >= 1300 && parseInt(time) <= 2359){
+    //     let math = parseInt(time) - 1200
+    //     let temp = math.toString()
+    //     return `${temp.slice(0,1).padStart(2, '0')}:${temp.slice(2,3).padStart(2, '0')} PM`
+    //   }
+    // },
 
       convertArrivalTime(index){
         // console.log(this.bookerArrivalTime);
@@ -1396,6 +1396,8 @@
          console.log(event.target.value);
 
          this.reservationDateTime = standardTimeFormat +' '+ moment(moment.now()).format("YYYY/MM/DD");
+         console.log(this.reservationDateTime);
+
          // console.log(this.reservationDateTime);
 
         var militaryTimeFormat = moment(standardTimeFormat, "h:mm A").format("HHmm");
@@ -1407,6 +1409,9 @@
       axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+militaryTimeFormat,
         {headers:{'X-API-KEY':'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo'}})
       .then(response => (this.posts = response.data.data));
+
+      this.selectedTime = moment(standardTimeFormat, "HHmm").format("YYYY-MM-DD HH:mm:00");
+      console.log(this.selectedTime);
 
       document.getElementById("hideDiv").style.visibility="visible";
       setTimeout("hideDiv",3000);
@@ -1519,7 +1524,14 @@
         // console.log('not null');
       }
 
-        // console.log(reservationOrderId);
+        console.log("inside reservation data");
+        console.log(this.bookerTravelerId);
+
+        var reservationtime = this.selectedTime;
+        console.log(reservationtime);
+
+
+
         axios.post(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+reservationOrderId,{
             // person_id: sand + 1,
             xola_order_id: this.bookerTravelerId,
@@ -1527,12 +1539,12 @@
             // booker_id: bookerwithid + 1,
             booker_id: bookerwithid + 1,
             final_dollar_amount: this.bookerAmount,
-            reservation_for: this.reservationDateTime,
+            reservation_for: reservationtime,
             location_id: 1,
             mission_id: this.mission_id
           })
           .then(function (response) {
-            // console.log(response);
+            console.log(response);
           })
           .catch(function (error) {
             console.log(error);
