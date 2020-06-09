@@ -358,13 +358,13 @@
 
   <br><br>
 
-<b-form-group
+<!-- <b-form-group
       id="input-group-1"
       label="Interested in getting promotional emails from Beat The Bomb?"
       label-for="input-1" class="nameTitle">
-    </b-form-group>
+    </b-form-group> -->
 
-  <b-form-radio-group v-model="promotional_item" class="mb-3" value-field="promotionalitem" text-field="name">
+  <b-form-radio-group v-model="promotional_item" class="mb-3" value-field="promotionalitem" text-field="name" style="display:none;">
     <b-form-radio value="1">YES</b-form-radio>
     <b-form-radio value="0">NO</b-form-radio>
   </b-form-radio-group>
