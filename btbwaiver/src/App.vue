@@ -518,7 +518,7 @@
   </div>
 
 
-  <div v-show="minorsAddDiv">
+  <div v-show="!minorsAddDiv">
 
         <br><br>
 
@@ -777,19 +777,47 @@
     },
 
     sortedArray: function() {
-      // console.log("inside sortedArray");
-      // function compare(a, b) {
-      //   if (a.items[0].arrivalTime < b.items[0].arrivalTime)
-      //     return -1;
-      //   if (a.items[0].arrivalTime > b.items[0].arrivalTime)
-      //     return 1;
-      //   return -1;
-      //     }
+      console.log("inside sortedArray");
 
-      // return this.allbookings.sort(compare);
+      var hrs, min, result, time;
 
-      return this.allbookings.sort((a, b) => a.items[0].arrivalTime < b.items[0].arrivalTime? -1:1)
+      time = '1100';
 
+      hrs = time.slice(0, 2);
+      min = time.slice(2, 4);
+
+      if (parseInt(time) > 1259) {
+        result = `${hrs - 12}:${min} PM`;
+      } else {
+        result = `${hrs}:${min} AM`;
+      }
+
+      console.log(result);
+
+      // console.log(time.items[0].arrivalTime);
+      function compare(a, b) {
+        console.log(a.items[0].arrivalTime);
+        var standardTimeA = moment(a.items[0].arrivalTime, "HHmm").format("HH:mm A");
+        var standardTimeB = moment(b.items[0].arrivalTime, "HHmm").format("HH:mm A");
+        console.log(standardTimeA);
+        console.log(standardTimeB);
+        if (standardTimeA < standardTimeB)
+          return -1;
+        if (standardTimeA > standardTimeB)
+          return 1;
+        return -1;
+          }
+
+
+      return this.allbookings.sort(compare);
+
+
+      // return this.allbookings.sort((standardTimeA, standardTimeB) => standardTimeA < standardTimeB? -1:1)
+
+    },
+
+    fromMilTime: function(todo){
+      console.log('Sa');
     },
 
 
@@ -841,7 +869,7 @@
 
    let next15Minutes = moment().add(15, 'minutes');
    next15Minutes.minutes(Math.floor(next15Minutes.minutes() / 15) * 15);
-   this.timeList.push(next15Minutes.format('Hmm'));
+   this.timeList.push(next15Minutes.format('HHmm'));
    // this.timeList.push(next15Minutes.format('H:mm A'));
    const timetest = next15Minutes;
    const timetest1 = next15Minutes;
@@ -852,13 +880,13 @@
           //  let currenttime2 = currentTime;
           timetest1.subtract(15, 'minutes');
            timetest1.minutes(Math.floor(timetest1.minutes() / 15) * 15);
-           this.timeList.push(timetest1.format('Hmm'));
+           this.timeList.push(timetest1.format('HHmm'));
             // console.log(this.timeList.push(timetest1.format('Hmm')));
          }
          else{
             timetest.add(15, 'minutes');
           timetest.minutes(Math.floor(timetest.minutes() / 15) * 15);
-          this.timeList.push(timetest.format('Hmm'));
+          this.timeList.push(timetest.format('HHmm'));
           // console.log(this.timeList.push(timetest.format('Hmm')));
        }
 
