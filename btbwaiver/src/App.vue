@@ -32,7 +32,7 @@
 
       <div v-for="todo in sortedArray">
         <p v-if="todo.items[0].arrivalTime >= momentFirstTime && todo.items[0].arrivalTime <= momentLastTime">
-          <b-button block pill variant="outline-info" id="fetchButtonGap" v-model:value="todo.items[0].arrivalTime" v-on:click="showTheTime(); reservationTimeDiv = !reservationTimeDiv ; reservationNameDiv = !reservationNameDiv ;">
+          <b-button block pill variant="outline-info" id="fetchButtonGap" v-model:value="todo.items[0].arrivalTime" v-on:click="checkPlayerId(); showTheTime(); reservationTimeDiv = !reservationTimeDiv ; reservationNameDiv = !reservationNameDiv ;">
             {{todo.items[0].arrivalTime}}
           </b-button>
 
@@ -508,7 +508,7 @@
         <b-col></b-col>
 
         <b-col>
-          <b-button variant="primary" v-on:click="hearAboutUsDiv = !hearAboutUsDiv; minorsAddDiv = !minorsAddDiv; checkBookerId(); postWaiverId();" v-bind:disabled="valiadateHearAboutUs">NEXT</b-button>
+          <b-button variant="primary" v-on:click="hearAboutUsDiv = !hearAboutUsDiv; minorsAddDiv = !minorsAddDiv; checkBookerId();" v-bind:disabled="valiadateHearAboutUs">NEXT</b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -578,7 +578,9 @@
         <b-col>
           <!-- <b-button variant="primary" v-on:click="checkPlayerId();">SUBMIT</b-button> -->
           
-        <b-button variant="primary" v-on:click=" minorsignDiv = !minorsignDiv; minorsAddDiv = !minorsAddDiv; postReservationData(); postPeopleData();" v-bind:disabled="validateMinorField">NEXT</b-button>
+        <!-- <b-button variant="primary" v-on:click=" minorsignDiv = !minorsignDiv; minorsAddDiv = !minorsAddDiv; postReservationData(); postPeopleData();" v-bind:disabled="validateMinorField">NEXT</b-button> -->
+        <b-button variant="primary" v-on:click=" minorsignDiv = !minorsignDiv; minorsAddDiv = !minorsAddDiv; postReservationData();" v-bind:disabled="validateMinorField">NEXT</b-button>
+
         <!-- <b-button variant="primary" v-on:click="submitMinorForm();">SUBMIT</b-button> -->
 
           <!-- {{lastPlayerData.id}} -->
@@ -692,7 +694,11 @@
 
       <b-col>
 
-        <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkLastPeopleId(); checkBookerId(); checkWaiverId(); checkReservationId(); checkPeopleId(); submitPlayerForm();">NEXT</b-button>
+        <!-- <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkLastPeopleId(); checkBookerId(); checkWaiverId(); checkReservationId(); checkPeopleId(); submitPlayerForm();">NEXT</b-button> -->
+        <!-- <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkLastPeopleId(); checkWaiverId(); checkReservationId(); checkPeopleId(); submitPlayerForm();">NEXT</b-button> -->
+        <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkLastPeopleId();">NEXTT</b-button>
+
+
 
       </b-col>
     </b-row>
@@ -778,21 +784,6 @@
 
     sortedArray: function() {
       console.log("inside sortedArray");
-
-      var hrs, min, result, time;
-
-      time = '1100';
-
-      hrs = time.slice(0, 2);
-      min = time.slice(2, 4);
-
-      if (parseInt(time) > 1259) {
-        result = `${hrs - 12}:${min} PM`;
-      } else {
-        result = `${hrs}:${min} AM`;
-      }
-
-      console.log(result);
 
       // console.log(time.items[0].arrivalTime);
       function compare(a, b) {
@@ -1015,6 +1006,7 @@
       allbookings: [],
       momentFirstTime:'',
       momentLastTime:'',
+      people_id: '',
 
       surveyQuestionAnswersList:[],
       surveylistid:'',
@@ -1033,6 +1025,8 @@
       consistsreservationresult:'',
       consistspeopleresult: '', /* this is to pass people id into booking id */
       // inputBookerId: '',
+      bookerFirstName: '',
+      bookerLastName: '',
 
       reservationDateTime: '',
 
@@ -1211,20 +1205,20 @@
         }
       },
 
-      postWaiverId(){
-        /** axios post on waiver table **/
-        axios.post(process.env.VUE_APP_WAIVERS,{
-          waiver_url : this.randomNumber
-        })
-        .then(response => {
-          // console.log(response.data.id);
-          // console.log(response.data.id);
-          this.waiverIdSinged = response.data.id;
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-      },
+      // postWaiverId(){
+      //   /** axios post on waiver table **/
+      //   axios.post(process.env.VUE_APP_WAIVERS,{
+      //     waiver_url : this.randomNumber
+      //   })
+      //   .then(response => {
+      //     // console.log(response.data.id);
+      //     // console.log(response.data.id);
+      //     this.waiverIdSinged = response.data.id;
+      //   })
+      //   .catch(function (error) {
+      //     console.log(error);
+      //   });
+      // },
 
       clickedTimer(){
         var time = 11;
@@ -1470,14 +1464,35 @@
     },
 
     checkPlayerId(){
-        axios.get(process.env.VUE_APP_PEOPLE).then(response => {this.playersresult = response.data.slice(0)}); // this get id for player_minor table id
+        axios.get(process.env.VUE_APP_PEOPLE).then(response => {
+          this.playersresult = response.data.slice(0);
+          console.log('san man mannn');
+          console.log(this.playersresult);
+          }); // this get id for player_minor table id
         // console.log('inside check player');
       },
 
     checkBookerId(){
-        axios.get(process.env.VUE_APP_BOOKERS).then(response => {this.bookerresult = response.data.slice(-1)}); // this get id for player_minor table id
+        axios.get(process.env.VUE_APP_BOOKERS).then(response => {
+        console.log("check booker id");
+        this.bookerresult = response.data.slice(-1);
+
+            // postWaiverId(){
+            /** axios post on waiver table **/
+            axios.post(process.env.VUE_APP_WAIVERS,{
+              waiver_url : this.randomNumber
+            })
+            .then(response => {
+              console.log("below is waiver id");
+              console.log(response.data.id);
+              this.waiverIdSinged = response.data.id;
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        });
+    }, // this get id for player_minor table id
         // console.log('inside bookers');
-      },
 
     checkReservationId(){
       axios.get(process.env.VUE_APP_RESERVATIONS).then(response => {this.reservationrresult = response.data.slice(-1)}); 
@@ -1485,15 +1500,15 @@
 
     },
 
-    checkWaiverId(){
-     axios.get(process.env.VUE_APP_WAIVERS).then(response => {this.waiverresult = response.data.slice(-1)});
-    },
+    // checkWaiverId(){
+    //  axios.get(process.env.VUE_APP_WAIVERS).then(response => {this.waiverresult = response.data.slice(-1)});
+    // },
 
-    checkReservationId(){
-      var reservationOrderId = this.bookerTravelerId;
-      axios.post(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+reservationOrderId).then(response => {this.consistsreservationresult = response.data});
-      // console.log(this.bookerTravelerId);
-    },
+    // checkReservationId(){
+    //   var reservationOrderId = this.bookerTravelerId;
+    //   axios.post(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+reservationOrderId).then(response => {this.consistsreservationresult = response.data});
+    //   // console.log(this.bookerTravelerId);
+    // },
 
     checkPeopleId(){
       var reservationOrderByEmail = this.bookerEmail;
@@ -1502,7 +1517,103 @@
     },
 
     checkLastPeopleId(){
-      axios.get(process.env.VUE_APP_PEOPLE).then(response => {this.lastPeopleDataId = response.data.slice(-1)});
+
+      console.log("INSIDE CHECK LAST PEOPLE ID");
+
+      axios.get(process.env.VUE_APP_PEOPLE).then(response => {
+        this.lastPeopleDataId = response.data.slice(-1);
+
+        var reservationOrderId = this.bookerTravelerId;
+        axios.post(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+reservationOrderId).then(response => {
+          this.consistsreservationresult = response.data;
+          console.log(response.data);
+          console.log("inside reservation order by id");
+
+          // axios.get(process.env.VUE_APP_WAIVERS).then(response => {
+          //   console.log("inside waiver get id");
+          //   this.waiverresult = response.data.slice(-1);
+          //   console.log("inside waiver get id1");
+            // var reservationOrderByEmail = this.bookerEmail;
+            var reservationOrderByEmail = this.bookerEmail;
+            var reservationFirstName = this.bookerFirstName;
+            var reservationLastName = this.bookerLastName;
+            var formEmailUsed = this.email;
+            var formFirstName = this.first_name;
+            var formLastname = this.last_name;
+
+            console.log(this.email);
+            console.log(this.bookerEmail);
+
+            axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/email/'+reservationOrderByEmail+'/first_name/'+reservationFirstName+'/last_name/'+reservationLastName,{
+                first_name: this.bookerFirstName,
+                last_name: this.bookerLastName,
+                email: this.bookerEmail
+              })
+              .then(response => {
+              this.consistspeopleresult = response.data;
+              console.log(response.data);
+              console.log("reservation name created in people table");
+
+              /** SUBMIT PLAYER FORM CODE **/
+
+                // var reservationOrderByEmail = this.bookerEmail;
+                axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/email/'+formEmailUsed+'/first_name/'+formFirstName+'/last_name/'+formLastname,{
+                  
+                })
+                .then(response => {
+                  console.log(response);
+                  console.log(response.data[0].id); /** this will return the ID from above which will then update the values **/
+                  console.log("new people as player or booker/player");
+
+                  this.people_id = response.data[0].id;
+                  var peopleId = response.data[0].id;
+                  /** if the booker is player as well then it will update the values **/
+                  axios.put(process.env.VUE_APP_PEOPLE+'/'+peopleId,{
+                    first_name: formFirstName,
+                    last_name: formLastname,
+                    date_of_birth: this.date_of_birth,
+                    gender_id: this.gender_id,
+                    marketing_consent: this.promotional_item,
+                    phone: this.phone,
+                    email: this.formEmailUsed,
+                    instagram: this.instagram,
+                    waiver_id: this.waiverIdSinged
+                    })
+                    .then(response => {
+                      console.log(response);
+                      console.log(response.data[0].id);
+                      console.log("new people as player or booker/player");
+                    })
+                    .catch(function(error){
+                      console.log(error);
+                    });
+                  /** end of update for BOOKER as PLAYER **/
+                })
+                .catch(function (error){
+                  console.log(error);
+                });
+
+              /** END OF SUBMIT PLAYER FORM CODE **/
+
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+
+          // })
+          // .catch(function (error) {
+          //   console.log(error);
+          // });
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     },
 
 
@@ -1543,51 +1654,98 @@
             location_id: 1,
             mission_id: this.mission_id
           })
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-    },
-
-    postPeopleData(){
-      var reservationOrderByEmail = this.bookerEmail;
-      console.log(this.bookername);
-      console.log(reservationOrderByEmail);
-      console.log(firstName);
-      console.log(lastName);
-
-      var fullName = this.bookername;
-      var firstName = fullName.split(' ').slice(0, -1).join(' ');
-      var lastName = fullName.split(' ').slice(-1).join(' ');
-
-      // console.log(firstName);
-      // console.log(lastName);
-
-      axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail,{
-            email: reservationOrderByEmail,
-            first_name: firstName,
-            last_name: lastName,
-            // date_of_birth: this.date_of_birth,
-            // gender_id: this.gender_id,
-            // marketing_consent: this.promotional_item,
-            // phone: this.phone,
-            // instagram: this.instagram,
-            // waiver_id: this.waiverIdSinged
-          })
           .then(response => {
-            // console.log(response);
-            // console.log(response.data[0].id);
-            // this.lastPeopleDataId = response.data[0].id;
-            // console.log(this.lastPeopleDataId)
+            console.log(response);
+            console.log(" inside reservation order by ID");
+
+
+              // postPeopleData(){
+              var reservationOrderByEmail = this.bookerEmail;
+              console.log(this.bookerEmail);
+              console.log(this.bookername);
+              console.log(reservationOrderByEmail);
+
+              var fullName = this.bookername;
+              var firstName = fullName.split(' ').slice(0, -1).join(' ');
+              var lastName = fullName.split(' ').slice(-1).join(' ');
+              console.log(firstName);
+              console.log(lastName);
+
+              this.bookerFirstName = firstName;
+              this.bookerLastName = lastName;
+
+              // console.log(firstName);
+              // console.log(lastName);
+
+              axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/email/'+reservationOrderByEmail+'/first_name/'+firstName+'/last_name/'+lastName,{
+                    email: reservationOrderByEmail,
+                    first_name: firstName,
+                    last_name: lastName,
+                    // date_of_birth: this.date_of_birth,
+                    // gender_id: this.gender_id,
+                    // marketing_consent: this.promotional_item,
+                    // phone: this.phone,
+                    // instagram: this.instagram,
+                    // waiver_id: this.waiverIdSinged
+                  })
+                  .then(response => {
+                    console.log(" inside reservation order by email");
+                    // console.log(response);
+                    // console.log(response.data[0].id);
+                    // this.lastPeopleDataId = response.data[0].id;
+                    // console.log(this.lastPeopleDataId)
+
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                  });
+
+            // },
+
 
           })
           .catch(function (error) {
             console.log(error);
           });
-
     },
+
+    // postPeopleData(){
+    //   var reservationOrderByEmail = this.bookerEmail;
+    //   console.log(this.bookername);
+    //   console.log(reservationOrderByEmail);
+    //   console.log(firstName);
+    //   console.log(lastName);
+
+    //   var fullName = this.bookername;
+    //   var firstName = fullName.split(' ').slice(0, -1).join(' ');
+    //   var lastName = fullName.split(' ').slice(-1).join(' ');
+
+    //   // console.log(firstName);
+    //   // console.log(lastName);
+
+    //   axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/'+reservationOrderByEmail,{
+    //         email: reservationOrderByEmail,
+    //         first_name: firstName,
+    //         last_name: lastName,
+    //         // date_of_birth: this.date_of_birth,
+    //         // gender_id: this.gender_id,
+    //         // marketing_consent: this.promotional_item,
+    //         // phone: this.phone,
+    //         // instagram: this.instagram,
+    //         // waiver_id: this.waiverIdSinged
+    //       })
+    //       .then(response => {
+    //         // console.log(response);
+    //         // console.log(response.data[0].id);
+    //         // this.lastPeopleDataId = response.data[0].id;
+    //         // console.log(this.lastPeopleDataId)
+
+    //       })
+    //       .catch(function (error) {
+    //         console.log(error);
+    //       });
+
+    // },
 
     submitPlayerForm(){
 
@@ -1885,9 +2043,10 @@
 
       /* end of post survey answers */
 
+      var peopleIdForPlayer = this.people_id;
 
       axios.post(process.env.VUE_APP_PLAYERS,{
-        person_id: this.newPlayerLastId
+        person_id: peopleIdForPlayer
       })
       .then(response => {
         // console.log(response);
