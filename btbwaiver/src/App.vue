@@ -414,7 +414,7 @@
     <br><br>
 
 
-    <div v-if="gender_id > '0'">
+    <!-- <div v-if="gender_id > '0'"> -->
       <b-container class="bv-example-row">
         <b-row>
           <b-col>
@@ -424,11 +424,11 @@
           <b-col></b-col>
 
           <b-col>
-            <b-button variant="primary" v-on:click="genderDiv = !genderDiv; hearAboutUsDiv = !hearAboutUsDiv;checkMissionId();" v-bind:disabled="validateGenderField">NEXT</b-button>
+            <b-button v-if="gender_id > 0" variant="primary" v-on:click="genderDiv = !genderDiv; hearAboutUsDiv = !hearAboutUsDiv;checkMissionId();" v-bind:disabled="validateGenderField">NEXT</b-button>
           </b-col>
         </b-row>
       </b-container>
-    </div>
+    <!-- </div> -->
     <br> <br>
 
   </div>
@@ -696,7 +696,7 @@
 
         <!-- <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkLastPeopleId(); checkBookerId(); checkWaiverId(); checkReservationId(); checkPeopleId(); submitPlayerForm();">NEXT</b-button> -->
         <!-- <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkLastPeopleId(); checkWaiverId(); checkReservationId(); checkPeopleId(); submitPlayerForm();">NEXT</b-button> -->
-        <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkLastPeopleId();">NEXTT</b-button>
+        <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkLastPeopleId();">NEXT</b-button>
 
 
 
@@ -1895,6 +1895,9 @@
 
     submitMinorForm(){
 
+      console.log("consists reservation result");
+      console.log(this.consistsreservationresult);
+
       var waiverDataId = this.waiverresult[0];
        if(waiverDataId == null){
           var waiverid = '0';
@@ -2112,7 +2115,7 @@
         /** axios post on reservation_people table**/
 
           axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
-            person_id: sand,
+            person_id: this.people_id,
             reservation_id: reservationwithid
           })
           .then(function (response) {
@@ -2129,7 +2132,7 @@
           /** axios post on reservation_people table**/
 
           axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
-            person_id: sand,
+            person_id: this.people_id,
             reservation_id: reservationwithnewid + 1
           })
           .then(function (response) {
