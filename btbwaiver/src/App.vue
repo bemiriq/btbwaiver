@@ -1181,7 +1181,7 @@
       console.log(todo);
       var militarytime = todo;
 
-      var standardTimeB = moment(militarytime, "HHmm").format("HH:mm A");
+      var standardTimeB = moment(militarytime, "HHmm").format("H:mm A");
 
       console.log(standardTimeB);
 
