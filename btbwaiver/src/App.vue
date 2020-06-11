@@ -32,8 +32,9 @@
 
       <div v-for="todo in sortedArray">
         <p v-if="todo.items[0].arrivalTime >= momentFirstTime && todo.items[0].arrivalTime <= momentLastTime">
-          <b-button block pill variant="outline-info" id="fetchButtonGap" v-model:value="todo.items[0].arrivalTime" v-on:click="checkPlayerId(); showTheTime(); reservationTimeDiv = !reservationTimeDiv ; reservationNameDiv = !reservationNameDiv ;">
-            {{todo.items[0].arrivalTime}}
+          <b-button block pill variant="outline-info" ref="sandes" id="fetchButtonGap" v-model:value="todo.items[0].arrivalTime" v-on:click="checkPlayerId(); showTheTime(); reservationTimeDiv = !reservationTimeDiv ; reservationNameDiv = !reservationNameDiv ;">
+            {{fromMilTime(todo.items[0].arrivalTime)}}
+            <!-- 01:30 PM -->
           </b-button>
 
 
@@ -807,10 +808,6 @@
 
     },
 
-    // fromMilTime: function(todo){
-    //   console.log('Sa');
-    // },
-
 
     isDisableFixedFirstName(){
       var specialChar = "@";
@@ -949,8 +946,8 @@
     //  {
     //   headers: {
     //     'X-API-KEY': "Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo",
-    //     // 'username': "sandesh.phuyal@beatthebomb.com",
-    //     // 'password': "xolasandesh23"
+    //     // 'username': "sandes.phuyal@beatthebomb.com",
+    //     // 'password': "xolasandes23"
     //   },
     // })
       // .then
@@ -1173,6 +1170,23 @@
     //     return `${temp.slice(0,1).padStart(2, '0')}:${temp.slice(2,3).padStart(2, '0')} PM`
     //   }
     // },
+
+  //   focus: function () {
+  //   this.$refs.sandes.focus();
+  //   console.log('san');
+  // },
+
+  fromMilTime: function(todo){
+
+      console.log(todo);
+      var militarytime = todo;
+
+      var standardTimeB = moment(militarytime, "HHmm").format("HH:mm A");
+
+      console.log(standardTimeB);
+
+      return standardTimeB;
+    },
 
       convertArrivalTime(index){
         // console.log(this.bookerArrivalTime);
