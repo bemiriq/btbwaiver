@@ -104,7 +104,7 @@
 
         <div>
           <div v-for="(post, index) in allbookings" :key="post.customerName">
-            <b-button block pill variant="outline-info" id="fetchButtonGap" v-on:click="bookerName(index); allreservationamediv = !allreservationamediv, fullnameDiv = !fullnameDiv">
+            <b-button block pill variant="outline-info" id="fetchButtonGap" v-on:click="bookerNameGetHelp(index); allreservationamediv = !allreservationamediv, fullnameDiv = !fullnameDiv">
               {{post.customerName}}
             </b-button>
           </div>
@@ -800,14 +800,16 @@
         return -1;
           }
 
-
       return this.allbookings.sort(compare);
-
-
+      
       // return this.allbookings.sort((standardTimeA, standardTimeB) => standardTimeA < standardTimeB? -1:1)
 
     },
 
+    removeDuplicatesTime(){
+      console.log("inside duplicates time");
+      this.allbookings = [ ...new Set(this.allbookings) ];
+    },
 
     isDisableFixedFirstName(){
       var specialChar = "@";
@@ -845,7 +847,6 @@
 },
 
   mounted: function(){
-
 
     this.showSignaturePad = true;
     this.$refs.signaturePad.$refs.signaturePadCanvas.width = 400;
@@ -1180,12 +1181,14 @@
 
       // console.log(todo);
       var militarytime = todo;
+      console.log(todo);
 
       var standardTimeB = moment(militarytime, "HHmm").format("hh:mm A");
 
       // console.log(standardTimeB);
 
       return standardTimeB;
+      // return ([...new Set(standardTimeB)]);
     },
 
       convertArrivalTime(index){
@@ -1244,6 +1247,7 @@
           this.countdownTimer = moment(duration.asMilliseconds()).format('s'); 
           // console.log(moment(duration.asMilliseconds()).format('s'));
         }, interval );
+
       },
 
       bookerName(index){
@@ -1258,6 +1262,25 @@
           this.bookerExperineceId = this.posts[index].items[0].experience.id;
           this.bookerEmail = this.posts[index].customerEmail;
           this.bookerArrivalTime = this.posts[index].items[0].arrivalDatetime;
+          // this.bookerPhoneNumber = this.post[index].customerNumber;
+          // this.bookerTravelerId = this.posts[index].id;
+
+          console.log("below booker id = ");
+          console.log(this.bookerId);
+        },
+
+        bookerNameGetHelp(index){
+
+          // console.log(this.posts[index].items[0].experience.id);
+
+          this.bookername = this.allbookings[index].customerName;
+          this.bookerId = this.allbookings[index].id;
+          this.bookerTeamSize = this.allbookings[index].items[0].quantity;
+          this.bookerAmount = this.allbookings[index].items[0].amount;
+          this.bookerTravelerId = this.allbookings[index].travelers[0].id;
+          this.bookerExperineceId = this.allbookings[index].items[0].experience.id;
+          this.bookerEmail = this.allbookings[index].customerEmail;
+          this.bookerArrivalTime = this.allbookings[index].items[0].arrivalDatetime;
           // this.bookerPhoneNumber = this.post[index].customerNumber;
           // this.bookerTravelerId = this.posts[index].id;
 
