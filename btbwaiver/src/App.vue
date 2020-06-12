@@ -1178,12 +1178,12 @@
 
   fromMilTime: function(todo){
 
-      console.log(todo);
+      // console.log(todo);
       var militarytime = todo;
 
       var standardTimeB = moment(militarytime, "HHmm").format("hh:mm A");
 
-      console.log(standardTimeB);
+      // console.log(standardTimeB);
 
       return standardTimeB;
     },
