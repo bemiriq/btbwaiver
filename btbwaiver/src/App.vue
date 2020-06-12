@@ -1480,8 +1480,8 @@
     checkPlayerId(){
         axios.get(process.env.VUE_APP_PEOPLE).then(response => {
           this.playersresult = response.data.slice(0);
-          console.log('san man mannn');
-          console.log(this.playersresult);
+          // console.log('san man mannn');
+          // console.log(this.playersresult);
           }); // this get id for player_minor table id
         // console.log('inside check player');
       },
