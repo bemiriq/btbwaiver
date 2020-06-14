@@ -240,11 +240,18 @@
 
   </b-form-group>
 
-  <b-form-group
+  <!-- <b-form-group
   id="input-group-1"
   label="Date of Birth"
-  label-for="input-1" class="nameTitle">
-  </b-form-group>
+  label-for="input-1" class="nameTitle"> -->
+
+   <b-form-group
+      id="input-group-1" class="nameTitle"> Date of birth <span style="color:red;">*</span> <span v-show=!validationDOBTextFalse style="color:red;">You should be over 18 to sign the waiver.</span>
+    </b-form-group> 
+
+    
+  
+  <!-- </b-form-group> -->
 
   <b-form-group>
    <!--  <date-dropdown 
@@ -255,7 +262,7 @@
     v-model="date_of_birth" id="dateDropdownDesign" size="lg">
   </date-dropdown> -->
 
-  <dropdown-datepicker display-format="mdy" v-model="date_of_birth" v-bind:min-age="6" default-date="2005-01-17"></dropdown-datepicker>
+  <dropdown-datepicker display-format="mdy" v-model="date_of_birth" v-bind:min-age="6" default-date="2001-01-01" @input="validationDOBText"></dropdown-datepicker>
 
   </b-form-group>
 
@@ -291,7 +298,8 @@
             <!-- <b-form @submit="onSubmit" @reset="onReset" v-if="show"> -->
 
               <b-form-group
-      id="input-group-1" class="nameTitle"> Enter Email Address <span style="color:red;">*</span>
+      id="input-group-1" class="nameTitle"> Enter Email Address <span style="color:red;">*</span> <span v-show="!ValidateEmailTextFalse" style="color:red;">
+      Please enter a valid email address</span>
     </b-form-group>
 
             <b-form-group>
@@ -300,7 +308,7 @@
               v-model="email"
               type="email"
               required
-              placeholder="Enter Email Address" size="lg">
+              placeholder="Enter Email Address" size="lg" v-on:input="validationEmailText">
             </b-form-input>
           </b-form-group>
 
@@ -313,7 +321,8 @@
 
           <br><br>
             <b-form-group
-      id="input-group-1" class="nameTitle"> Phone Number <span style="color:red;">*</span>
+      id="input-group-1" class="nameTitle"> Phone Number <span style="color:red;">*</span> <span v-show="!validatePhoneTextFalse" style="color:red;">
+      Please enter a valid phone number including area code</span>
     </b-form-group> 
 
               <b-form-group>
@@ -322,7 +331,7 @@
                 v-model="phone"
                 type="tel"
                 required
-                placeholder="Enter Cell Phone Number" size="lg">
+                placeholder="Enter Cell Phone Number" size="lg" v-on:input="validationPhoneText">
               </b-form-input>
             </b-form-group>
 
@@ -425,7 +434,9 @@
           <b-col></b-col>
 
           <b-col>
-            <b-button v-if="gender_id > 0" variant="primary" v-on:click="genderDiv = !genderDiv; hearAboutUsDiv = !hearAboutUsDiv;checkMissionId();" v-bind:disabled="validateGenderField">NEXT</b-button>
+            <!-- <b-button v-if="gender_id > 0" variant="primary" v-on:click="genderDiv = !genderDiv; hearAboutUsDiv = !hearAboutUsDiv;checkMissionId();" v-bind:disabled="validateGenderField">NEXT</b-button> -->
+            <b-button variant="primary" v-on:click="genderDiv = !genderDiv; hearAboutUsDiv = !hearAboutUsDiv;checkMissionId();" v-bind:disabled="validateGenderField">NEXT</b-button>
+
           </b-col>
         </b-row>
       </b-container>
@@ -538,17 +549,22 @@
       <div class="form-row" v-for="(minordatabase, index) in minorsDetail" :key="index">
 
         <div class="col" style="margin-left: 8%;">
+          <!-- <label id="minorHeading">Minors First Name and Last Initial</label>
+          <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name and Last Initial" size="lg" v-on:input="validateMinorFieldFunction"/> -->
+
           <label id="minorHeading">Minors First Name and Last Initial</label>
           <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name and Last Initial" size="lg" v-on:input="validateMinorFieldFunction"/>
         </div>
 
         <div class="col">
             <label id="minorHeading">Minor's date of birth</label>
-            <!-- <date-dropdown default="1993.01.10" min="1940" max="2020" :months-names="months" v-model="minordatabase.date_of_birth" style="margin-left: 22%;" size="lg"> -->
-            <!-- </date-dropdown> -->
-            <dropdown-datepicker display-format="mdy" id="dateDropdownDesign" size="lg" v-model="minordatabase.date_of_birth" v-bind:min-age="6" default-date="2005-01-17"></dropdown-datepicker>
+            <dropdown-datepicker display-format="mdy" size="lg" v-model="minordatabase.date_of_birth" default-date="2015-01-17" submit-id="example4"  v-bind:min-age="7" v-on:change="validationMinorDOBText"></dropdown-datepicker>
+            <p v-show="!validateMinorDOBFalse">Minor date 18 </p>
         </div>
 
+        <div class="col">
+          <button type="button" class="btn btn-outline-info" @click="minorsDetail.splice(index, 1)">Remove Minor</button>
+        </div>
       </div>
 
     </div>
@@ -801,7 +817,7 @@
           }
 
       return this.allbookings.sort(compare);
-      
+
       // return this.allbookings.sort((standardTimeA, standardTimeB) => standardTimeA < standardTimeB? -1:1)
 
     },
@@ -812,17 +828,26 @@
     },
 
     isDisableFixedFirstName(){
+
+      // if(this.validationDOBTextFalse = true){
+      //   console.log("CASE TRUE");
+      //   return true;
+      // }
+      // else{
+      //   return false;
+      // }
+
       var specialChar = "@";
-     if (this.first_name.includes(specialChar) || this.last_name.includes(specialChar) || this.first_name < 1 || this.last_name < 1) {
-      return true;
-    } 
-    else {
-      return false;
-    }
+       if (this.first_name.includes(specialChar) || this.last_name.includes(specialChar) || this.first_name < 1 || this.last_name < 1 || this.validationDOBTextFalse == false) {
+        return true;
+      } 
+      else {
+        return false;
+      }
   },
 
   validateGenderField(){
-    return this.gender_id.length < 0;
+    return this.gender_id < 1;
   },
 
   valiadateHearAboutUs(){
@@ -972,6 +997,11 @@
    data() {
     return {
       // customerName: '',
+      ValidateEmailTextFalse: true,
+      validatePhoneTextFalse: true,
+      validationDOBTextFalse: true,
+      validateMinorDOBFalse: true,
+
       DropdownDatepicker: '',
       text: '',
       value: '',
@@ -1177,16 +1207,77 @@
   //   console.log('san');
   // },
 
+  validationEmailText(){
+    console.log("VALIDATION EMAIL TEXT");
+    if(this.email.length > 2){
+      // console.log("INSIDE this.email > 2");
+      // return "ENTER VALID ADDRESS";
+      this.ValidateEmailTextFalse = false;
+    }
+
+    if(this.email.length > 10){
+      this.ValidateEmailTextFalse = true;
+    }
+  },
+
+  validationPhoneText(){
+    // console.log("VALIDATION EMAIL TEXT");
+    if(this.phone.length > 2){
+      console.log("PHONE > 2");
+      // return "ENTER VALID ADDRESS";
+      this.validatePhoneTextFalse = false;
+    }
+
+    if(this.phone.length > 9){
+      this.validatePhoneTextFalse = true;
+    }
+  },
+
+  validationDOBText(){
+
+    // if(this.date_of_birth.length > 2){
+    //   this.ValidateEmailTextFalse = true;
+    // }
+
+    console.log("INISDE DOB");
+
+    var dob= this.date_of_birth;
+    console.log(dob);
+      var today = new Date();
+      var birthDate = new Date(dob);
+      var age = today.getFullYear() - birthDate.getFullYear();
+      var m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+      }
+     if(age<18){
+        // console.log("< 16");
+        // alert('You are not eligible. Age should be above 16...!!!');
+        this.validationDOBTextFalse = false;
+     }
+     else{
+      this.validationDOBTextFalse = true;
+     }
+
+  },
+
+  validationMinorDOBText(){
+    console.log("Inside MINOR DATE");
+    // if(this.minordatabase.date_of_birth < '2012-01-01'){
+    //     this.validateMinorDOBFalse = false;
+    // }
+  },
+
   fromMilTime: function(todo){
 
       // console.log(todo);
       var militarytime = todo;
+
       console.log(todo);
 
       var standardTimeB = moment(militarytime, "HHmm").format("hh:mm A");
 
       // console.log(standardTimeB);
-
       return standardTimeB;
       // return ([...new Set(standardTimeB)]);
     },
