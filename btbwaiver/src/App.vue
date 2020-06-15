@@ -361,7 +361,10 @@
           </b-form-input>
         </b-input-group>
       </b-form-group>
-      <b-form-group id="input-group-1" label-for="input-1" description="Share your handle for a chance to be featured on our official Instagram channel.">
+      <!-- <b-form-group id="input-group-1" label-for="input-1" description="Share your handle for a chance to be featured on our official Instagram channel.">
+      </b-form-group> -->
+      <!-- Share your handle for a chance to be dm’d your photos and video directly. -->
+      <b-form-group id="input-group-1" label-for="input-1" description="Share your handle for a chance to be dm’d your photos and video directly.">
       </b-form-group>
 
   <!-- <span style="font-size: 0.8em;">If you don't have one, please enter @bombsquad</span> -->
@@ -543,12 +546,12 @@
       </b-form-radio-group>
 
     <div v-show="minorsChecked  === 'A' " >
-
+      <br>
       <div class="work-experiences">
 
       <div class="form-row" v-for="(minordatabase, index) in minorsDetail" :key="index">
 
-        <div class="col" style="margin-left: 8%;">
+        <div class="col-lg-4" style="margin-left: 10%;">
           <!-- <label id="minorHeading">Minors First Name and Last Initial</label>
           <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name and Last Initial" size="lg" v-on:input="validateMinorFieldFunction"/> -->
 
@@ -556,14 +559,18 @@
           <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name and Last Initial" size="lg" v-on:input="validateMinorFieldFunction"/>
         </div>
 
-        <div class="col">
+        <div class="col-lg-3">
             <label id="minorHeading">Minor's date of birth</label>
-            <dropdown-datepicker display-format="mdy" size="lg" v-model="minordatabase.date_of_birth" default-date="2015-01-17" submit-id="example4"  v-bind:min-age="7" v-on:change="validationMinorDOBText"></dropdown-datepicker>
-            <p v-show="!validateMinorDOBFalse">Minor date 18 </p>
+            <!-- <dropdown-datepicker display-format="mdy" size="lg" v-model="minordatabase.date_of_birth" default-date="2015-01-17"></dropdown-datepicker> -->
+            <!-- <p v-show="!validationMinorDOBTextFalse" style="color:red;">Minor should be under 18 </p> -->
+            <p v-show="!validationMinorDOBTextFalse" v-if="minordatabase.date_of_birth < currentDateCompare" style="color: red;">Minor should be under 18</p>
+            <dropdown-datepicker display-format="mdy" v-model="minordatabase.date_of_birth" v-bind:min-age="6" @input="validationMinorDOBText"></dropdown-datepicker> 
         </div>
 
-        <div class="col">
-          <button type="button" class="btn btn-outline-info" @click="minorsDetail.splice(index, 1)">Remove Minor</button>
+        <div class="col-lg-1">
+          <!-- <button type="button" class="btn btn-outline-info" @click="minorsDetail.splice(index, 1)">Remove Minor</button> -->
+          <p></p>
+          <b-icon icon="trash-fill" font-scale="1.7"  @click="minorsDetail.splice(index, 1)"></b-icon>
         </div>
       </div>
 
@@ -572,7 +579,7 @@
       <br>
 
       <div class="form-group">
-        <button @click="addExperience" type="button" class="btn btn-info" style="margin-right:1.5%;">Add Another Minor</button>
+        <button @click="addExperience" type="button" class="btn btn-info" style="margin-right:1.5%;" v-bind:disabled="disableAddMinorButton">Add Another Minor</button>
         <button @click="removeExperience" type="button" class="btn btn-outline-info">Remove Minor</button>
       </div>
 
@@ -962,6 +969,11 @@
 
     console.log(this.surveyQuestionAnswersList);
 
+    if(this.minorsChecked === 'B'){
+      console.log("enable minor");
+      this.validateMinorField = false;
+    }
+
           //  setInterval(() => {
           //   this.date = moment(this.date.subtract(1, 'seconds'))
           // }, 1000)
@@ -997,10 +1009,15 @@
    data() {
     return {
       // customerName: '',
+      currentDateCompare: '2002-01-01',
       ValidateEmailTextFalse: true,
       validatePhoneTextFalse: true,
       validationDOBTextFalse: true,
       validateMinorDOBFalse: true,
+      validationMinorDOBTextFalse: true,
+      disableAddMinorButton: true,
+
+      countvalidationminorfunction: 0,
 
       DropdownDatepicker: '',
       text: '',
@@ -1263,6 +1280,36 @@
 
   validationMinorDOBText(){
     console.log("Inside MINOR DATE");
+    console.log("INISDE DOB");
+
+    // var index = this.countvalidationminorfunction++;
+    // console.log(index);
+
+    // console.log(this.minorsDetail.splice(index, 1));
+
+    console.log(this.minorsDetail);
+    var dob= this.minorsDetail[this.minorsDetail.length-1].date_of_birth;
+    console.log(dob);
+      var today = new Date();
+      var birthDate = new Date(dob);
+      var age = today.getFullYear() - birthDate.getFullYear();
+      var m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+      }
+     if(age>18){
+        // console.log("< 16");
+        // alert('You are not eligible. Age should be above 16...!!!');
+        this.validationMinorDOBTextFalse = false;
+        this.validateMinorField = true; // disable minor page NEXT button
+        this.disableAddMinorButton = true;
+        // console.log('Over 18');
+     }
+     else{
+      this.validationMinorDOBTextFalse = true;
+      this.validateMinorField = false;  // eable minor page NEXT button
+      this.disableAddMinorButton = false;
+     }
     // if(this.minordatabase.date_of_birth < '2012-01-01'){
     //     this.validateMinorDOBFalse = false;
     // }
@@ -1434,7 +1481,7 @@
         addExperience(){
           this.minorsDetail.push({
             first_name: '',
-            // date_of_birth: ''
+            date_of_birth: ''
           })
           // this.playerLastId = this.playersresult.id; // this is the line which passes value from playerresult to playerid
 
@@ -1457,7 +1504,16 @@
 
            var firstminorname = this.minorsDetail[0].first_name;
 
-            this.validateMinorField = true;
+            // this.validateMinorField = true;
+
+            // if(this.validationMinorDOBTextFalse == true){
+            //   console.log("its true");
+            //   // this.validateMinorField = true;
+            // }
+            // else{
+            //   console.log("else 77777");
+            //   this.validateMinorField = false;
+            // }
 
             if(firstminorname.length > 3){
               // console.log("greater than 3 man");
@@ -1467,7 +1523,7 @@
             if(this.minorsDetail.length <= 1){
               // console.log("empty");
               console.log(this.minorsDetail.length);
-              // this.validateMinorField = true;
+              this.validateMinorField = true;
             }
 
             else{
