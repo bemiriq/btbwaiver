@@ -202,11 +202,16 @@
 
     <b-form v-if="show">
 
-      <b-form-group
+      <b-form-group 
+      id="input-group-1" class="nameTitle" label-for="input-1"> First Name <span v-show="!validateFirstNameTextFalse" style="color:red;">Please enter a valid first name.</span>
+    </b-form-group> 
+
+ <!--      <b-form-group
       id="input-group-1"
       label="First Name"
       label-for="input-1" class="nameTitle" >
     </b-form-group>
+    <p v-show="!validateFirstNameTextFalse"> VALID FIRST NAME </p> -->
 
     <b-form-group
     <b-form-input
@@ -215,17 +220,21 @@
     type="text"
     required
     placeholder="Enter your first name" size="lg"
-    ></b-form-input>
+    @input="validateFirstNameText"></b-form-input>
   </b-form-group>
 
   <br/>
 
-  <b-form-group
+  <b-form-group 
+      id="input-group-1" class="nameTitle" label-for="input-1"> Last Name <span v-show="!validateLastNameTextFalse" style="color:red;">Please enter a valid last name.</span>
+    </b-form-group> 
+
+<!--   <b-form-group
   id="input-group-1"
   label="Last Name"
   label-for="input-1" class="nameTitle">
   </b-form-group>
-
+ -->
   <b-form-group>
 
     <b-form-input
@@ -233,7 +242,7 @@
     v-model="last_name"
     type="text"
     required
-    placeholder="Enter your last name" size="lg"
+    placeholder="Enter your last name" size="lg" @input="validateLastNameText"
     ></b-form-input>
 
     <br/>
@@ -245,21 +254,21 @@
   label="Date of Birth"
   label-for="input-1" class="nameTitle"> -->
 
-   <b-form-group
-      id="input-group-1" class="nameTitle"> Date of birth <span style="color:red;">*</span> <span v-show=!validationDOBTextFalse style="color:red;">You should be over 18 to sign the waiver.</span>
+   <b-form-group 
+      id="input-group-1" class="nameTitle" label-for="input-1"> Date of birth <span style="color:red;">*</span> <span v-show="!validationDOBTextFalse" style="color:red;">You should be over 18 to sign the waiver.</span>
     </b-form-group> 
 
     
   
   <!-- </b-form-group> -->
 
-  <b-form-group>
-   <!--  <date-dropdown 
+ <!--  <b-form-group label-for="input-1" style="margin-left:20%;">
+    <date-dropdown
     default="1993.02.27" 
     min="1940" 
-    max="2020"
+    max="2014"
     :months-names="months"
-    v-model="date_of_birth" id="dateDropdownDesign" size="lg">
+    v-model="date_of_birth" id="dateDropdownDesign" @input="validationDOBText">
   </date-dropdown> -->
 
   <dropdown-datepicker display-format="mdy" v-model="date_of_birth" v-bind:min-age="6" default-date="2001-01-01" @input="validationDOBText"></dropdown-datepicker>
@@ -499,7 +508,7 @@
                 {{surveyanswer.Survey_answer_option.answer}}
               </b-form-radio> -->
 
-              <input type="radio" class="form-check-input" v-model="hearAboutUs" :value="surveyanswer.survey_answer_option_id"> {{surveyanswer.Survey_answer_option.answer}}<br></input>
+              <input type="radio" class="form-check-input" v-model="hearAboutUs" :value="surveyanswer.survey_answer_option_id" v-on:change="surveyAnswerValidation"> {{surveyanswer.Survey_answer_option.answer}}<br></input>
 
               <!-- <span>Picked: {{ hearAboutUs }}</span> -->
 
@@ -508,7 +517,7 @@
         </div>
 
         <div v-if="hearAboutUs == '6'">
-          <b-form-input placeholder="How did you hear about us?" v-model="surveyOtherInput"></b-form-input>
+          <b-form-input placeholder="How did you hear about us?" v-model="surveyOtherInput" @input="validateOtherHearAboutUs"></b-form-input>
         </div>
 
       <!-- </div> -->
@@ -523,7 +532,7 @@
         <b-col></b-col>
 
         <b-col>
-          <b-button variant="primary" v-on:click="hearAboutUsDiv = !hearAboutUsDiv; minorsAddDiv = !minorsAddDiv; checkBookerId();" v-bind:disabled="valiadateHearAboutUs">NEXT</b-button>
+          <b-button variant="primary" v-on:click="hearAboutUsDiv = !hearAboutUsDiv; minorsAddDiv = !minorsAddDiv; checkBookerId();" v-bind:disabled="validateHearAboutUs">NEXT</b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -547,6 +556,8 @@
 
     <div v-show="minorsChecked  === 'A' " >
       <br>
+      <p style="font-style: italic; color:red;"> Minor should be more than 6 and less than 18 year to play BEAT THE BOMB . </p>
+      <br>
       <div class="work-experiences">
 
       <div class="form-row" v-for="(minordatabase, index) in minorsDetail" :key="index">
@@ -561,10 +572,22 @@
 
         <div class="col-lg-3">
             <label id="minorHeading">Minor's date of birth</label>
+
+            <p v-show="!validationMinorDOBTextFalse" v-if="minordatabase.date_of_birth < currentDateCompare" style="color: red;">Minor should be under 18</p>
+            <p v-show="!validationMinorDOBBelow6TextFalse" v-if="minordatabase.date_of_birth > minorLessThan6" style="color: red;">Minor should be over 6 year </p>
+            <!-- <p v-show="!validationMinorDOBTextFalse" v-if="minordatabase.date_of_birth < currentDateCompare" style="color: red;">Minor should be under 18</p> -->
+
+            <!-- <date-dropdown
+              min="1940" 
+              max="2020"
+              :months-names="months"
+              v-model="minordatabase.date_of_birth" id="dateDropdownDesign" style="margin-left:15%;" @input="validationMinorDOBText">
+            </date-dropdown> -->
+
             <!-- <dropdown-datepicker display-format="mdy" size="lg" v-model="minordatabase.date_of_birth" default-date="2015-01-17"></dropdown-datepicker> -->
             <!-- <p v-show="!validationMinorDOBTextFalse" style="color:red;">Minor should be under 18 </p> -->
-            <p v-show="!validationMinorDOBTextFalse" v-if="minordatabase.date_of_birth < currentDateCompare" style="color: red;">Minor should be under 18</p>
-            <dropdown-datepicker display-format="mdy" v-model="minordatabase.date_of_birth" v-bind:min-age="6" @input="validationMinorDOBText"></dropdown-datepicker> 
+            
+            <dropdown-datepicker display-format="mdy" v-model="minordatabase.date_of_birth" v-bind:min-age="0" @input="validationMinorDOBText"></dropdown-datepicker> 
         </div>
 
         <div class="col-lg-1">
@@ -628,9 +651,9 @@
     </div> -->
 
    <div>
-    <b-button v-b-modal.modal-scrollable variant="info">View Full Waiver</b-button>
+    <b-button v-b-modal.modal-scrollable variant="info" >View Full Waiver</b-button>
 
-      <b-modal id="modal-scrollable" scrollable title="Waiver Legal">
+      <b-modal id="modal-scrollable" scrollable title="Waiver Legal" v-bind:hide-footer="true">
         <p class="my-4">
           {{ waiverParagraph1 }}
         </p>
@@ -666,6 +689,22 @@
           {{ waiverParagraph10 }}
         </p>
 
+        <!-- <p> -->
+          <b-form-checkbox class="mb-2 mr-sm-2 mb-sm-0" v-model="acceptedCheckBox" :value="1" v-on:change="acceptedWaiverCheckbox">I accept all the terms & condition. </b-form-checkbox>
+        <!-- </p> -->
+
+          <br>
+
+          <footer id="modal-scrollable___BV_modal_footer_" class="modal-footer">
+            <!-- <button type="button" class="btn btn-secondary">Cancel</button> -->
+            <button type="button" class="btn btn-primary" v-bind:disabled="disabledAgreeButton" v-on:click="clickedOkonWaiver" @click="$bvModal.hide('modal-scrollable')" >OK</button>
+
+          </footer>
+
+          <!-- <b-button variant="info">Cancel</b-button> -->
+          <!-- <b-button variant="info" v-bind:disabled="disabledAgreeButton" v-on:click="clickedOkonWaiver" @click="$bvModal.hide('modal-scrollable')" >OK</b-button> -->
+
+
       </b-modal>
     </div>
 
@@ -674,9 +713,9 @@
   <br>
 
 
-  <div class="container">
+  <div class="container" v-show="!displaySignaturePad">
     <div class="row">
-      <div class="col-12 mt-2">
+      <div class="col-12 mt-2" >
         <VueSignaturePad
         id="signature"
         width="auto"
@@ -686,13 +725,15 @@
         />
       </div>
     </div>
-    <!-- <div class="row">
+    <div class="row">
       <div class="col-3 mt-2">
         <button class="btn btn-outline-secondary" @click="undo">Undo</button>
 
-         <button class="btn btn-outline-primary" @click="change">Reset</button> 
+         <!-- <button class="btn btn-outline-primary" @click="change">Reset</button>  -->
+         <button class="btn btn-outline-primary" @click="save">Save</button> 
+
       </div>
-    </div> -->
+    </div>
   </div>
 
   <br><br>
@@ -720,7 +761,7 @@
 
         <!-- <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkLastPeopleId(); checkBookerId(); checkWaiverId(); checkReservationId(); checkPeopleId(); submitPlayerForm();">NEXT</b-button> -->
         <!-- <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkLastPeopleId(); checkWaiverId(); checkReservationId(); checkPeopleId(); submitPlayerForm();">NEXT</b-button> -->
-        <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkLastPeopleId();">NEXT</b-button>
+        <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkLastPeopleId();" v-bind:disabled="disabledNextButtonAtLast">NEXT</b-button>
 
 
 
@@ -773,7 +814,7 @@
   // import App from "./App";
   import Vue from 'vue';
   import moment from 'moment';
-  // import DateDropdown from 'vue-date-dropdown'; // this for the date dropdown
+  import DateDropdown from 'vue-date-dropdown'; // this for the date dropdown
   import DropdownDatepicker from 'vue-dropdown-datepicker';
 
   // import LoadingScreen from "./components/LoadingScreen";
@@ -790,19 +831,22 @@
     components: {
       // HelloWorld,
       // BookingName
-      // DateDropdown,
+      DateDropdown,
       DropdownDatepicker
     },
 
     computed: {
       isDisableComputed() {
-        var specialChar = "@";
+      
+      var specialChar = "@";
+
        if (this.email.includes(specialChar) && this.phone.length > 9 && this.email.length > 6) {
         // if(this.email.length > 6){
           return false;
         // }
       } else {
         return true;
+        // this.validationEmailText = false;
       }
     },
 
@@ -857,9 +901,9 @@
     return this.gender_id < 1;
   },
 
-  valiadateHearAboutUs(){
-    return this.hearAboutUs.length < 1;
-  },
+  // valiadateHearAboutUs(){
+  //   return this.hearAboutUs.length < 1;
+  // },
 
   time: function(){
     return this.date.format('mm:ss');
@@ -1003,19 +1047,42 @@
 
      // axios.get('http://localhost:9090/people/').then(response => {this.playersresult = response.data.slice(-1)});  //this calls at the first
 
+     /** below date conversion is for the MINOR less than 6 year from current date **/
+     var minorcurrenttime = moment().format("YYYY-MM-DD");
+     var minorLessThan6 = moment(minorcurrenttime).subtract(6, 'years').format("YYYY-MM-DD");
+     var minorLessThan18 = moment(minorcurrenttime).subtract(18, 'years').format("YYYY-MM-DD");
+
+     this.minorLessThan6 = minorLessThan6;
+     this.currentDateCompare = minorLessThan18;
+
+     console.log(minorcurrenttime);
+     console.log(minorLessThan6);
+     console.log(minorLessThan18);
+     /** end of date conversion for MINOR less than 6 **/
    },
 
 
    data() {
     return {
       // customerName: '',
-      currentDateCompare: '2002-01-01',
+      currentDateCompare: '',
+      minorLessThan6: '',
       ValidateEmailTextFalse: true,
       validatePhoneTextFalse: true,
       validationDOBTextFalse: true,
       validateMinorDOBFalse: true,
       validationMinorDOBTextFalse: true,
+      validationMinorDOBBelow6TextFalse: true,
       disableAddMinorButton: true,
+      validateFirstNameTextFalse: true,
+      validateLastNameTextFalse: true,
+      validateHearAboutUs: true,
+
+      displaySignaturePad: true,
+      acceptedCheckBox: '',
+      disabledAgreeButton: true,
+      disabledNextButtonAtLast: true,
+      disableViewWaiver: true,
 
       countvalidationminorfunction: 0,
 
@@ -1224,30 +1291,127 @@
   //   console.log('san');
   // },
 
+  validateSignaturePad(){
+    console.log("oip");
+  },
+
+  clickedOkonWaiver(){
+    console.log("clicked ok on waiver");
+    this.displaySignaturePad = false;
+    this.disableViewWaiver = true;
+  },
+
+  acceptedWaiverCheckbox(){
+    if(this.acceptedCheckBox == '1'){
+      this.disabledAgreeButton = true;
+      this.disabledNextButtonAtLast = true;
+      console.log("true");
+    }
+    else{
+      console.log('false');
+      this.disabledAgreeButton = false;
+      this.disabledNextButtonAtLast = false;
+    }
+    // if(this.acceptedCheckBox = 'false'){
+    //   this.disabledAgreeButton = true;
+    //   console.log('false');
+    // }
+  },
+
+  validateOtherHearAboutUs(){
+    if(this.surveyOtherInput.length > 3){
+      this.validateHearAboutUs = false;
+    }
+    else{
+      this.validateHearAboutUs = true;
+    }
+  },
+
+  surveyAnswerValidation(){
+    console.log("survey validation");
+    if(this.hearAboutUs > 0 && this.hearAboutUs < 6){
+      console.log(" 1 6");
+      this.validateHearAboutUs = false;
+    }
+    if(this.hearAboutUs == 6){
+        this.validateHearAboutUs = true;
+        // this.validateHearAboutUs = false; /** this will enable the button **/
+      }
+    // }
+  },
+
   validationEmailText(){
     console.log("VALIDATION EMAIL TEXT");
-    if(this.email.length > 2){
-      // console.log("INSIDE this.email > 2");
-      // return "ENTER VALID ADDRESS";
+
+    var specialChar = "@";
+    var specialChar1 = '.';
+
+      // if (this.email.includes(specialChar) && this.phone.length > 9 && this.email.length > 6) {
+      //   return false;
+      // } else {
+      //   return true;
+      // }
+
+    // if(this.email.length > 7){
+    //   this.ValidateEmailTextFalse = false;
+    // }
+
+    if(this.email.includes(specialChar) && this.email.includes(specialChar1) && this.email.length > 12){
+      this.ValidateEmailTextFalse = true;
+    }
+    else{
       this.ValidateEmailTextFalse = false;
     }
 
-    if(this.email.length > 10){
-      this.ValidateEmailTextFalse = true;
+    // if(this.email.length > 12){
+    //   this.ValidateEmailTextFalse = true;
+    // }
+  },
+
+  validateFirstNameText(){
+    var z = this.first_name;
+
+    if(!/^[A-Za-z]+$/.test(z) || this.first_name.length < 2){
+      // console.log("inside z");
+      this.validateFirstNameTextFalse = false;
+    }
+    else{
+      this.validateFirstNameTextFalse = true;
+    }
+  },
+
+  validateLastNameText(){
+    var z = this.last_name;
+
+    if(!/^[A-Za-z]+$/.test(z) || this.last_name.length < 2){
+      // console.log("inside z");
+      this.validateLastNameTextFalse = false;
+    }
+    else{
+      this.validateLastNameTextFalse = true;
     }
   },
 
   validationPhoneText(){
-    // console.log("VALIDATION EMAIL TEXT");
-    if(this.phone.length > 2){
-      console.log("PHONE > 2");
-      // return "ENTER VALID ADDRESS";
+
+    var z = this.phone;
+
+    if(!/^[0-9]+$/.test(z) || this.phone.length < 10){
+      // console.log("inside z");
       this.validatePhoneTextFalse = false;
     }
-
-    if(this.phone.length > 9){
+    else{
       this.validatePhoneTextFalse = true;
     }
+
+    // if(this.phone.length > 2){
+    //   console.log("PHONE > 2");
+    //   this.validatePhoneTextFalse = false;
+    // }
+
+    // if(this.phone.length > 9){
+    //   this.validatePhoneTextFalse = true;
+    // }
   },
 
   validationDOBText(){
@@ -1264,15 +1428,17 @@
       var birthDate = new Date(dob);
       var age = today.getFullYear() - birthDate.getFullYear();
       var m = today.getMonth() - birthDate.getMonth();
+
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
           age--;
       }
      if(age<18){
-        // console.log("< 16");
+        console.log("< 16");
         // alert('You are not eligible. Age should be above 16...!!!');
         this.validationDOBTextFalse = false;
      }
      else{
+      console.log("> 18");
       this.validationDOBTextFalse = true;
      }
 
@@ -1295,10 +1461,11 @@
       var age = today.getFullYear() - birthDate.getFullYear();
       var m = today.getMonth() - birthDate.getMonth();
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          console.log(birthDate.getDate());
           age--;
       }
      if(age>18){
-        // console.log("< 16");
+        console.log("greater than 18");
         // alert('You are not eligible. Age should be above 16...!!!');
         this.validationMinorDOBTextFalse = false;
         this.validateMinorField = true; // disable minor page NEXT button
@@ -1306,9 +1473,25 @@
         // console.log('Over 18');
      }
      else{
+      console.log("less than eighteen");
       this.validationMinorDOBTextFalse = true;
       this.validateMinorField = false;  // eable minor page NEXT button
       this.disableAddMinorButton = false;
+     }
+     if(age<6){
+      this.validationMinorDOBBelow6TextFalse = false;
+      this.validateMinorField = true;
+      this.disableAddMinorButton = true;
+      console.log("666");
+     }
+     else{
+      this.validationMinorDOBBelow6TextFalse = true;
+      this.validateMinorField = false;  // eable minor page NEXT button
+      this.disableAddMinorButton = false;
+     }
+     if(age<6 || age>18){
+      this.validateMinorField = true;  // disable minor page NEXT button
+      this.disableAddMinorButton = true;
      }
     // if(this.minordatabase.date_of_birth < '2012-01-01'){
     //     this.validateMinorDOBFalse = false;
