@@ -542,7 +542,7 @@
   </div>
 
 
-  <div v-show="!minorsAddDiv">
+  <div v-show="minorsAddDiv">
 
         <br><br>
 
@@ -556,18 +556,23 @@
 
     <div v-show="minorsChecked  === 'A' " >
       <br>
-      <p style="font-style: italic; color:red;"> Minor should be more than 6 and less than 18 year to play BEAT THE BOMB . </p>
+      <p style="font-style: italic; color:red;"> Minor should be more than 6 and less than 18 years . </p>
       <br>
       <div class="work-experiences">
 
       <div class="form-row" v-for="(minordatabase, index) in minorsDetail" :key="index">
 
-        <div class="col-lg-4" style="margin-left: 10%;">
+        <div class="col-lg-3" style="margin-left: 10%;">
           <!-- <label id="minorHeading">Minors First Name and Last Initial</label>
           <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name and Last Initial" size="lg" v-on:input="validateMinorFieldFunction"/> -->
 
-          <label id="minorHeading">Minors First Name and Last Initial</label>
-          <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name and Last Initial" size="lg" v-on:input="validateMinorFieldFunction"/>
+          <label id="minorHeading">Minors First Name</label>
+          <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name" size="lg" v-on:input="validateMinorFieldFunction"/>
+        </div>
+
+        <div class="col-lg-3">
+          <label id="minorHeading">Minors Last Name</label>
+          <input v-model="minordatabase.last_name" type="text" class="form-control" placeholder="Minors Last Name" size="lg" v-on:input="validateMinorFieldFunction"/>
         </div>
 
         <div class="col-lg-3">
@@ -603,7 +608,7 @@
 
       <div class="form-group">
         <button @click="addExperience" type="button" class="btn btn-info" style="margin-right:1.5%;" v-bind:disabled="disableAddMinorButton">Add Another Minor</button>
-        <button @click="removeExperience" type="button" class="btn btn-outline-info">Remove Minor</button>
+        <!-- <button @click="removeExperience" type="button" class="btn btn-outline-info">Remove Minor</button> -->
       </div>
 
     </div>
@@ -1220,6 +1225,7 @@
         minorsDetail: [
         {
           first_name: "",
+          last_name: "",
           date_of_birth: "",
           // title: "Date of Birth"
         }
@@ -1679,6 +1685,17 @@
           this.removeMinorFieldFunction();
         },
 
+        // validateMinorLastFieldFunction: function(){
+        //   var lastminorname = this.minorsDetail[0].last_name;
+        //   if(lastminorname.length < 3){
+        //       this.validateMinorField = true;
+        //     }
+
+        //   if(lastminorname.length > 2){
+        //       this.validateMinorField = false;
+        //     }
+        // },
+
           validateMinorFieldFunction: function(){
 
             // console.log(this.minorsDetail);
@@ -1686,6 +1703,8 @@
             // console.log(this.minorsDetail[0].first_name);
 
            var firstminorname = this.minorsDetail[0].first_name;
+           var lastminorname = this.minorsDetail[0].last_name;
+           var firstdob = this.minorsDetail[0].date_of_birth;
 
             // this.validateMinorField = true;
 
@@ -1698,7 +1717,12 @@
             //   this.validateMinorField = false;
             // }
 
-            if(firstminorname.length > 3){
+            if(firstminorname.length > 2 && lastminorname.length > 1 && firstdob.length > 2){
+              // console.log("greater than 3 man");
+              this.validateMinorField = false;
+            }
+
+            if(lastminorname.length > 1){
               // console.log("greater than 3 man");
               this.validateMinorField = false;
             }
@@ -1714,8 +1738,9 @@
               var minordetaillength = this.minorsDetail.length;
               console.log(minordetaillength-1);
               this.validateMinorField = true;
+              this.disableAddMinorButton = true;
 
-              if(minordetail[minordetaillength-1].first_name.length > 2){
+              if(minordetail[minordetaillength-1].first_name.length > 2 && minordetail[minordetaillength-1].last_name.length > 1 && minordetail[minordetaillength-1].date_of_birth.length > 2){
                 // console.log("less than 2");
                 this.validateMinorField = false;
               }
