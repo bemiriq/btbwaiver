@@ -1347,7 +1347,7 @@
   },
 
   validationEmailText(){
-    console.log("VALIDATION EMAIL TEXT");
+    // console.log("VALIDATION EMAIL TEXT");
 
     var specialChar = "@";
     var specialChar1 = '.';
@@ -1426,10 +1426,10 @@
     //   this.ValidateEmailTextFalse = true;
     // }
 
-    console.log("INISDE DOB");
+    // console.log("INISDE DOB");
 
     var dob= this.date_of_birth;
-    console.log(dob);
+    // console.log(dob);
       var today = new Date();
       var birthDate = new Date(dob);
       var age = today.getFullYear() - birthDate.getFullYear();
@@ -1509,7 +1509,7 @@
       // console.log(todo);
       var militarytime = todo;
 
-      console.log(todo);
+      // console.log(todo);
 
       var standardTimeB = moment(militarytime, "HHmm").format("hh:mm A");
 
@@ -2464,6 +2464,7 @@
 
                  axios.post(process.env.VUE_APP_PLAYERMINOR,{
                   first_name: arr[i]['first_name'],
+                  last_name: arr[i]['last_name'],
                   date_of_birth: arr[i]['date_of_birth'],
                   player_id: playerIdForMinor
                 })
