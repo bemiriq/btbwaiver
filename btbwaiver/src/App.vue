@@ -656,7 +656,7 @@
     </div> -->
 
    <div>
-    <b-button v-b-modal.modal-scrollable variant="info" >View Full Waiver</b-button>
+    <b-button v-b-modal.modal-scrollable variant="info" v-on:click="checkLastPeopleId();">View Full Waiver</b-button>
 
       <b-modal id="modal-scrollable" scrollable title="Waiver Legal" v-bind:hide-footer="true">
         <p class="my-4">
@@ -751,7 +751,7 @@
   <b-modal id="modal-1" ref="my-modal-submit-id" title="BTB Waiver Form" centered v-bind:hide-footer="true">
     <p> Please click on submit to complete this waiver. If you want to go through your waiver again, please click on cross sign on top right. </p>
       <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); submitMinorForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer();">SUBMIT</b-button> -->
-      <b-button variant="primary" v-on:click="submitMinorForm(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer();">SUBMIT</b-button>
+      <b-button variant="primary" v-on:click="submitMinorForm(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer(); reloadfunction();">SUBMIT</b-button>
   </b-modal>
 
   <b-container class="bv-example-row">
@@ -766,7 +766,7 @@
 
         <!-- <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkLastPeopleId(); checkBookerId(); checkWaiverId(); checkReservationId(); checkPeopleId(); submitPlayerForm();">NEXT</b-button> -->
         <!-- <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkLastPeopleId(); checkWaiverId(); checkReservationId(); checkPeopleId(); submitPlayerForm();">NEXT</b-button> -->
-        <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkLastPeopleId();" v-bind:disabled="disabledNextButtonAtLast">NEXT</b-button>
+        <b-button variant="primary" v-b-modal.modal-1 v-bind:disabled="disabledNextButtonAtLast">NEXT</b-button>
 
 
 
@@ -860,17 +860,31 @@
 
       // console.log(time.items[0].arrivalTime);
       function compare(a, b) {
-        console.log(a.items[0].arrivalTime);
+
+        // console.log([...new Set(a.items[0].arrivalTime)]);
+        console.log("jhandu");
+        // console.log(a.items[0].arrivalTime);
+        // console.log(item[0].arrivalTime);
+
         var standardTimeA = moment(a.items[0].arrivalTime, "HHmm").format("HH:mm A");
         var standardTimeB = moment(b.items[0].arrivalTime, "HHmm").format("HH:mm A");
-        console.log(standardTimeA);
-        console.log(standardTimeB);
+
+        if(standardTimeA = standardTimeB){
+          console.log("same");
+          console.log(standardTimeA+' '+standardTimeB);
+          // return this.allbookings.push(compare);
+          let unique = [...new Set(standardTimeA,standardTimeB)];
+          console.log(unique); 
+        }
+        
         if (standardTimeA < standardTimeB)
           return -1;
         if (standardTimeA > standardTimeB)
           return 1;
         return -1;
-          }
+
+        }
+        
 
       return this.allbookings.sort(compare);
 
@@ -1512,8 +1526,13 @@
       // console.log(todo);
 
       var standardTimeB = moment(militarytime, "HHmm").format("hh:mm A");
+      // [...new Set(a.items[0].arrivalTime)]
+
+      // var removeSameTime = [...new Set(standardTimeB)];
 
       // console.log(standardTimeB);
+
+       // return changedTime;
       return standardTimeB;
       // return ([...new Set(standardTimeB)]);
     },
@@ -1805,7 +1824,7 @@
     },
 
     reloadfunction(){
-      setTimeout(location.reload.bind(location), 8500);
+      setTimeout(location.reload.bind(location), 9500);
     },
 
 
