@@ -751,7 +751,7 @@
   <b-modal id="modal-1" ref="my-modal-submit-id" title="BTB Waiver Form" centered v-bind:hide-footer="true">
     <p> Please click on submit to complete this waiver. If you want to go through your waiver again, please click on cross sign on top right. </p>
       <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer();">SUBMIT</b-button> -->
-      <b-button variant="primary" v-on:click="submitMinorForm(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer(); reloadfunction();">SUBMIT</b-button>
+      <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer(); reloadfunction();">SUBMIT</b-button>
   </b-modal>
 
   <b-container class="bv-example-row">
@@ -856,13 +856,13 @@
     },
 
     sortedArray: function() {
-      console.log("inside sortedArray");
+      // console.log("inside sortedArray");
 
       // console.log(time.items[0].arrivalTime);
       function compare(a, b) {
 
         // console.log([...new Set(a.items[0].arrivalTime)]);
-        console.log("jhandu");
+        // console.log("jhandu");
         // console.log(a.items[0].arrivalTime);
         // console.log(item[0].arrivalTime);
 
@@ -870,11 +870,11 @@
         var standardTimeB = moment(b.items[0].arrivalTime, "HHmm").format("HH:mm A");
 
         if(standardTimeA = standardTimeB){
-          console.log("same");
-          console.log(standardTimeA+' '+standardTimeB);
+          // console.log("same");
+          // console.log(standardTimeA+' '+standardTimeB);
           // return this.allbookings.push(compare);
           let unique = [...new Set(standardTimeA,standardTimeB)];
-          console.log(unique); 
+          // console.log(unique); 
         }
         
         if (standardTimeA < standardTimeB)
@@ -1024,13 +1024,13 @@
           })
           .then(response => {
             this.surveyQuestionAnswersList = response.data;
-            console.log(response.data);
+            // console.log(response.data);
           })
           .catch(function (error) {
             console.log(error);
           });
 
-    console.log(this.surveyQuestionAnswersList);
+    // console.log(this.surveyQuestionAnswersList);
 
     if(this.minorsChecked === 'B'){
       console.log("enable minor");
