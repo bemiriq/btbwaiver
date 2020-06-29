@@ -542,7 +542,7 @@
   </div>
 
 
-  <div v-show="minorsAddDiv">
+  <div v-show="!minorsAddDiv">
 
         <br><br>
 
