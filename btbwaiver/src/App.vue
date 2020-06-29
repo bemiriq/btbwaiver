@@ -1,4 +1,4 @@
-  <template>
+<template>
 
     <div id="app">
       <br/>
@@ -220,7 +220,7 @@
     type="text"
     required
     placeholder="Enter your first name" size="lg"
-    @input="validateFirstNameText"></b-form-input>
+    @blur="validateFirstNameText"></b-form-input>
   </b-form-group>
 
   <br/>
@@ -242,7 +242,7 @@
     v-model="last_name"
     type="text"
     required
-    placeholder="Enter your last name" size="lg" @input="validateLastNameText"
+    placeholder="Enter your last name" size="lg" @blur="validateLastNameText"
     ></b-form-input>
 
     <br/>
@@ -317,7 +317,7 @@
               v-model="email"
               type="email"
               required
-              placeholder="Enter Email Address" size="lg" v-on:input="validationEmailText">
+              placeholder="Enter Email Address" size="lg" @blur="validationEmailText">
             </b-form-input>
           </b-form-group>
 
@@ -340,7 +340,7 @@
                 v-model="phone"
                 type="tel"
                 required
-                placeholder="Enter Cell Phone Number" size="lg" v-on:input="validationPhoneText">
+                placeholder="Enter Cell Phone Number" size="lg" @blur="validationPhoneText">
               </b-form-input>
             </b-form-group>
 
@@ -542,7 +542,7 @@
   </div>
 
 
-  <div v-show="!minorsAddDiv">
+  <div v-show="minorsAddDiv">
 
         <br><br>
 
@@ -751,7 +751,7 @@
   <b-modal id="modal-1" ref="my-modal-submit-id" title="BTB Waiver Form" centered v-bind:hide-footer="true">
     <p> Please click on submit to complete this waiver. If you want to go through your waiver again, please click on cross sign on top right. </p>
       <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer();">SUBMIT</b-button> -->
-      <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer(); reloadfunction();">SUBMIT</b-button>
+      <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; submitMinorForm(); hideModal(); clickedTimer(); reloadfunction();">SUBMIT</b-button>
   </b-modal>
 
   <b-container class="bv-example-row">
@@ -766,7 +766,7 @@
 
         <!-- <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkLastPeopleId(); checkBookerId(); checkWaiverId(); checkReservationId(); checkPeopleId(); submitPlayerForm();">NEXT</b-button> -->
         <!-- <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkLastPeopleId(); checkWaiverId(); checkReservationId(); checkPeopleId(); submitPlayerForm();">NEXT</b-button> -->
-        <b-button variant="primary" v-b-modal.modal-1 v-bind:disabled="disabledNextButtonAtLast" v-on:click="submitMinorForm();">NEXT</b-button>
+        <b-button variant="primary" v-b-modal.modal-1 v-bind:disabled="disabledNextButtonAtLast">NEXT</b-button>
 
 
 
@@ -1104,6 +1104,8 @@
       disableViewWaiver: true,
 
       countvalidationminorfunction: 0,
+
+      reservationIdForReservationMinor:'',
 
       DropdownDatepicker: '',
       text: '',
@@ -1750,6 +1752,12 @@
               // console.log("empty");
               console.log(this.minorsDetail.length);
               this.validateMinorField = true;
+
+              if(this.minorsChecked === 'A'){
+                console.log("enable minor");
+                this.validateMinorField = false;
+              }
+
             }
 
             else{
@@ -1824,7 +1832,7 @@
     },
 
     reloadfunction(){
-      setTimeout(location.reload.bind(location), 9500);
+      setTimeout(location.reload.bind(location), 9800);
     },
 
 
@@ -1938,6 +1946,11 @@
         axios.post(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+reservationOrderId).then(response => {
           this.consistsreservationresult = response.data;
           console.log(response.data);
+
+          this.reservationIdForReservationMinor = response.data[0].id;
+
+          console.log(this.reservationIdForReservationMinor);
+
           console.log("inside reservation order by id");
 
           // axios.get(process.env.VUE_APP_WAIVERS).then(response => {
@@ -2308,6 +2321,8 @@
 
       console.log("consists reservation result");
       console.log(this.consistsreservationresult);
+      console.log(this.reservationIdForReservationMinor);
+
 
       var waiverDataId = this.waiverresult[0];
        if(waiverDataId == null){
@@ -2476,6 +2491,9 @@
           var minorvalue = this.minorsDetail[0].first_name;
           // console.log(this.minorsDetail);
           // console.log(this.minorsDetail[0].first_name);
+          console.log(this.reservationIdForReservationMinor);
+          var reservationIdUsedOnSession = this.reservationIdForReservationMinor;
+          console.log(reservationIdUsedOnSession);
 
           if (minorvalue.length > 0) {
             // console.log("INSIDE MINOR");
@@ -2488,8 +2506,37 @@
                   player_id: playerIdForMinor
                 })
 
-                .then(function (response) {
-                  // console.log(response);
+                .then(response => {
+                  console.log(response);
+
+                  console.log(reservationIdUsedOnSession);
+
+                  var playerMinorIdforReservationMinor = response.data.id;
+
+                  /** the code below will add the data into RESERVATION_MINOR table **/
+
+                    // console.log(reservationwithnewid);
+                    // console.log("PRINT VAYO");
+
+                    // console.log(this.reservationIdForReservationMinor);
+
+                    // var reservationIdUsed = this.reservationIdForReservationMinor;
+                    // console.log(reservationIdUsed);
+
+                    axios.post(process.env.VUE_APP_RESERVATION_MINOR,{
+                      player_minor_id: playerMinorIdforReservationMinor,
+                      reservation_id: reservationIdUsedOnSession
+                    })
+
+                    .then(function (response) {
+                      console.log(response);
+                    })
+                    .catch(function (error) {
+                      console.log(error);
+                    });
+
+                  /** end of inserting data into RESERVATION_MINOR table **/
+
                 })
                 .catch(function (error) {
                   console.log(error);
@@ -2499,7 +2546,7 @@
           }
 
           else{
-            // console.log("No Minors");
+            console.log("No Minors");
           }
           /** end of minor table **/
 
