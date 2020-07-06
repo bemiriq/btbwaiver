@@ -299,7 +299,7 @@
   </div>
 
 
-    <div v-show="emailDiv">
+    <div v-show="!emailDiv">
         <!-- <p>SAN 2</p> -->
         <br><br>
 
@@ -411,11 +411,11 @@
   <br> <br>
 
 
-  <div v-if="increaseHeightForInstagram === '1'" style="height: 600px; background-color: yellow;">
-    <p> SAN </p>
+  <div v-if="increaseHeightForInstagram === '1'" style="height: 500px;">
+    <p> </p>
   </div>
   <div v-else>
-    <p> ELSE </p>
+    <p> </p>
   </div>
 
   </div>
