@@ -299,7 +299,7 @@
   </div>
 
 
-        <div v-show="!emailDiv">
+    <div v-show="emailDiv">
         <!-- <p>SAN 2</p> -->
         <br><br>
 
@@ -408,8 +408,15 @@
       </b-col>
     </b-row>
   </b-container>
-
   <br> <br>
+
+
+  <div v-if="increaseHeightForInstagram === '1'" style="height: 300px; background-color: yellow;">
+    <p> SAN </p>
+  </div>
+  <div v-else>
+    <p> ELSE </p>
+  </div>
 
   </div>
 
@@ -1103,6 +1110,8 @@
       disabledNextButtonAtLast: true,
       disableViewWaiver: true,
 
+      increaseHeightForInstagram: 0,
+
       countvalidationminorfunction: 0,
 
       reservationIdForReservationMinor:'',
@@ -1364,6 +1373,8 @@
 
   validationEmailText(){
     // console.log("VALIDATION EMAIL TEXT");
+
+    this.increaseHeightForInstagram = '1';
 
     var specialChar = "@";
     var specialChar1 = '.';
