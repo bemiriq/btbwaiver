@@ -411,7 +411,7 @@
   <br> <br>
 
 
-  <div v-if="increaseHeightForInstagram === '1'" style="height: 300px; background-color: yellow;">
+  <div v-if="increaseHeightForInstagram === '1'" style="height: 600px; background-color: yellow;">
     <p> SAN </p>
   </div>
   <div v-else>
