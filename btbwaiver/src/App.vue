@@ -301,13 +301,19 @@
 
     <div v-show="!emailDiv">
         <!-- <p>SAN 2</p> -->
-        <br><br>
-
-            <br>
+        <br>
             <!-- <b-form @submit="onSubmit" @reset="onReset" v-if="show"> -->
+              <b-form-group>
+                <span style="color:red; font-style: italic; font-size: 16px;"> Validate Email and Phone Number is required to proceed next page. </span>
+              </b-form-group>
+
+              <b-form-group>
+
+              </b-form-group>
+
 
               <b-form-group
-      id="input-group-1" class="nameTitle"> Enter Email Address <span style="color:red;">*</span> <span v-show="!ValidateEmailTextFalse" style="color:red;">
+      id="input-group-1" class="nameTitle"> Enter Email Address <span style="color:red; font-style: italic; font-size: 15px;"> ( Required &#42; )</span>  <span v-show="!ValidateEmailTextFalse" style="color:red;">
       Please enter a valid email address</span>
     </b-form-group>
 
@@ -330,7 +336,7 @@
 
           <br><br>
             <b-form-group
-      id="input-group-1" class="nameTitle"> Phone Number <span style="color:red;">*</span> <span v-show="!validatePhoneTextFalse" style="color:red;">
+      id="input-group-1" class="nameTitle"> Phone Number <span style="color:red; font-style: italic; font-size: 15px;"> ( Required &#42; )</span> <span v-show="!validatePhoneTextFalse" style="color:red;">
       Please enter a valid phone number including area code</span>
     </b-form-group> 
 
@@ -549,7 +555,7 @@
   </div>
 
 
-  <div v-show="!minorsAddDiv">
+  <div v-show="minorsAddDiv">
 
         <br><br>
 
@@ -563,13 +569,13 @@
 
     <div v-show="minorsChecked  === 'A' " >
       <br>
-      <p style="font-style: italic; color:red;"> Minor should be more than 6 and less than 18 years . </p>
+      <p style="font-style: italic; color:red;"> Minor should be more than 8 and less than 18 years . </p>
       <br>
       <div class="work-experiences">
 
       <div class="form-row" v-for="(minordatabase, index) in minorsDetail" :key="index">
 
-        <div class="col-lg-3" style="margin-left: 10%;">
+        <div class="col-lg-3" style="margin-left: 0%;">
           <!-- <label id="minorHeading">Minors First Name and Last Initial</label>
           <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name and Last Initial" size="lg" v-on:input="validateMinorFieldFunction"/> -->
 
@@ -582,11 +588,11 @@
           <input v-model="minordatabase.last_name" type="text" class="form-control" placeholder="Minors Last Name" size="lg" v-on:input="validateMinorFieldFunction"/>
         </div>
 
-        <div class="col-lg-3">
+        <div class="col-lg-5">
             <label id="minorHeading">Minor's date of birth</label>
 
             <p v-show="!validationMinorDOBTextFalse" v-if="minordatabase.date_of_birth < currentDateCompare" style="color: red;">Minor should be under 18</p>
-            <p v-show="!validationMinorDOBBelow6TextFalse" v-if="minordatabase.date_of_birth > minorLessThan6" style="color: red;">Minor should be over 6 year </p>
+            <p v-show="!validationMinorDOBBelow8TextFalse" v-if="minordatabase.date_of_birth > minorLessThan6" style="color: red;">Minor should be over 8 year </p>
             <!-- <p v-show="!validationMinorDOBTextFalse" v-if="minordatabase.date_of_birth < currentDateCompare" style="color: red;">Minor should be under 18</p> -->
 
             <!-- <date-dropdown
@@ -1098,7 +1104,7 @@
       validationDOBTextFalse: true,
       validateMinorDOBFalse: true,
       validationMinorDOBTextFalse: true,
-      validationMinorDOBBelow6TextFalse: true,
+      validationMinorDOBBelow8TextFalse: true,
       disableAddMinorButton: true,
       validateFirstNameTextFalse: true,
       validateLastNameTextFalse: true,
@@ -1511,18 +1517,18 @@
       this.validateMinorField = false;  // eable minor page NEXT button
       this.disableAddMinorButton = false;
      }
-     if(age<6){
-      this.validationMinorDOBBelow6TextFalse = false;
+     if(age<8){
+      this.validationMinorDOBBelow8TextFalse = false;
       this.validateMinorField = true;
       this.disableAddMinorButton = true;
       console.log("666");
      }
      else{
-      this.validationMinorDOBBelow6TextFalse = true;
+      this.validationMinorDOBBelow8TextFalse = true;
       this.validateMinorField = false;  // eable minor page NEXT button
       this.disableAddMinorButton = false;
      }
-     if(age<6 || age>18){
+     if(age<8 || age>18){
       this.validateMinorField = true;  // disable minor page NEXT button
       this.disableAddMinorButton = true;
      }
