@@ -580,12 +580,13 @@
           <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name and Last Initial" size="lg" v-on:input="validateMinorFieldFunction"/> -->
 
           <label id="minorHeading">First Name</label>
-          <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name" size="md" v-on:input="validateMinorFieldFunction"/>
+          <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name" size="md"/>
+          <!-- <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name" size="md" v-on:input="validateMinorFieldFunction"/> -->
         </div>
 
         <div class="col-md-3">
           <label id="minorHeading">Last Name</label>
-          <input v-model="minordatabase.last_name" type="text" class="form-control" placeholder="Minors Last Name" size="md" v-on:input="validateMinorFieldFunction"/>
+          <input v-model="minordatabase.last_name" type="text" class="form-control" placeholder="Minors Last Name" size="md"/>
         </div>
 
         <div class="col-md-6">
