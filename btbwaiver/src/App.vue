@@ -417,7 +417,7 @@
   <br> <br>
 
 
-  <div v-if="increaseHeightForInstagram === '1'" style="height: 400px;">
+  <div v-if="increaseHeightForInstagram === '1'" style="height: 450px;">
     <p> </p>
   </div>
   <div v-else>
@@ -614,14 +614,7 @@
           <b-icon icon="trash-fill" font-scale="1.5"  @click="minorsDetail.splice(index, 1)"></b-icon>
         </div>
 
-        <div v-if="increaseHeightForInstagram === '1'" style="height: 400px;">
-          <p> </p>
-        </div>
-        <div v-else>
-          <p> </p>
-        </div>
-
-
+        
       </div>
 
     </div>
@@ -662,6 +655,13 @@
       </b-row>
     </b-container>
     
+    <div v-if="increaseHeightForInstagram === '1'" style="height: 450px;">
+          <p> </p>
+        </div>
+        <div v-else>
+          <p> </p>
+    </div>
+
     <br/>
 
   </div>
