@@ -417,7 +417,7 @@
   <br> <br>
 
 
-  <div v-if="increaseHeightForInstagram === '1'" style="height: 500px;">
+  <div v-if="increaseHeightForInstagram === '1'" style="height: 400px;">
     <p> </p>
   </div>
   <div v-else>
@@ -555,7 +555,7 @@
   </div>
 
 
-  <div v-show="minorsAddDiv">
+  <div v-show="!minorsAddDiv">
 
         <br><br>
 
@@ -575,20 +575,20 @@
 
       <div class="form-row" v-for="(minordatabase, index) in minorsDetail" :key="index">
 
-        <div class="col-lg-3" style="margin-left: 0%;">
+        <div class="col-md-3" style="margin-left: 0%;">
           <!-- <label id="minorHeading">Minors First Name and Last Initial</label>
           <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name and Last Initial" size="lg" v-on:input="validateMinorFieldFunction"/> -->
 
-          <label id="minorHeading">Minors First Name</label>
-          <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name" size="lg" v-on:input="validateMinorFieldFunction"/>
+          <label id="minorHeading">First Name</label>
+          <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name" size="md" v-on:input="validateMinorFieldFunction"/>
         </div>
 
-        <div class="col-lg-3">
-          <label id="minorHeading">Minors Last Name</label>
-          <input v-model="minordatabase.last_name" type="text" class="form-control" placeholder="Minors Last Name" size="lg" v-on:input="validateMinorFieldFunction"/>
+        <div class="col-md-3">
+          <label id="minorHeading">Last Name</label>
+          <input v-model="minordatabase.last_name" type="text" class="form-control" placeholder="Minors Last Name" size="md" v-on:input="validateMinorFieldFunction"/>
         </div>
 
-        <div class="col-lg-5">
+        <div class="col-md-6">
             <label id="minorHeading">Minor's date of birth</label>
 
             <p v-show="!validationMinorDOBTextFalse" v-if="minordatabase.date_of_birth < currentDateCompare" style="color: red;">Minor should be under 18</p>
@@ -608,11 +608,20 @@
             <dropdown-datepicker display-format="mdy" v-model="minordatabase.date_of_birth" v-bind:min-age="0" @input="validationMinorDOBText"></dropdown-datepicker> 
         </div>
 
-        <div class="col-lg-1">
+        <div class="col-lg-2">
           <!-- <button type="button" class="btn btn-outline-info" @click="minorsDetail.splice(index, 1)">Remove Minor</button> -->
           <p></p>
-          <b-icon icon="trash-fill" font-scale="1.7"  @click="minorsDetail.splice(index, 1)"></b-icon>
+          <b-icon icon="trash-fill" font-scale="1.5"  @click="minorsDetail.splice(index, 1)"></b-icon>
         </div>
+
+        <div v-if="increaseHeightForInstagram === '1'" style="height: 400px;">
+          <p> </p>
+        </div>
+        <div v-else>
+          <p> </p>
+        </div>
+
+
       </div>
 
     </div>
