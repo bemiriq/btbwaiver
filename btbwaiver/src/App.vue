@@ -213,7 +213,7 @@
     </b-form-group>
     <p v-show="!validateFirstNameTextFalse"> VALID FIRST NAME </p> -->
 
-    <b-form-group
+    <b-form-group>
     <b-form-input
     id="inputField"
     v-model="first_name"
@@ -255,7 +255,10 @@
   label-for="input-1" class="nameTitle"> -->
 
    <b-form-group 
-      id="input-group-1" class="nameTitle" label-for="input-1"> Date of birth <span style="color:red;">*</span> <span v-show="!validationDOBTextFalse" style="color:red;">You should be over 18 to sign the waiver.</span>
+      id="input-group-1" class="nameTitle" label-for="input-1"> 
+
+      Date of birth <span style="color:red;">*</span> <span v-show="!validationDOBTextFalse" style="color:red;">You should be over 18 to sign the waiver.</span>
+
     </b-form-group> 
 
     
@@ -270,10 +273,21 @@
     :months-names="months"
     v-model="date_of_birth" id="dateDropdownDesign" @input="validationDOBText">
   </date-dropdown> -->
-
-  <dropdown-datepicker display-format="mdy" v-model="date_of_birth" v-bind:min-age="6" default-date="2001-01-01" @input="validationDOBText"></dropdown-datepicker>
-
+  <b-form-group style="margin-right:30%;">
+    <dropdown-datepicker display-format="mdy" v-model="date_of_birth" v-bind:min-age="6" default-date="2001-01-01" @input="validationDOBText"></dropdown-datepicker>
   </b-form-group>
+
+  <br>
+
+  <b-form-group label="Are you a player ?"></b-form-group>
+  <b-form-group>
+      <b-form-radio-group id="radio-group-2" v-model="playerSelected" name="radio-sub-component">
+        <b-form-radio value="yes">YES</b-form-radio>
+        <b-form-radio value="no">NO</b-form-radio>
+      </b-form-radio-group>
+    </b-form-group>
+
+
 
   </b-form>
 
@@ -303,14 +317,6 @@
         <!-- <p>SAN 2</p> -->
         <br>
             <!-- <b-form @submit="onSubmit" @reset="onReset" v-if="show"> -->
-              <b-form-group>
-                <span style="color:red; font-style: italic; font-size: 16px;"> Validate Email and Phone Number is required to proceed next page. </span>
-              </b-form-group>
-
-              <b-form-group>
-
-              </b-form-group>
-
 
               <b-form-group
       id="input-group-1" class="nameTitle"> Enter Email Address <span style="color:red; font-style: italic; font-size: 15px;"> ( Required &#42; )</span>  <span v-show="!ValidateEmailTextFalse" style="color:red;">
@@ -473,6 +479,7 @@
 
   <div v-show="!hearAboutUsDiv" id="hearAboutUsDiv">
 
+    <b-form>
     <br><br>
     <span style="font-size: 1.6em;">{{ hearAboutUsTitle }}</span>
     <br><br>
@@ -506,51 +513,55 @@
         <b-form-radio class="form-check-input" id="radio-group-5" type="radio" value="Other" v-model="hearAboutUs">
          Other
         </b-form-radio> -->
+                <div v-for="surveylist in surveyQuestionAnswersList.Survey_set_questions" :key="surveylist.id" style="text-align:left; margin-left:5%;">
+                    <!-- {{surveylist.id}} use v-model and this will be the survey_id -->
+                    <!-- <input type="text" v-model="surveylistid" :name="name1" :value="surveylist.id"/> -->
+                    <!-- <br> -->
+                    <!-- {{surveylist.Survey_question.id}} use v-model and pass this value to data and fetch on method now as for question_id -->
+                    <div v-for="surveyanswer in surveylist.Survey_set_question_answer_options" :key="surveyanswer.id">
+                      <!-- {{surveyanswer.id}} {{surveyanswer.Survey_answer_option.answer}} -->
 
-        <div v-for="surveylist in surveyQuestionAnswersList.Survey_set_questions" :key="surveylist.id" style="text-align:left;">
-            <!-- {{surveylist.id}} use v-model and this will be the survey_id -->
-            <!-- <input type="text" v-model="surveylistid" :name="name1" :value="surveylist.id"/> -->
-            <!-- <br> -->
-            <!-- {{surveylist.Survey_question.id}} use v-model and pass this value to data and fetch on method now as for question_id -->
-            <div v-for="surveyanswer in surveylist.Survey_set_question_answer_options" :key="surveyanswer.id">
-              <!-- {{surveyanswer.id}} {{surveyanswer.Survey_answer_option.answer}} -->
+                      <!-- <b-form-radio class="form-check-input" id="radio-group-6" type="radio" v-model="hearAboutUs"> -->
 
-              <!-- <b-form-radio class="form-check-input" id="radio-group-6" type="radio" v-model="hearAboutUs"> -->
+                      <!-- <b-form-radio class="form-check-input" id="radio-group-6" type="radio" :value="surveyanswer.survey_answer_option_id" v-model="hearAboutUs">
+                        {{surveyanswer.Survey_answer_option.answer}}
+                      </b-form-radio> -->
 
-              <!-- <b-form-radio class="form-check-input" id="radio-group-6" type="radio" :value="surveyanswer.survey_answer_option_id" v-model="hearAboutUs">
-                {{surveyanswer.Survey_answer_option.answer}}
-              </b-form-radio> -->
+                      <input type="radio" class="form-check-input" v-model="hearAboutUs" :value="surveyanswer.survey_answer_option_id" v-on:change="surveyAnswerValidation"> {{surveyanswer.Survey_answer_option.answer}}<br></input>
 
-              <input type="radio" class="form-check-input" v-model="hearAboutUs" :value="surveyanswer.survey_answer_option_id" v-on:change="surveyAnswerValidation"> {{surveyanswer.Survey_answer_option.answer}}<br></input>
+                      <!-- <span>Picked: {{ hearAboutUs }}</span> -->
 
-              <!-- <span>Picked: {{ hearAboutUs }}</span> -->
+                    </div>
 
-            </div>
+                </div>
 
-        </div>
+                <div v-if="hearAboutUs == '6'">
+                  <span style="color:red; font-size: 0.8em; font-style: italic;">Please explain using more than 5 characters</span>
+                  <b-form-input placeholder="How did you hear about us?" v-model="surveyOtherInput" @input="validateOtherHearAboutUs"></b-form-input>
+                </div>
 
-        <div v-if="hearAboutUs == '6'">
-          <b-form-input placeholder="How did you hear about us?" v-model="surveyOtherInput" @input="validateOtherHearAboutUs"></b-form-input>
-        </div>
+              <!-- </div> -->
 
-      <!-- </div> -->
+              <br><br>
+            <b-container class="bv-example-row">
+              <b-row>
+                <b-col>
+                  <b-button variant="outline-primary" v-on:click="hearAboutUsDiv = !hearAboutUsDiv, genderDiv = !genderDiv">BACK</b-button>
+                </b-col>
 
-      <br><br>
-    <b-container class="bv-example-row">
-      <b-row>
-        <b-col>
-          <b-button variant="outline-primary" v-on:click="hearAboutUsDiv = !hearAboutUsDiv, genderDiv = !genderDiv">BACK</b-button>
-        </b-col>
+                <b-col></b-col>
 
-        <b-col></b-col>
+                <b-col>
+                  <b-button variant="primary" v-on:click="hearAboutUsDiv = !hearAboutUsDiv; minorsAddDiv = !minorsAddDiv; checkBookerId();" v-bind:disabled="validateHearAboutUs">NEXT</b-button>
+                  <!-- <b-button variant="primary" v-on:click="hearAboutUsDiv = !hearAboutUsDiv; minorsAddDiv = !minorsAddDiv; checkBookerId();">NEXT</b-button> -->
 
-        <b-col>
-          <b-button variant="primary" v-on:click="hearAboutUsDiv = !hearAboutUsDiv; minorsAddDiv = !minorsAddDiv; checkBookerId();" v-bind:disabled="validateHearAboutUs">NEXT</b-button>
-        </b-col>
-      </b-row>
-    </b-container>
+                </b-col>
+              </b-row>
+            </b-container>
 
     <br><br>
+
+  </b-form>
 
   </div>
 
@@ -589,7 +600,7 @@
           <input v-model="minordatabase.last_name" type="text" class="form-control" placeholder="Minors Last Name" size="md"/>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
             <label id="minorHeading">Minor's date of birth</label>
 
             <p v-show="!validationMinorDOBTextFalse" v-if="minordatabase.date_of_birth < currentDateCompare" style="color: red;">Minor should be under 18</p>
@@ -609,7 +620,7 @@
             <dropdown-datepicker display-format="mdy" v-model="minordatabase.date_of_birth" v-bind:min-age="0" @input="validationMinorDOBText"></dropdown-datepicker> 
         </div>
 
-        <div class="col-lg-2">
+        <div class="col-md-2">
           <!-- <button type="button" class="btn btn-outline-info" @click="minorsDetail.splice(index, 1)">Remove Minor</button> -->
           <p></p>
           <b-icon icon="trash-fill" font-scale="1.5"  @click="minorsDetail.splice(index, 1)"></b-icon>
@@ -647,7 +658,7 @@
           <!-- <b-button variant="primary" v-on:click="checkPlayerId();">SUBMIT</b-button> -->
           
         <!-- <b-button variant="primary" v-on:click=" minorsignDiv = !minorsignDiv; minorsAddDiv = !minorsAddDiv; postReservationData(); postPeopleData();" v-bind:disabled="validateMinorField">NEXT</b-button> -->
-        <b-button variant="primary" v-on:click=" minorsignDiv = !minorsignDiv; minorsAddDiv = !minorsAddDiv; postReservationData();" v-bind:disabled="validateMinorField">NEXT</b-button>
+        <b-button variant="primary" v-on:click=" covidWholeForm = !covidWholeForm; minorsAddDiv = !minorsAddDiv; postReservationData();" v-bind:disabled="validateMinorField">NEXT</b-button>
 
         <!-- <b-button variant="primary" v-on:click="submitMinorForm();">SUBMIT</b-button> -->
 
@@ -666,6 +677,165 @@
     <br/>
 
   </div>
+
+  <!-- div for COVID FORM PAGE -->
+
+  <div v-show="!covidWholeForm">
+        <b-form-group>
+          <b-form-checkbox id="checkbox-1" v-model="covidForm1" name="checkbox-1" value="1" unchecked-value="not_accepted">
+            I confirm I am not experiencing any of the following symptoms of COVID-19 that are listed below: 
+          </b-form-checkbox>
+        </b-form-group>
+
+        <div id="covidFormListingDiv">
+          <b-container class="bv-example-row">
+            <b-row>
+              <b-col>&#8226; Fever or chills</b-col>
+              <b-col>&#8226; Muscle or body aches</b-col>
+              <b-col>&#8226; Congestion or runny nose</b-col>
+            </b-row>
+          </b-container>
+
+          <b-container class="bv-example-row">
+            <b-row>
+              <b-col>&#8226; Cough</b-col>
+              <b-col>&#8226; Headache</b-col>
+              <b-col>&#8226; Nausea or vomiting</b-col>
+            </b-row>
+          </b-container>
+
+          <b-container class="bv-example-row">
+            <b-row>
+              <b-col>&#8226; Shortness of breath or difficulty breathing</b-col>
+              <b-col>&#8226; New loss of taste or smell</b-col>
+              <b-col>&#8226; Diarrhea</b-col>
+            </b-row>
+          </b-container>
+
+          <b-container class="bv-example-row">
+            <b-row>
+              <b-col>&#8226; Fatigue</b-col>
+              <b-col>&#8226; Sore throat</b-col>
+              <b-col></b-col>
+            </b-row>
+          </b-container>
+
+        </div>
+
+        <br>
+
+        <b-form-group>
+          <b-form-checkbox id="checkbox-2" v-model="covidForm2" name="checkbox-2" value="1" unchecked-value="not_accepted">
+            I confirm that in the last 14 days I have not  been in contact with anyone who has tested positive <br>for COVID-19 or has experienced the following symptoms of COVID-19 that are listed below:
+          </b-form-checkbox>
+        </b-form-group>
+
+        <div id="covidFormListingDiv">
+          <b-container class="bv-example-row">
+            <b-row>
+              <b-col>&#8226; Fever or chills</b-col>
+              <b-col>&#8226; Muscle or body aches</b-col>
+              <b-col>&#8226; Congestion or runny nose</b-col>
+            </b-row>
+          </b-container>
+
+          <b-container class="bv-example-row">
+            <b-row>
+              <b-col>&#8226; Cough</b-col>
+              <b-col>&#8226; Headache</b-col>
+              <b-col>&#8226; Nausea or vomiting</b-col>
+            </b-row>
+          </b-container>
+
+          <b-container class="bv-example-row">
+            <b-row>
+              <b-col>&#8226; Shortness of breath or difficulty breathing</b-col>
+              <b-col>&#8226; New loss of taste or smell</b-col>
+              <b-col>&#8226; Diarrhea</b-col>
+            </b-row>
+          </b-container>
+
+          <b-container class="bv-example-row">
+            <b-row>
+              <b-col>&#8226; Fatigue</b-col>
+              <b-col>&#8226; Sore throat</b-col>
+              <b-col></b-col>
+            </b-row>
+          </b-container>
+
+        </div>
+
+        <br>
+
+        <div style="text-align: justify; width: 88%; margin: auto;">
+
+          <b-form-group>
+
+            <b-form-checkbox id="checkbox-3" v-model="covidForm3" name="checkbox-3" value="1" unchecked-value="not_accepted">
+              I understand travel increases my risk of contracting and transmitting the COVID-19 virus. I verify that I have NOT in the past 14 days traveled: 1) Outside of the United States to countries that have been affected by COVID-19; or 2) Domestically within the United States to any states that currently fall under Executive Order 205: Quarantine Restrictions on Travelers Arriving in New York. 
+            </b-form-checkbox>
+
+          </b-form-group>
+
+        </div>
+
+        <br>
+
+        <div style="text-align: justify; width: 88%; margin: auto;">
+
+          <b-form-group>
+
+            <b-form-checkbox id="checkbox-4" v-model="covidForm4" name="checkbox-4" value="1" unchecked-value="not_accepted">
+              I am informed that Beat The Bomb has  implemented preventative measures intended to reduce the spread of COVID-19. However, I understand that by entering Beat the Bomb's premises or participating in any activity thereon, I am knowingly and willingly exposing myself to infectious and communicable diseases, including but not limited to severe acute respiratory syndrome coronavirus 2 (commonly known as Covid-19 or coronavirus), and that my presence or participation in any activity on Beat the Bomb’s premises could increase my risk of contracting such diseases.
+            </b-form-checkbox>
+
+          </b-form-group>
+
+        </div>
+
+        <br>
+
+        <div style="text-align: justify; width: 88%; margin: auto;">
+
+          <b-form-group>
+
+            <b-form-checkbox id="checkbox-5" v-model="covidForm5" name="checkbox-5" value="1" unchecked-value="not_accepted">
+              I HAVE READ THE ABOVE CONSENT  FORM AND RELEASE AND BY ACKNOWLEDGING IT I AGREE IT IS MY INTENTION TO EXEMPT AND RELIEVE TASK FORCE ZERO LLC FROM FROM ALL CLAIMS OR BODILY INJURY RESULTING FROM PARTICIPANT’S  EXPOSURE  TO  ANY  BACTERIA,  FUNGUS,  VIRUS,  UNKNOWN  CONTAGIOUS  DISEASES  OR  COVID-19 AND IN ANY WAY CONNECTED TO PARTICIPANT’S ENTRY INTO THE PREMISES OR ENGAGEMENT IN THE ACTIVITIES.
+            </b-form-checkbox>
+
+          </b-form-group>
+
+        </div>
+
+        <br><br>
+
+        <b-container class="bv-example-row">
+          <b-row>
+            <b-col>
+              <b-button variant="outline-primary" v-on:click="minorsAddDiv = !minorsAddDiv, covidWholeForm = !covidWholeForm">BACK</b-button>
+            </b-col>
+
+            <b-col></b-col>
+
+            <b-col>
+              <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv; covidWholeForm = !covidWholeForm;" v-bind:disabled="isDisableCovidForm" >NEXT</b-button>
+              <!-- <b-button variant="primary" v-bind:disabled="isDisableCovidForm" >NEXT</b-button> -->
+
+            </b-col>
+          </b-row>
+        </b-container>
+
+        <div v-if="increaseHeightForInstagram === '1'" style="height: 450px;">
+            <p> </p>
+          </div>
+          <div v-else>
+            <p> </p>
+          </div>
+
+
+      </div>
+
+  <!-- END OF DIV for COVID FORM -->
 
 
   <div v-show="!minorsignDiv">
@@ -774,13 +944,13 @@
   <b-modal id="modal-1" ref="my-modal-submit-id" title="BTB Waiver Form" centered v-bind:hide-footer="true">
     <p> Please click on submit to complete this waiver. If you want to go through your waiver again, please click on cross sign on top right. </p>
       <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer();">SUBMIT</b-button> -->
-      <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; submitMinorForm(); hideModal(); clickedTimer(); reloadfunction();">SUBMIT</b-button>
+      <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; submitMinorForm(); hideModal(); clickedTimer();">SUBMIT</b-button>
   </b-modal>
 
   <b-container class="bv-example-row">
     <b-row>
       <b-col>
-        <b-button variant="outline-primary" v-on:click="minorsAddDiv = !minorsAddDiv, minorsignDiv = !minorsignDiv">BACK</b-button>
+        <b-button variant="outline-primary" v-on:click="covidWholeForm = !covidWholeForm, minorsignDiv = !minorsignDiv">BACK</b-button>
       </b-col>
 
       <b-col></b-col>
@@ -937,6 +1107,19 @@
       else {
         return false;
       }
+  },
+
+  isDisableCovidForm(){
+
+    // return false;
+
+    if(this.covidForm1 == '1' && this.covidForm3 == '1' && this.covidForm4 == '1' && this.covidForm5 == '1' && this.covidForm2 == '1'){
+      console.log('true');
+      return false;
+    }
+    else{
+      return true;
+    }
   },
 
   validateGenderField(){
@@ -1119,6 +1302,13 @@
       validateFirstNameTextFalse: true,
       validateLastNameTextFalse: true,
       validateHearAboutUs: true,
+      covidWholeForm: true,
+      isDisableCovidFormButton: true,
+      covidForm1: 0,
+      covidForm2: 0,
+      covidForm3: 0,
+      covidForm4: 0,
+      covidForm5: 0,
 
       displaySignaturePad: true,
       acceptedCheckBox: '',
@@ -1165,6 +1355,8 @@
       momentFirstTime:'',
       momentLastTime:'',
       people_id: '',
+
+      playerSelected:'yes',
 
       surveyQuestionAnswersList:[],
       surveylistid:'',
@@ -2483,25 +2675,16 @@
         })
       }
 
-      // console.log("not 6");
-        //   axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
-        //   person_id: lastPlayerIdNew,
-        //   survey_id: 1,
-        //   answer_id: answerId,
-        //   question_id: 1
-        // })
-        // .then(response => {
-        //   console.log(response);
-        // })
-        // .catch(function(error){
-        //   console.log(error);
-        // })
-
       /* end of post survey answers */
 
       var peopleIdForPlayer = this.people_id;
 
-      axios.post(process.env.VUE_APP_PLAYERS,{
+      if(this.playerSelected == 'yes'){
+
+        console.log("PLAYER SELECTED AS YESSSSSSSSSSSSSSSSSSSSSSS");
+
+
+        axios.post(process.env.VUE_APP_PLAYERS,{
         person_id: peopleIdForPlayer
       })
       .then(response => {
@@ -2585,6 +2768,11 @@
       // console.log(this.email);
       // console.log(this.consistspeopleresult);
 
+
+      }
+      else{
+        console.log("NOT A PLAYER just a visitor");
+      }
         /** axios post the bookers table **/
 
       var foundTravelId = this.consistsreservationresult.find((todo) => {
@@ -2593,41 +2781,49 @@
       })
 
       // If nothing is foundTravelId, Array.find() returns undefined, which is false-y
+       if(this.playerSelected == 'yes'){
 
-      if (foundTravelId) {
-        // console.log("already inserted travel id");
-        // console.log(reservationwithid);
+          console.log("UPDATE ON RESERVATION PEOPLE ");
 
-        /** axios post on reservation_people table**/
+          if (foundTravelId) {
+            // console.log("already inserted travel id");
+            // console.log(reservationwithid);
 
-          axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
-            person_id: this.people_id,
-            reservation_id: reservationwithid
-          })
-          .then(function (response) {
-            // console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+            /** axios post on reservation_people table**/
 
-      } 
-      
-      else {
+              axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
+                person_id: this.people_id,
+                reservation_id: reservationwithid
+              })
+              .then(function (response) {
+                // console.log(response);
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
 
-          /** axios post on reservation_people table**/
+          } 
+          
+          else {
 
-          axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
-            person_id: this.people_id,
-            reservation_id: reservationwithnewid + 1
-          })
-          .then(function (response) {
-            // console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+              /** axios post on reservation_people table**/
 
+              axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
+                person_id: this.people_id,
+                reservation_id: reservationwithnewid + 1
+              })
+              .then(function (response) {
+                // console.log(response);
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+
+            }
+        }
+
+        else{
+          console.log("NO UPDATE ON RESERVATION PEOPLE");
         }
 
         /** end of bookers table **/
@@ -2665,7 +2861,7 @@
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
-    width: 70%; 
+    width: auto; /** width: 60%; **/
     margin-right:auto; 
     margin-left:auto;
     background-color: #fff;
@@ -2764,6 +2960,10 @@
     margin-right: auto;
     width: 60%;
     font-size: 1.2em;
+  }
+
+  #covidFormListingDiv{
+    width: 85%; margin:auto; text-align:left;
   }
 
   .work-experiences > div {
