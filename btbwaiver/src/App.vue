@@ -257,7 +257,7 @@
    <b-form-group 
       id="input-group-1" class="nameTitle" label-for="input-1"> 
 
-      Date of birth <span style="color:red;">*</span> <span v-show="!validationDOBTextFalse" style="color:red;">You should be over 18 to sign the waiver.</span>
+      Date of birth <span style="color:red;">*</span> <span v-show="!validationDOBTextFalse" style="color:red;">You must be over 18 to sign the waiver.</span>
 
     </b-form-group> 
 
@@ -536,7 +536,7 @@
                 </div>
 
                 <div v-if="hearAboutUs == '6'">
-                  <span style="color:red; font-size: 0.8em; font-style: italic;">Please explain using more than 5 characters</span>
+                  <span style="color:red; font-size: 0.8em; font-style: italic;">Please provide response with minimum 5 characters</span>
                   <b-form-input placeholder="How did you hear about us?" v-model="surveyOtherInput" @input="validateOtherHearAboutUs"></b-form-input>
                 </div>
 
@@ -580,22 +580,19 @@
 
     <div v-show="minorsChecked  === 'A' " >
       <br>
-      <p style="font-style: italic; color:red;"> Minor should be more than 8 and less than 18 years . </p>
+      <p style="font-style: italic; color:red;"> “Minors should be between 8 and 18 years old” </p>
       <br>
       <div class="work-experiences">
 
       <div class="form-row" v-for="(minordatabase, index) in minorsDetail" :key="index">
 
-        <div class="col-md-3" style="margin-left: 0%;">
-          <!-- <label id="minorHeading">Minors First Name and Last Initial</label>
-          <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name and Last Initial" size="lg" v-on:input="validateMinorFieldFunction"/> -->
+        <div class="col-md-2" style="margin-left: 0%;">
 
           <label id="minorHeading">First Name</label>
           <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name" size="md"/>
-          <!-- <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name" size="md" v-on:input="validateMinorFieldFunction"/> -->
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-2">
           <label id="minorHeading">Last Name</label>
           <input v-model="minordatabase.last_name" type="text" class="form-control" placeholder="Minors Last Name" size="md"/>
         </div>
@@ -605,19 +602,17 @@
 
             <p v-show="!validationMinorDOBTextFalse" v-if="minordatabase.date_of_birth < currentDateCompare" style="color: red;">Minor should be under 18</p>
             <p v-show="!validationMinorDOBBelow8TextFalse" v-if="minordatabase.date_of_birth > minorLessThan6" style="color: red;">Minor should be over 8 year </p>
-            <!-- <p v-show="!validationMinorDOBTextFalse" v-if="minordatabase.date_of_birth < currentDateCompare" style="color: red;">Minor should be under 18</p> -->
-
-            <!-- <date-dropdown
-              min="1940" 
-              max="2020"
-              :months-names="months"
-              v-model="minordatabase.date_of_birth" id="dateDropdownDesign" style="margin-left:15%;" @input="validationMinorDOBText">
-            </date-dropdown> -->
-
-            <!-- <dropdown-datepicker display-format="mdy" size="lg" v-model="minordatabase.date_of_birth" default-date="2015-01-17"></dropdown-datepicker> -->
-            <!-- <p v-show="!validationMinorDOBTextFalse" style="color:red;">Minor should be under 18 </p> -->
             
             <dropdown-datepicker display-format="mdy" v-model="minordatabase.date_of_birth" v-bind:min-age="0" @input="validationMinorDOBText"></dropdown-datepicker> 
+        </div>
+
+        <div class="col-md-2">
+           <label id="minorHeading">Are you a player?</label>
+           <br>
+            <!-- <b-form-checkbox id="checkbox-index" v-model="minordatabase.minorPlayerOrNot" name="checkbox-index" value="yes" unchecked-value="no">
+            </b-form-checkbox> -->
+            <input type="checkbox" id="checkbox" v-model="minordatabase.minorPlayerOrNot" true-value="1" false-value="0">
+          <!-- </b-form-group> -->
         </div>
 
         <div class="col-md-2">
@@ -635,7 +630,6 @@
 
       <div class="form-group">
         <button @click="addExperience" type="button" class="btn btn-info" style="margin-right:1.5%;" v-bind:disabled="disableAddMinorButton">Add Another Minor</button>
-        <!-- <button @click="removeExperience" type="button" class="btn btn-outline-info">Remove Minor</button> -->
       </div>
 
     </div>
@@ -655,14 +649,9 @@
         <b-col></b-col>
 
         <b-col>
-          <!-- <b-button variant="primary" v-on:click="checkPlayerId();">SUBMIT</b-button> -->
-          
-        <!-- <b-button variant="primary" v-on:click=" minorsignDiv = !minorsignDiv; minorsAddDiv = !minorsAddDiv; postReservationData(); postPeopleData();" v-bind:disabled="validateMinorField">NEXT</b-button> -->
+
         <b-button variant="primary" v-on:click=" covidWholeForm = !covidWholeForm; minorsAddDiv = !minorsAddDiv; postReservationData();" v-bind:disabled="validateMinorField">NEXT</b-button>
 
-        <!-- <b-button variant="primary" v-on:click="submitMinorForm();">SUBMIT</b-button> -->
-
-          <!-- {{lastPlayerData.id}} -->
         </b-col>
       </b-row>
     </b-container>
@@ -818,7 +807,7 @@
             <b-col></b-col>
 
             <b-col>
-              <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv; covidWholeForm = !covidWholeForm;" v-bind:disabled="isDisableCovidForm" >NEXT</b-button>
+              <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv; covidWholeForm = !covidWholeForm; checkLastPeopleId();" v-bind:disabled="isDisableCovidForm" >NEXT</b-button>
               <!-- <b-button variant="primary" v-bind:disabled="isDisableCovidForm" >NEXT</b-button> -->
 
             </b-col>
@@ -849,7 +838,7 @@
     </div> -->
 
    <div>
-    <b-button v-b-modal.modal-scrollable variant="info" v-on:click="checkLastPeopleId();">View Full Waiver</b-button>
+    <b-button v-b-modal.modal-scrollable variant="info">View Full Waiver</b-button>
 
       <b-modal id="modal-scrollable" scrollable title="Waiver Legal" v-bind:hide-footer="true">
         <p class="my-4">
@@ -895,7 +884,7 @@
 
           <footer id="modal-scrollable___BV_modal_footer_" class="modal-footer">
             <!-- <button type="button" class="btn btn-secondary">Cancel</button> -->
-            <button type="button" class="btn btn-primary" v-bind:disabled="disabledAgreeButton" v-on:click="clickedOkonWaiver" @click="$bvModal.hide('modal-scrollable')" >OK</button>
+            <button type="button" class="btn btn-primary" v-bind:disabled="disabledAgreeButton" v-on:click="clickedOkonWaiver(); submitMinorForm();" @click="$bvModal.hide('modal-scrollable')" >OK</button>
 
           </footer>
 
@@ -919,17 +908,16 @@
         width="auto"
         height="400px"
         ref="signaturePad"
-        :options="signatureoptions" v-show="showSignaturePad" style="margin:auto;"
-        />
+        :options="signatureoptions" v-show="showSignaturePad" style="margin:auto;" />
       </div>
     </div>
     <div class="row">
-      <div class="col-3 mt-2">
+      <div class="col-6 mt-2">
         <button class="btn btn-outline-secondary" @click="undo">Undo</button>
-
+      </div>
+      <div class="col-6 mt-2">
          <!-- <button class="btn btn-outline-primary" @click="change">Reset</button>  -->
          <button class="btn btn-outline-primary" @click="save">Save</button> 
-
       </div>
     </div>
   </div>
@@ -944,7 +932,7 @@
   <b-modal id="modal-1" ref="my-modal-submit-id" title="BTB Waiver Form" centered v-bind:hide-footer="true">
     <p> Please click on submit to complete this waiver. If you want to go through your waiver again, please click on cross sign on top right. </p>
       <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer();">SUBMIT</b-button> -->
-      <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; submitMinorForm(); hideModal(); clickedTimer();">SUBMIT</b-button>
+      <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer(); submitReservationMinor();">SUBMIT</b-button>
   </b-modal>
 
   <b-container class="bv-example-row">
@@ -1310,6 +1298,9 @@
       covidForm4: 0,
       covidForm5: 0,
 
+      playerMinorIdforReservationMinor:'',
+      saveSignatureURL: '',
+
       displaySignaturePad: true,
       acceptedCheckBox: '',
       disabledAgreeButton: true,
@@ -1321,6 +1312,8 @@
       countvalidationminorfunction: 0,
 
       reservationIdForReservationMinor:'',
+      toplayerMinorIdList: '', 
+      playerMinorIdList: [], 
 
       DropdownDatepicker: '',
       text: '',
@@ -1397,7 +1390,7 @@
       greetings: 'Welcome to BEAT THE BOMB',
       reservationTimeTitle: 'Please select your reservation time:',
       // reservationNameTitle: 'Please select name of the person <br> who booked your reservation:',
-      reservationNameTitle: 'Please select name of the person who booked your reservation:',
+      reservationNameTitle: 'Please select the name of the person who booked your reservation:',
       genderNameTitle: 'Whats your gender ?',
       minorNameTitle: 'Are you responsible for any minors in your group today?',
       minorNameTitle1: 'Do you have any minors you are signing a waiver for today?',
@@ -1452,7 +1445,7 @@
          ],
 
          signatureoptions:{
-          penColor: "black"
+          penColor: "#c0f"
         },
 
         minorsDetail: [
@@ -1460,12 +1453,12 @@
           first_name: "",
           last_name: "",
           date_of_birth: "",
+          minorPlayerOrNot: "1"
           // title: "Date of Birth"
         }
         ],
 
         /* post data to api*/
-        // first_name:"",
         last_name:"",
         date_of_birth:"2005-01-17",
         gender_id:"",
@@ -1543,13 +1536,13 @@
   acceptedWaiverCheckbox(){
     if(this.acceptedCheckBox == '1'){
       this.disabledAgreeButton = true;
-      this.disabledNextButtonAtLast = true;
+      // this.disabledNextButtonAtLast = true;
       console.log("true");
     }
     else{
       console.log('false');
       this.disabledAgreeButton = false;
-      this.disabledNextButtonAtLast = false;
+      // this.disabledNextButtonAtLast = false;
     }
     // if(this.acceptedCheckBox = 'false'){
     //   this.disabledAgreeButton = true;
@@ -1890,12 +1883,20 @@
 
         undo() {
           this.$refs.signaturePad.undoSignature();
+           this.disabledNextButtonAtLast = true;
         },
         save() {
           const { isEmpty, data } = this.$refs.signaturePad.saveSignature();
 
-          alert("Open DevTools see the save data.");
+          // alert("Open DevTools see the save data.");
+          console.log(isEmpty);
+          console.log(data);
+
+          this.disabledNextButtonAtLast = false;
+
+          this.saveSignatureURL = data;
         },
+
         change() {
           this.options = {
             penColor: "#00f"
@@ -1910,7 +1911,8 @@
         addExperience(){
           this.minorsDetail.push({
             first_name: '',
-            date_of_birth: ''
+            date_of_birth: '',
+            minorPlayerOrNot: "1"
           })
           // this.playerLastId = this.playersresult.id; // this is the line which passes value from playerresult to playerid
 
@@ -2197,6 +2199,7 @@
               console.log(response.data);
               console.log("reservation name created in people table");
 
+
               /** SUBMIT PLAYER FORM CODE **/
 
                 // var reservationOrderByEmail = this.bookerEmail;
@@ -2231,6 +2234,8 @@
                       console.log(error);
                     });
                   /** end of update for BOOKER as PLAYER **/
+
+
                 })
                 .catch(function (error){
                   console.log(error);
@@ -2535,6 +2540,48 @@
 
     },
 
+    submitReservationMinor(){
+      console.log("INSIDE RESERVATION MINOR");
+
+      /** if the minor player is selected as TRUE it submits inside reservation_minor **/
+
+      var arr = this.minorsDetail;
+
+      for(var i=0; i < arr.length; i++){
+
+        console.log(this.minorsDetail[i].minorPlayerOrNot);
+
+                     if(this.minorsDetail[i].minorPlayerOrNot == '1'){
+                        
+                        console.log("SOLTIIIIIIIII");
+                        var playerMinorIdforReservationMinor1 = this.playerMinorIdList[i];
+
+                        console.log(this.playerMinorIdList[i]+' yo ho id ');
+                        console.log(playerMinorIdforReservationMinor1);
+
+                        axios.post(process.env.VUE_APP_RESERVATION_MINOR,{
+                          player_minor_id: playerMinorIdforReservationMinor1,
+                          reservation_id: this.reservationIdForReservationMinor
+                        })
+
+                        .then(function (response) {
+                          console.log(response);
+                          console.log(playerMinorIdforReservationMinor1);
+                        })
+                        .catch(function (error) {
+                          console.log(error);
+                        });
+                    
+                      }
+
+                    else{
+                      console.log("NOT A PLAYER MINOR");
+                    }
+      }
+    /** END of if clause for minor player for reservation_minor table **/
+
+    },
+
 
     submitMinorForm(){
 
@@ -2709,6 +2756,14 @@
             // console.log("INSIDE MINOR");
             for(var i=0; i < arr.length; i++){
 
+
+                // console.log(this.minorsDetail);
+                // console.log(this.minorsDetail[i]);
+                console.log(this.minorsDetail[i].minorPlayerOrNot);
+
+                var playerOrNot = this.minorsDetail[i].minorPlayerOrNot;
+                console.log(playerOrNot);
+
                  axios.post(process.env.VUE_APP_PLAYERMINOR,{
                   first_name: arr[i]['first_name'],
                   last_name: arr[i]['last_name'],
@@ -2723,35 +2778,21 @@
 
                   var playerMinorIdforReservationMinor = response.data.id;
 
-                  /** the code below will add the data into RESERVATION_MINOR table **/
+                  this.playerMinorIdforReservationMinor = response.data.id;
 
-                    // console.log(reservationwithnewid);
-                    // console.log("PRINT VAYO");
+                  this.toplayerMinorIdList = response.data.id;
 
-                    // console.log(this.reservationIdForReservationMinor);
+                  if (this.toplayerMinorIdList > 0) { 
+                              this.playerMinorIdList.push(this.toplayerMinorIdList);
+                          }
 
-                    // var reservationIdUsed = this.reservationIdForReservationMinor;
-                    // console.log(reservationIdUsed);
-
-                    axios.post(process.env.VUE_APP_RESERVATION_MINOR,{
-                      player_minor_id: playerMinorIdforReservationMinor,
-                      reservation_id: reservationIdUsedOnSession
-                    })
-
-                    .then(function (response) {
-                      console.log(response);
-                    })
-                    .catch(function (error) {
-                      console.log(error);
-                    });
-
-                  /** end of inserting data into RESERVATION_MINOR table **/
 
                 })
                 .catch(function (error) {
                   console.log(error);
                 });
                 // console.log("Minors added");
+
             }
           }
 
@@ -2839,9 +2880,25 @@
 
 
       /** if function submits to different database if it contains value on it only **/
+      
 
-      
-      
+      // /**** THIS DATA WILL SUBMIT PEOPLE TO PDF FILE ********************************/
+
+                    // axios.post(process.env.VUE_APP_WAIVER_MINOR_URL,{
+                    //   first_name: this.first_name,
+                    //   last_name: this.last_name,
+                    //   date_of_birth: this.date_of_birth,
+                    //   minors: this.minorsDetail,
+                    //   signature: this.saveSignatureURL
+                    // })
+                    // .then(response => {
+                    //   console.log(response.data);
+                    // })
+                    // .catch(function(error){
+                    //   console.log(error);
+                    // });
+
+    // /******************** END OF POST TO WAIVER PDF URL *********************************/
       
     }
 
@@ -2872,7 +2929,7 @@
   border: double 3px transparent;
   border-radius: 5px;
   background-image: linear-gradient(white, white),
-    radial-gradient(circle at top left, #4bc5e8, #9f6274);
+  radial-gradient(circle at top left, #4bc5e8, #9f6274);
   background-origin: border-box;
   background-clip: content-box, border-box;
 }
