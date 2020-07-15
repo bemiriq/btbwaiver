@@ -7,7 +7,7 @@
 
       <div>
         <!-- <img alt="Vue logo" src="./assets/btb.png"> -->
-        <a href="/"><img center src="./assets/btb.png" alt="BTB LOGO" style="width:auto;"></img></a>
+        <a href="/"><img center src="./assets/btb.png" alt="BTB LOGO" id="btbImageLogo"></img></a>
 
       </div>
 
@@ -2922,11 +2922,16 @@
       text-align: center;
       color: #2c3e50;
       margin-top: 60px;
-      width: 40%; /** width: 60%; **/
+      width: 60%; /** width: 60%; **/
       margin-right:auto; 
       margin-left:auto;
       background-color: #fff;
       height: auto;
+    }
+
+    #btbImageLogo{
+      width: 30%;
+      margin:auto;
     }
   }
 
@@ -2939,11 +2944,16 @@
       text-align: center;
       color: #2c3e50;
       margin-top: 60px;
-      width: 40%; /** width: 60%; **/
+      width: 50%; /** width: 60%; **/
       margin-right:auto; 
       margin-left:auto;
       background-color: #fff;
       height: auto;
+    }
+
+    #btbImageLogo{
+      width: 40%;
+      margin:auto;
     }
   }
 
@@ -2956,12 +2966,18 @@
       text-align: center;
       color: #2c3e50;
       margin-top: 60px;
-      width: 60%; /** width: 60%; **/
+      width: 80%; /** width: 60%; **/
       margin-right:auto; 
       margin-left:auto;
       background-color: #fff;
       height: auto;
     }
+
+    #btbImageLogo{
+      width: 50%;
+      margin:auto;
+    }
+
   }
 
   /** desktop **/
@@ -2973,11 +2989,16 @@
       text-align: center;
       color: #2c3e50;
       margin-top: 60px;
-      width: 100%; /** width: 60%; **/
+      width: 90%; /** width: 60%; **/
       margin-right:auto; 
       margin-left:auto;
       background-color: #fff;
       height: auto;
+    }
+
+    #btbImageLogo{
+      width: auto;
+      margin:auto;
     }
   }
 
