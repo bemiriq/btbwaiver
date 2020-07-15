@@ -70,7 +70,7 @@
             <b-col>
 
               <!-- <b-button variant="primary" v-on:click="showAllTime(); allreservationamediv = !allreservationamediv, reservationTimeDiv = !reservationTimeDiv; getallreservation();">Need Help?</b-button> -->
-              <b-button variant="primary" v-on:click="allreservationamediv = !allreservationamediv, reservationTimeDiv = !reservationTimeDiv;">Need Help?</b-button>
+              <b-button variant="primary" id="needhelp1" v-on:click="allreservationamediv = !allreservationamediv, reservationTimeDiv = !reservationTimeDiv;">Need Help?</b-button>
 
 
 
@@ -95,10 +95,10 @@
       </div>
 
       <!-- this div list all the name of reservation -->
-      <div v-show="allreservationamediv">
+      <div v-show="!allreservationamediv">
         <br><br>
 
-        <span style="font-size: 1.7em;">{{ reservationNameTitle }}</span>
+        <span id="selectReservationName">{{ reservationNameTitle }}</span>
 
         <br><br>
 
@@ -125,7 +125,7 @@
 
             <b-col>
               <div id="bookingNameModal">
-                <b-button v-b-modal="'modalNameList1'">Need Help?</b-button>
+                <b-button v-b-modal="'modalNameList1'" id="needhelp2">Need Help?</b-button>
 
                 <b-modal id="modalNameList1" centered title="Booking Name Required">
                   <p class="my-4">Please ask the front desk staff for assistance.</p>
@@ -143,13 +143,13 @@
       <!-- end of list all name of reservation  -->
 
 
-      <div v-show="reservationNameDiv">
+      <div v-show="!reservationNameDiv">
 
         <!-- <div v-for="LoadingScreen"/> -->
 
         <br><br>
 
-        <span style="font-size: 1.7em;">{{ reservationNameTitle }}</span>
+        <span id="selectReservationBookerName">{{ reservationNameTitle }}</span>
 
         <br><br>
         <div id="hideDiv" style="visibility:hidden;">
@@ -175,7 +175,7 @@
 
             <b-col>
               <div id="bookingNameModal">
-                <b-button v-b-modal="'modalName'">Need Help?</b-button>
+                <b-button v-b-modal="'modalName'" id="needhelp2">Need Help?</b-button>
 
                 <b-modal id="modalName" centered title="Booking Name Required">
                   <p class="my-4">Please ask the front desk staff for assistance.</p>
@@ -195,7 +195,7 @@
       </div>
 
 
-  <div v-show="fullnameDiv">
+  <div v-show="!fullnameDiv">
     <!-- <p>This is full name div </p> -->
 
     <br>
@@ -203,7 +203,7 @@
     <b-form v-if="show">
 
       <b-form-group 
-      id="input-group-1" class="nameTitle" label-for="input-1"> First Name <span v-show="!validateFirstNameTextFalse" style="color:red;">Please enter a valid first name.</span>
+      id="input-group-1" class="nameTitle" label-for="input-1"> First Name <span v-show="!validateFirstNameTextFalse" id="validationError">Please enter a valid first name.</span>
     </b-form-group> 
 
  <!--      <b-form-group
@@ -215,7 +215,7 @@
 
     <b-form-group>
     <b-form-input
-    id="inputField"
+    id="inputField" class="mbInputField"
     v-model="first_name"
     type="text"
     required
@@ -226,7 +226,7 @@
   <br/>
 
   <b-form-group 
-      id="input-group-1" class="nameTitle" label-for="input-1"> Last Name <span v-show="!validateLastNameTextFalse" style="color:red;">Please enter a valid last name.</span>
+      id="input-group-1" class="nameTitle" label-for="input-1"> Last Name <span v-show="!validateLastNameTextFalse" id="validationError">Please enter a valid last name.</span>
     </b-form-group> 
 
 <!--   <b-form-group
@@ -257,7 +257,7 @@
    <b-form-group 
       id="input-group-1" class="nameTitle" label-for="input-1"> 
 
-      Date of birth <span style="color:red;">*</span> <span v-show="!validationDOBTextFalse" style="color:red;">You must be over 18 to sign the waiver.</span>
+      Date of birth <span style="color:red;">*</span> <span v-show="!validationDOBTextFalse" id="validationError">You must be over 18 to sign the waiver.</span>
 
     </b-form-group> 
 
@@ -275,14 +275,14 @@
     </date-dropdown>
   </b-form-group> -->
 
-  <b-form-group style="margin-right:30%;">
+  <b-form-group>
     <dropdown-datepicker display-format="mdy" v-model="date_of_birth" v-bind:min-age="6" default-date="2001-01-01" @input="validationDOBText"></dropdown-datepicker>
   </b-form-group>
 
   <br>
 
-  <b-form-group label="Are you a player ?"></b-form-group>
-  <b-form-group>
+  <b-form-group label="Are you a player ?" id="areYouAPlayer"></b-form-group>
+  <b-form-group id="areYouPlayerDiv">
       <b-form-radio-group id="radio-group-2" v-model="playerSelected" name="radio-sub-component">
         <b-form-radio value="yes">YES</b-form-radio>
         <b-form-radio value="no">NO</b-form-radio>
@@ -315,13 +315,13 @@
   </div>
 
 
-    <div v-show="emailDiv">
+    <div v-show="!emailDiv">
         <!-- <p>SAN 2</p> -->
         <br>
             <!-- <b-form @submit="onSubmit" @reset="onReset" v-if="show"> -->
 
               <b-form-group
-      id="input-group-1" class="nameTitle"> Enter Email Address <span style="color:red; font-style: italic; font-size: 15px;"> ( Required &#42; )</span>  <span v-show="!ValidateEmailTextFalse" style="color:red;">
+      id="input-group-1" class="nameTitle"> Enter Email Address <span style="color:red; font-style: italic; font-size: 15px;"> ( Required &#42; )</span>  <span v-show="!ValidateEmailTextFalse" id="validationError">
       Please enter a valid email address</span>
     </b-form-group>
 
@@ -344,7 +344,7 @@
 
           <br><br>
             <b-form-group
-      id="input-group-1" class="nameTitle"> Phone Number <span style="color:red; font-style: italic; font-size: 15px;"> ( Required &#42; )</span> <span v-show="!validatePhoneTextFalse" style="color:red;">
+      id="input-group-1" class="nameTitle"> Phone Number <span style="color:red; font-style: italic; font-size: 15px;"> ( Required &#42; )</span> <span v-show="!validatePhoneTextFalse" id="validationError">
       Please enter a valid phone number including area code</span>
     </b-form-group> 
 
@@ -380,7 +380,7 @@
             v-model="instagram"
             type="text"
             required
-            placeholder="Enter Instagram Handle">
+            placeholder="Enter Instagram Handle" class="instagramInput">
           </b-form-input>
         </b-input-group>
       </b-form-group>
@@ -436,23 +436,26 @@
 
 
 
-  <div v-show="genderDiv">
+  <div v-show="!genderDiv">
 
     <br><br>
 
-    <span style="font-size: 1.6em;">{{ genderNameTitle }}</span>
+    <span id="genderTitle">{{ genderNameTitle }}</span>
 
     <br><br>
 
+      <b-form-radio-group
+      :options="genderoptions" class="mb-10"
+      v-model="gender_id"
+      value-field="genderitem"
+      text-field="name" id="genderText"
+      >
+        
+      </b-form-radio-group>
 
-    <b-form-radio-group
-    :options="genderoptions"
-    type="text"
-    v-model="gender_id"
-    value-field="genderitem"
-    text-field="name" id="genderText"
-    ></b-form-radio-group>
 
+      <!-- <b-form-radio-group :options="genderoptions" v-model="gender_id" value-field="genderitem" text-field="name" style="display:block;">
+      </b-form-radio-group> -->
 
     <br><br>
 
@@ -483,7 +486,7 @@
 
     <b-form>
     <br><br>
-    <span style="font-size: 1.6em;">{{ hearAboutUsTitle }}</span>
+    <span id="hearAboutUsTitle">{{ hearAboutUsTitle }}</span>
     <br><br>
 
     <!--   <div class="form-check">
@@ -515,7 +518,7 @@
         <b-form-radio class="form-check-input" id="radio-group-5" type="radio" value="Other" v-model="hearAboutUs">
          Other
         </b-form-radio> -->
-                <div v-for="surveylist in surveyQuestionAnswersList.Survey_set_questions" :key="surveylist.id" style="text-align:left; margin-left:5%;">
+                <div v-for="surveylist in surveyQuestionAnswersList.Survey_set_questions" :key="surveylist.id" id="whereDidYouHear">
                     <!-- {{surveylist.id}} use v-model and this will be the survey_id -->
                     <!-- <input type="text" v-model="surveylistid" :name="name1" :value="surveylist.id"/> -->
                     <!-- <br> -->
@@ -545,7 +548,7 @@
               <!-- </div> -->
 
               <br><br>
-            <b-container class="bv-example-row">
+            <b-container class="bv-example-row" id="hearAboutUsNextButton">
               <b-row>
                 <b-col>
                   <b-button variant="outline-primary" v-on:click="hearAboutUsDiv = !hearAboutUsDiv, genderDiv = !genderDiv">BACK</b-button>
@@ -568,11 +571,11 @@
   </div>
 
 
-  <div v-show="minorsAddDiv">
+  <div v-show="!minorsAddDiv">
 
         <br><br>
 
-    <span style="font-size: 1.3em;">{{ minorNameTitle }}</span>
+    <span id="minorNameTitle">{{ minorNameTitle }}</span>
 
     <br><br>
 
@@ -582,30 +585,30 @@
 
     <div v-show="minorsChecked  === 'A' " >
       <br>
-      <p style="font-style: italic; color:red;"> “Minors should be between 8 and 18 years old” </p>
+      <p id="minorCheckedText"> “Minors should be between 8 and 18 years old” </p>
       <br>
       <div class="work-experiences">
 
-      <div class="form-row" v-for="(minordatabase, index) in minorsDetail" :key="index">
+      <div class="form-row" v-for="(minordatabase, index) in minorsDetail" :key="index" id="addMinorForm">
 
-        <div class="col-md-2" style="margin-left: 0%;">
+        <div class="col-md-2" style="margin-left: 0%;" id="minorNameDiv">
 
           <label id="minorHeading">First Name</label>
-          <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name" size="md"/>
+          <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name" id="minorFirstName"/>
         </div>
 
         <div class="col-md-2">
           <label id="minorHeading">Last Name</label>
-          <input v-model="minordatabase.last_name" type="text" class="form-control" placeholder="Minors Last Name" size="md"/>
+          <input v-model="minordatabase.last_name" type="text" class="form-control" placeholder="Minors Last Name" id="minorLastName"/>
         </div>
 
         <div class="col-md-4">
-            <label id="minorHeading">Minor's date of birth</label>
+            <label id="minorHeadingDOB">Minor's date of birth</label>
 
             <p v-show="!validationMinorDOBTextFalse" v-if="minordatabase.date_of_birth < currentDateCompare" style="color: red;">Minor should be under 18</p>
             <p v-show="!validationMinorDOBBelow8TextFalse" v-if="minordatabase.date_of_birth > minorLessThan6" style="color: red;">Minor should be over 8 year </p>
             
-            <dropdown-datepicker display-format="mdy" v-model="minordatabase.date_of_birth" v-bind:min-age="0" @input="validationMinorDOBText"></dropdown-datepicker> 
+            <dropdown-datepicker display-format="mdy" v-model="minordatabase.date_of_birth" v-bind:min-age="0" @input="validationMinorDOBText" id="dateDefine"></dropdown-datepicker> 
         </div>
 
         <div class="col-md-2">
@@ -619,8 +622,9 @@
 
         <div class="col-md-2">
           <!-- <button type="button" class="btn btn-outline-info" @click="minorsDetail.splice(index, 1)">Remove Minor</button> -->
-          <p></p>
-          <b-icon icon="trash-fill" font-scale="1.5"  @click="minorsDetail.splice(index, 1)"></b-icon>
+          
+          <p v-if="minorsDetail.length > 1" id="trashCan"><b-icon icon="trash-fill" font-scale="1.5"  @click="minorsDetail.splice(index, 1)"></b-icon></p>
+          <p v-else></p>
         </div>
 
         
@@ -671,7 +675,7 @@
 
   <!-- div for COVID FORM PAGE -->
 
-  <div v-show="covidWholeForm">
+  <div v-show="!covidWholeForm">
         <b-form-group>
           <b-form-checkbox id="checkbox-1" v-model="covidForm1" name="checkbox-1" value="1" unchecked-value="not_accepted">
             I confirm I am not experiencing any of the following symptoms of COVID-19 that are listed below: 
@@ -758,7 +762,7 @@
 
         <br>
 
-        <div style="text-align: justify; width: 88%; margin: auto;">
+        <div id="covidForm2">
 
           <b-form-group>
 
@@ -772,7 +776,7 @@
 
         <br>
 
-        <div style="text-align: justify; width: 88%; margin: auto;">
+        <div id="covidForm2">
 
           <b-form-group>
 
@@ -786,7 +790,7 @@
 
         <br>
 
-        <div style="text-align: justify; width: 88%; margin: auto;">
+        <div id="covidForm2">
 
           <b-form-group>
 
@@ -829,7 +833,7 @@
   <!-- END OF DIV for COVID FORM -->
 
 
-  <div v-show="minorsignDiv">
+  <div v-show="!minorsignDiv">
 
    <br><br>
 
@@ -934,7 +938,7 @@
   <b-modal id="modal-1" ref="my-modal-submit-id" title="BTB Waiver Form" centered v-bind:hide-footer="true">
     <p> Please click on submit to complete this waiver. If you want to go through your waiver again, please click on cross sign on top right. </p>
       <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer();">SUBMIT</b-button> -->
-      <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer(); submitReservationMinor();">SUBMIT</b-button>
+      <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer(); submitReservationMinor(); reloadfunction(); ">SUBMIT</b-button>
   </b-modal>
 
   <b-container class="bv-example-row">
@@ -2921,25 +2925,23 @@
       -moz-osx-font-smoothing: grayscale;
       text-align: center;
       color: #2c3e50;
-      margin-top: 20px;
-      width: 70%; /** width: 60%; **/
-      margin-right:auto; 
-      margin-left:auto;
+      width: 96%; /** width: 60%; **/
+      margin:auto;
       background-color: #fff;
       height: auto;
     }
 
     #btbImageLogo{
-      width: 60%;
+      width: 80%;
       margin:auto;
     }
 
     #greetings{
-      font-size: 1.5em;
+      font-size: 1.4em;
     }
 
     #selectReservationTime{
-      font-size: 1.3em;
+      font-size: 1.1em;
     }
 
     #fetchButtonGap{
@@ -2948,6 +2950,207 @@
       margin-top: 10px;
       font-size: 1.1em;
     }
+
+    #selectReservationName{
+      font-size: 1.1em;
+    }
+
+    #selectReservationBookerName{
+      font-size: 1.1em;
+    }
+
+    #month{
+      height: 30px;
+      color: black;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      font-style: normal;
+      border-color: #E8E8E8;
+      border-radius: 5px;
+    }
+
+    #day{
+      height: 30px;
+      color: black;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      font-style: normal;
+      border-color: #E8E8E8;
+      border-radius: 5px;
+    }
+
+    #year{
+      height: 30px;
+      color: black;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      font-style: normal;
+      border-color: #E8E8E8;
+      border-radius: 5px;
+    }
+
+    #inputField{
+      /*height: 40px;*/
+      font-size: 1rem;
+    }
+
+    .nameTitle{
+      font-size: 1.1em;
+      text-align: left;
+      margin-left: 21%;
+    }
+
+    #validationError{ 
+      font-size: 0.8em;
+      color:red;
+    }
+    #validationError:before{
+      content: "\A";
+      white-space: pre;
+    }
+
+    .form-control-lg {
+      font-size: 1rem;
+    }
+
+    #genderText{
+      font-size: 1em;
+    }
+
+    #genderTitle{
+      font-size: 1.4em;
+    }
+
+     #hearAboutUsTitle{
+      font-size: 1em;
+    }
+
+    #minorNameTitle{
+      font-size:1.1em;
+    }
+
+    .custom-control-label{
+      font-size: 0.9em;
+      text-align: justify;
+      /*text-align: justify;*/
+    }
+
+    #covidFormListingDiv{
+    width: auto; 
+    margin:auto; 
+    text-align:justify;
+    font-size: 0.6em;
+  }
+
+  #covidForm2{
+      text-align: justify; 
+      width: 99%; 
+      margin: auto;
+    }
+
+  #addMinorForm{
+    /*background-color: yellow;*/
+    width: 90%;
+    margin: auto;
+  }
+
+  #minorCheckedText{
+      font-style: italic; 
+      color:red;
+      font-size: 0.95em;
+    }
+
+  #minorFirstName{
+    /*margin-top: 2%;*/
+    width: 80%;
+    margin: auto;
+  }
+
+  #minorLastName{
+    /*margin-top: -4%;*/
+    width: 80%;
+    margin: auto;
+  }
+
+  #minorHeading{
+    font-size: 1em;
+    margin-top: 8%;
+  }
+
+  #minorHeadingDOB{
+    font-size: 1em;
+    margin-top: 5%;
+  }
+
+/*  .custom-control-label{
+    font-size: 0.95em;
+  }*/
+
+  #areYouAPlayer{
+    font-size: 1.1em;
+    margin-left:-18%;
+  }
+
+  #needhelp1{
+    width: 120%;
+    font-size: 0.9em;
+    margin-left: -15%;
+  }
+
+  #needhelp2{
+    width: 120%;
+    font-size: 0.9em;
+    height: 40px;
+    margin-left: -15%;
+  }
+
+  #whereDidYouHear{
+    text-align:left;
+    margin-left:5%;
+    font-size: 0.8em;
+  }
+
+  #hearAboutUsNextButton{
+    width: 160%;
+    margin-left: -25%;
+  }
+
+  #hearAboutUsDiv{
+    text-align: left;
+    margin:auto;
+    width: 60%;
+    font-size: 1.2em;
+  }
+
+  #areYouPlayerDiv{
+    margin-left:-18%;
+  }
+
+  .work-experiences > div {
+    margin: 20px 0;
+    padding-bottom: 10px;
+  }
+  .work-experiences > div:not(:last-child) {
+    border-bottom: 1px solid rgb(206, 212, 218);
+  }
+
+  #dateDefine{
+    margin-left: 0%;
+  }
+
+  .input-group-prepend{
+    height: 40px;
+  }
+
+  #inline-form-input-name{
+    height: 40px;
+    width: 20%;
+    font-size: 0.76em;
+  }
+
+  #trashCan{
+    margin-top: 5%;
+  }
 
   }
 
@@ -2987,7 +3190,175 @@
       font-size: 1.1em;
     }
 
+    #selectReservationName{
+      font-size: 1.5em;
+    }
+
+    #selectReservationBookerName{
+      font-size: 1.5em;
+    }
+
+    #month{
+    height: 38px;
+    color: black;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-style: normal;
+    border-color: #E8E8E8;
+    margin-right: 1.5%;
+    border-radius: 5px;
+    margin-left: 9%;
   }
+
+  #day{
+    height: 38px;
+    color: black;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-style: normal;
+    border-color: #E8E8E8;
+    margin-right: 1.5%;
+    border-radius: 5px;
+  }
+
+  #year{
+    height: 38px;
+    color: black;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-style: normal;
+    border-color: #E8E8E8;
+    border-radius: 5px;
+    /*margin-right: 10%;*/
+  }
+
+  .nameTitle{
+    font-size: 1.1em;
+    text-align: left;
+    margin-left: 21%;
+  }
+
+  #genderText{
+    font-size: 1.2em;
+  }
+
+  #genderTitle{
+    font-size: 1.6em;
+  }
+
+   #hearAboutUsTitle{
+      font-size: 1.6em;
+    }
+
+    #minorNameTitle{
+      font-size:1.3em;
+    }
+
+    .custom-control-label{
+      font-size: 1.1em;
+    }
+
+    #covidFormListingDiv{
+    width: 85%; margin:auto; text-align:left;
+  }
+
+  #covidForm2{
+      text-align: justify; width: 88%; margin: auto;
+    }
+
+  #minorCheckedText{
+      font-style: italic; 
+      color:red;
+    }
+
+  #minorFirstName{
+    /*margin-top: 2%;*/
+    width: 80%;
+    margin: auto;
+  }
+
+  #minorLastName{
+    /*margin-top: -4%;*/
+    width: 80%;
+    margin: auto;
+  }
+
+  #minorHeading{
+    font-size: 1em;
+    margin-top: 8%;
+  }
+
+  #minorHeadingDOB{
+    font-size: 1em;
+    margin-top: 5%;
+  }
+
+  #needhelp1{
+    width: 40%;
+    font-size: 1.1em;
+    margin-left: 0%;
+  }
+
+  #needhelp2{
+    width: 40%;
+    font-size: 1.1em;
+    margin-left: 0%;
+  }
+
+  #whereDidYouHear{
+    text-align:left;
+    margin-left:5%;
+    font-size: 1.2em;
+  }
+
+  #hearAboutUsNextButton{
+    width: auto;
+    margin-left: 0%;
+  }
+
+  #hearAboutUsDiv{
+    text-align: left;
+    margin:auto;
+    width: 60%;
+    font-size: 1.2em;
+  }
+
+  #areYouPlayerDiv{
+    margin-left:-50%;
+  }
+
+  #areYouAPlayer{
+    font-size: 1.1em;
+    margin-left:-50%;
+  }
+
+  .work-experiences > div {
+    margin: 20px 0;
+    padding-bottom: 10px;
+  }
+  .work-experiences > div:not(:last-child) {
+    border-bottom: 1px solid rgb(206, 212, 218);
+  }
+
+  #dateDefine{
+    margin-left: 0%;
+  }
+
+  .input-group-prepend{
+    height: auto;
+  }
+
+  #inline-form-input-name{
+    height: auto;
+    width: auto;
+    font-size: 1em;
+  }
+
+  #trashCan{
+    margin-top: 25%;
+  }
+
+}
 
   /** tablets **/
   @media (min-width: 768px) {
@@ -2998,7 +3369,7 @@
       text-align: center;
       color: #2c3e50;
       margin-top: 60px;
-      width: 80%; /** width: 60%; **/
+      width: 99%; /** width: 60%; **/
       margin-right:auto; 
       margin-left:auto;
       background-color: #fff;
@@ -3015,7 +3386,7 @@
     }
 
     #selectReservationTime{
-      font-size: 1.7em;
+      font-size: 1.6em;
     }
 
     #fetchButtonGap{
@@ -3024,6 +3395,185 @@
       margin-top: 10px;
       font-size: 1.1em;
     }
+
+    #selectReservationName{
+      font-size: 1.5em;
+    }
+
+    #selectReservationBookerName{
+      font-size: 1.5em;
+    }
+
+    #month{
+      height: 30px;
+      color: black;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      font-style: normal;
+      border-color: #E8E8E8;
+      margin-right: 1.5%;
+      border-radius: 5px;
+      margin-left: -26%;
+    }
+
+    #day{
+      height: 30px;
+      color: black;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      font-style: normal;
+      border-color: #E8E8E8;
+      margin-right: 1.5%;
+      border-radius: 5px;
+    }
+
+    #year{
+      height: 30px;
+      color: black;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      font-style: normal;
+      border-color: #E8E8E8;
+      border-radius: 5px;
+      /*margin-right: 30%;*/
+    }
+
+    .nameTitle{
+        font-size: 1.1em;
+        text-align: left;
+        margin-left: 21%;
+      }
+
+    #genderText{
+    font-size: 1.2em;
+  }
+
+  #genderTitle{
+    font-size: 1.6em;
+  }
+
+   #hearAboutUsTitle{
+      font-size: 1.5em;
+    }
+
+    #minorNameTitle{
+      font-size:1.3em;
+    }
+
+    .custom-control-label{
+      font-size: 1.1em;
+    }
+
+    #covidFormListingDiv{
+    width: 90%;
+    margin:auto;
+    text-align:justify;
+    font-size: 0.9em;
+  }
+
+  #covidForm2{
+      text-align: justify;
+      width: 99%;
+      margin: auto;
+    }
+
+    #minorCheckedText{
+      font-style: italic; 
+      color:red;
+    }
+
+    #minorFirstName{
+    /*margin-top: 2%;*/
+    width: 98%;
+    margin: auto;
+  }
+
+  #minorLastName{
+    /*margin-top: -4%;*/
+    width: 98%;
+    margin: auto;
+  }
+
+   #minorHeading{
+    font-size: 0.93em;
+    margin-top: 8%;
+  }
+
+  #minorHeadingDOB{
+    font-size: 0.98em;
+    margin-top: 3.5%;
+  }
+
+  #needhelp1{
+    width: 70%;
+    font-size: 1.1em;
+    margin-left: 0%;
+  }
+
+  #needhelp2{
+    width: 70%;
+    font-size: 1.1em;
+    margin-left: 0%;
+  }
+
+  #whereDidYouHear{
+    text-align:left;
+    margin-left:5%;
+    font-size: 1.2em;
+  }
+
+  #hearAboutUsNextButton{
+    width: auto;
+    margin-left: 0%;
+  }
+
+  #hearAboutUsDiv{
+    text-align: left;
+    margin:auto;
+    width: 60%;
+    font-size: 1.2em;
+  }
+
+  #areYouPlayerDiv{
+    margin-left:-34%;
+  }
+
+  #areYouAPlayer{
+    font-size: 1.2em;
+    margin-left:-39.5%;
+  }
+
+   #addMinorForm{
+      /*background-color: yellow;*/
+      width: 100%;
+      margin: auto;
+    }
+
+  .work-experiences > div {
+    margin: 20px 0;
+    padding-bottom: 10px;
+  }
+  .work-experiences > div:not(:last-child) {
+    border-bottom: 1px solid rgb(206, 212, 218);
+  }
+
+  #dateDefine{
+    margin-left: 20%;
+  }
+
+  .input-group-prepend{
+    height: auto;
+  }
+
+  #inline-form-input-name{
+    height: auto;
+    width: auto;
+    font-size: 1em;
+  }
+
+  #trashCan{
+    margin-top: 25%;
+  }
 
   }
 
@@ -3063,6 +3613,191 @@
       font-size: 1.1em;
     }
 
+    #selectReservationName{
+      font-size: 1.7em;
+    }
+
+    #selectReservationBookerName{
+      font-size: 1.7em;
+    }
+
+    #month{
+    height: 38px;
+    color: black;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-style: normal;
+    border-color: #E8E8E8;
+    border-radius: 5px;
+    margin-left: -42%;
+  }
+
+  #day{
+    height: 38px;
+    color: black;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-style: normal;
+    border-color: #E8E8E8;
+    margin-right: 1.5%;
+    border-radius: 5px;
+  }
+
+  #year{
+    height: 38px;
+    color: black;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-style: normal;
+    border-color: #E8E8E8;
+    border-radius: 5px;
+  }
+
+  .nameTitle{
+    font-size: 1.1em;
+    text-align: left;
+    margin-left: 21%;
+  }
+
+  #validationError{ 
+      font-size: 1.1em;
+      color:red;
+    }
+
+    #genderText{
+      font-size: 1em;
+    }
+
+    #genderTitle{
+      font-size: 1.4em;
+    }
+
+    #hearAboutUsTitle{
+      font-size: 1.6em;
+    }
+
+    #minorNameTitle{
+      font-size:1.3em;
+    }
+
+    #minorHeadingDOB{
+      font-size: 1.3em;
+      margin-top: 3%;
+    }
+
+    /** this css is linked with gender input radio button as well **/
+    .custom-control-label{
+      font-size: 1.1em;
+      width: auto;
+      /*background-color: yellow;*/
+    }
+
+    #covidFormListingDiv{
+    width: 44%; 
+    margin:auto; 
+    text-align:justify;
+    /*background-color: red;*/
+  }
+
+
+    #covidForm2{
+      text-align: left; 
+      width: 45%; 
+      margin: auto;
+    }
+
+    #addMinorForm{
+      /*background-color: yellow;*/
+      width: 77%;
+      margin: auto;
+    }
+
+    #minorCheckedText{
+      font-style: italic; 
+      color:red;
+    }
+
+    #minorFirstName{
+    /*margin-top: 2%;*/
+    width: 80%;
+    margin: auto;
+  }
+
+  #minorLastName{
+    /*margin-top: -4%;*/
+    width: 80%;
+    margin: auto;
+  }
+
+    #minorHeading{
+    font-size: 1.2em;
+  }
+
+  #needhelp1{
+    width: 40%;
+    font-size: 1.1em;
+    margin-left: 0%;
+  }
+
+  #needhelp2{
+    width: 40%;
+    font-size: 1.1em;
+    margin-left: 0%;
+  }
+
+  #whereDidYouHear{
+    text-align:left;
+    margin-left:5%;
+    font-size: 1.2em;
+  }
+
+  #hearAboutUsNextButton{
+    width: auto;
+    margin-left: 0%;
+  }
+
+  #hearAboutUsDiv{
+    text-align: left;
+    margin:auto;
+    width: 60%;
+    font-size: 1.2em;
+  }
+
+  #areYouPlayerDiv{
+    margin-left:-50%;
+  }
+
+  #areYouAPlayer{
+    font-size: 1.1em;
+    margin-left:-50%;
+  }
+
+  .work-experiences > div {
+    margin: 20px 0;
+    padding-bottom: 10px;
+  }
+  .work-experiences > div:not(:last-child) {
+    border-bottom: 1px solid rgb(206, 212, 218);
+  }
+
+  #dateDefine{
+    margin-left: 30%;
+  }
+
+  .input-group-prepend{
+    height: auto;
+  }
+
+  #trashCan{
+    margin-top: 25%;
+  }
+
+ /* #inline-form-input-name{
+    height: auto;
+    width: auto;
+    font-size: 1em;
+  }*/
+
   }
 
   /*#app {
@@ -3097,29 +3832,16 @@
     margin: auto;
   }
 
+  
   #minorsInput{
     width: 40%;
     margin: auto;
-  }
-
-  #minorHeading{
-    font-size: 1.2em;
   }
 
   #dateDropdownDesign{
     margin:auto;
     width: auto;
     /*background-color: yellow; */
-  }
-
-  #genderText{
-    font-size: 1.2em;
-  }
-
-  .nameTitle{
-    font-size: 1.1em;
-    text-align: left;
-    margin-left: 21%;
   }
 
   .fullNameTitle{
@@ -3158,55 +3880,5 @@
     margin-right: 7%;
   }
 
-  #hearAboutUsDiv{
-    text-align: left;
-    margin-left: auto;
-    margin-right: auto;
-    width: 60%;
-    font-size: 1.2em;
-  }
 
-  #covidFormListingDiv{
-    width: 85%; margin:auto; text-align:left;
-  }
-
-  #month{
-    height: 38px;
-    color: black;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 17px;
-    font-style: normal;
-    border-color: #E8E8E8;
-    margin-right: 1.5%;
-    border-radius: 5px;
-  }
-
-  #day{
-    height: 38px;
-    color: black;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 17px;
-    font-style: normal;
-    border-color: #E8E8E8;
-    margin-right: 1.5%;
-    border-radius: 5px;
-  }
-
-  #year{
-    height: 38px;
-    color: black;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 17px;
-    font-style: normal;
-    border-color: #E8E8E8;
-    border-radius: 5px;
-  }
-
-  .work-experiences > div {
-    margin: 20px 0;
-    padding-bottom: 10px;
-  }
-  .work-experiences > div:not(:last-child) {
-    border-bottom: 1px solid rgb(206, 212, 218);
-  }
   </style>
