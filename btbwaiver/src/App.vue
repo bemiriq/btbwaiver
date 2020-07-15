@@ -15,7 +15,7 @@
 
   <br/>
       <div>
-        <span style="font-size: 2.2em;">{{ greetings }}</span>
+        <span id="greetings">{{ greetings }}</span>
       </div>
 
       <hr>
@@ -25,7 +25,7 @@
 
         <br>
 
-        <span style="font-size: 1.7em;">{{ reservationTimeTitle }}</span>
+        <span id="selectReservationTime">{{ reservationTimeTitle }}</span>
 
         <br> <br>
 
@@ -2930,9 +2930,25 @@
     }
 
     #btbImageLogo{
-      width: 30%;
+      width: 50%;
       margin:auto;
     }
+
+    #greetings{
+      font-size: 1.3em;
+    }
+
+    #selectReservationTime{
+      font-size: 1.1em;
+    }
+
+    #fetchButtonGap{
+      width: 55%;
+      margin:auto;
+      margin-top: 10px;
+      font-size: 1.1em;
+    }
+
   }
 
   /** cellphone LANDSCAPE **/
@@ -2952,9 +2968,25 @@
     }
 
     #btbImageLogo{
-      width: 40%;
+      width: 55%;
       margin:auto;
     }
+
+    #greetings{
+      font-size: 2.2em;
+    }
+
+    #selectReservationTime{
+      font-size: 1.7em;
+    }
+
+    #fetchButtonGap{
+      width: 41%;
+      margin:auto;
+      margin-top: 10px;
+      font-size: 1.1em;
+    }
+
   }
 
   /** tablets **/
@@ -2974,8 +3006,23 @@
     }
 
     #btbImageLogo{
-      width: 50%;
+      width: 65%;
       margin:auto;
+    }
+
+    #greetings{
+      font-size: 2.2em;
+    }
+
+    #selectReservationTime{
+      font-size: 1.7em;
+    }
+
+    #fetchButtonGap{
+      width: 41%;
+      margin:auto;
+      margin-top: 10px;
+      font-size: 1.1em;
     }
 
   }
@@ -3000,6 +3047,22 @@
       width: auto;
       margin:auto;
     }
+
+    #greetings{
+      font-size: 2.2em;
+    }
+
+    #selectReservationTime{
+      font-size: 1.7em;
+    }
+
+    #fetchButtonGap{
+      width: 25%;
+      margin:auto;
+      margin-top: 10px;
+      font-size: 1.1em;
+    }
+
   }
 
   /*#app {
@@ -3041,13 +3104,6 @@
 
   #minorHeading{
     font-size: 1.2em;
-  }
-
-  #fetchButtonGap{
-    width: 41%;
-    margin:auto;
-    margin-top: 10px;
-    font-size: 1.1em;
   }
 
   #dateDropdownDesign{
