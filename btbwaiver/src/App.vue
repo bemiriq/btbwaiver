@@ -95,7 +95,7 @@
       </div>
 
       <!-- this div list all the name of reservation -->
-      <div v-show="!allreservationamediv">
+      <div v-show="allreservationamediv">
         <br><br>
 
         <span style="font-size: 1.7em;">{{ reservationNameTitle }}</span>
@@ -143,7 +143,7 @@
       <!-- end of list all name of reservation  -->
 
 
-      <div v-show="!reservationNameDiv">
+      <div v-show="reservationNameDiv">
 
         <!-- <div v-for="LoadingScreen"/> -->
 
@@ -195,7 +195,7 @@
       </div>
 
 
-  <div v-show="!fullnameDiv">
+  <div v-show="fullnameDiv">
     <!-- <p>This is full name div </p> -->
 
     <br>
@@ -265,14 +265,16 @@
   
   <!-- </b-form-group> -->
 
- <!--  <b-form-group label-for="input-1" style="margin-left:20%;">
-    <date-dropdown
-    default="1993.02.27" 
-    min="1940" 
-    max="2014"
-    :months-names="months"
-    v-model="date_of_birth" id="dateDropdownDesign" @input="validationDOBText">
-  </date-dropdown> -->
+<!--   <b-form-group label-for="input-1" style="margin-left:20%;">
+      <date-dropdown
+      default="1993.02.27" 
+      min="1940" 
+      max="2014"
+      :months-names="months"
+      v-model="date_of_birth" id="dateDropdownDesign" @input="validationDOBText">
+    </date-dropdown>
+  </b-form-group> -->
+
   <b-form-group style="margin-right:30%;">
     <dropdown-datepicker display-format="mdy" v-model="date_of_birth" v-bind:min-age="6" default-date="2001-01-01" @input="validationDOBText"></dropdown-datepicker>
   </b-form-group>
@@ -313,7 +315,7 @@
   </div>
 
 
-    <div v-show="!emailDiv">
+    <div v-show="emailDiv">
         <!-- <p>SAN 2</p> -->
         <br>
             <!-- <b-form @submit="onSubmit" @reset="onReset" v-if="show"> -->
@@ -434,7 +436,7 @@
 
 
 
-  <div v-show="!genderDiv">
+  <div v-show="genderDiv">
 
     <br><br>
 
@@ -566,7 +568,7 @@
   </div>
 
 
-  <div v-show="!minorsAddDiv">
+  <div v-show="minorsAddDiv">
 
         <br><br>
 
@@ -669,7 +671,7 @@
 
   <!-- div for COVID FORM PAGE -->
 
-  <div v-show="!covidWholeForm">
+  <div v-show="covidWholeForm">
         <b-form-group>
           <b-form-checkbox id="checkbox-1" v-model="covidForm1" name="checkbox-1" value="1" unchecked-value="not_accepted">
             I confirm I am not experiencing any of the following symptoms of COVID-19 that are listed below: 
@@ -827,7 +829,7 @@
   <!-- END OF DIV for COVID FORM -->
 
 
-  <div v-show="!minorsignDiv">
+  <div v-show="minorsignDiv">
 
    <br><br>
 
@@ -2911,19 +2913,87 @@
   </script>
 
   <style>
-  #app {
+  /** cellphone PORTRAIT **/
+  @media (min-width: 288px) {
+    #app {
+      font-family: Avenir, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-align: center;
+      color: #2c3e50;
+      margin-top: 60px;
+      width: 40%; /** width: 60%; **/
+      margin-right:auto; 
+      margin-left:auto;
+      background-color: #fff;
+      height: auto;
+    }
+  }
+
+  /** cellphone LANDSCAPE **/
+  @media (min-width: 576px) {
+    #app {
+      font-family: Avenir, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-align: center;
+      color: #2c3e50;
+      margin-top: 60px;
+      width: 40%; /** width: 60%; **/
+      margin-right:auto; 
+      margin-left:auto;
+      background-color: #fff;
+      height: auto;
+    }
+  }
+
+  /** tablets **/
+  @media (min-width: 768px) {
+    #app {
+      font-family: Avenir, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-align: center;
+      color: #2c3e50;
+      margin-top: 60px;
+      width: 60%; /** width: 60%; **/
+      margin-right:auto; 
+      margin-left:auto;
+      background-color: #fff;
+      height: auto;
+    }
+  }
+
+  /** desktop **/
+  @media (min-width: 992px) {
+    #app {
+      font-family: Avenir, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-align: center;
+      color: #2c3e50;
+      margin-top: 60px;
+      width: 100%; /** width: 60%; **/
+      margin-right:auto; 
+      margin-left:auto;
+      background-color: #fff;
+      height: auto;
+    }
+  }
+
+  /*#app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
-    width: auto; /** width: 60%; **/
+    width: auto; 
     margin-right:auto; 
     margin-left:auto;
     background-color: #fff;
     height: auto;
-  }
+  }*/
 
   #signature {
   border: double 3px transparent;
@@ -3021,6 +3091,38 @@
 
   #covidFormListingDiv{
     width: 85%; margin:auto; text-align:left;
+  }
+
+  #month{
+    height: 38px;
+    color: black;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-style: normal;
+    border-color: #E8E8E8;
+    margin-right: 1.5%;
+    border-radius: 5px;
+  }
+
+  #day{
+    height: 38px;
+    color: black;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-style: normal;
+    border-color: #E8E8E8;
+    margin-right: 1.5%;
+    border-radius: 5px;
+  }
+
+  #year{
+    height: 38px;
+    color: black;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-style: normal;
+    border-color: #E8E8E8;
+    border-radius: 5px;
   }
 
   .work-experiences > div {
