@@ -2921,8 +2921,8 @@
       -moz-osx-font-smoothing: grayscale;
       text-align: center;
       color: #2c3e50;
-      margin-top: 60px;
-      width: 60%; /** width: 60%; **/
+      margin-top: 20px;
+      width: 70%; /** width: 60%; **/
       margin-right:auto; 
       margin-left:auto;
       background-color: #fff;
@@ -2930,16 +2930,16 @@
     }
 
     #btbImageLogo{
-      width: 50%;
+      width: 60%;
       margin:auto;
     }
 
     #greetings{
-      font-size: 1.3em;
+      font-size: 1.5em;
     }
 
     #selectReservationTime{
-      font-size: 1.1em;
+      font-size: 1.3em;
     }
 
     #fetchButtonGap{
@@ -3057,7 +3057,7 @@
     }
 
     #fetchButtonGap{
-      width: 25%;
+      width: 18%;
       margin:auto;
       margin-top: 10px;
       font-size: 1.1em;
