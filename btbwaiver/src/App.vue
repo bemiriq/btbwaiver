@@ -591,7 +591,16 @@
 
       <div class="form-row" v-for="(minordatabase, index) in minorsDetail" :key="index" id="addMinorForm">
 
-        <div class="col-md-2" style="margin-left: 0%;" id="minorNameDiv">
+        <div class="col-md-2" id="minorNameDiv">
+           <label id="minorHeading">Are you a player?</label>
+           <br>
+            <!-- <b-form-checkbox id="checkbox-index" v-model="minordatabase.minorPlayerOrNot" name="checkbox-index" value="yes" unchecked-value="no">
+            </b-form-checkbox> -->
+            <input type="checkbox" id="checkbox" v-model="minordatabase.minorPlayerOrNot" true-value="1" false-value="0" @input="validationByPlayerMinor">
+          <!-- </b-form-group> -->
+        </div>
+
+        <div class="col-md-2" style="margin-left: 0%;">
 
           <label id="minorHeading">First Name</label>
           <input v-model="minordatabase.first_name" type="text" class="form-control" placeholder="Minors First Name" id="minorFirstName"/>
@@ -609,15 +618,6 @@
             <p v-show="!validationMinorDOBBelow8TextFalse" v-if="minordatabase.date_of_birth > minorLessThan6" style="color: red;">Minor should be over 8 year </p>
             
             <dropdown-datepicker display-format="mdy" v-model="minordatabase.date_of_birth" v-bind:min-age="0" @input="validationMinorDOBText" id="dateDefine"></dropdown-datepicker> 
-        </div>
-
-        <div class="col-md-2">
-           <label id="minorHeading">Are you a player?</label>
-           <br>
-            <!-- <b-form-checkbox id="checkbox-index" v-model="minordatabase.minorPlayerOrNot" name="checkbox-index" value="yes" unchecked-value="no">
-            </b-form-checkbox> -->
-            <input type="checkbox" id="checkbox" v-model="minordatabase.minorPlayerOrNot" true-value="1" false-value="0">
-          <!-- </b-form-group> -->
         </div>
 
         <div class="col-md-2">
@@ -938,7 +938,7 @@
   <b-modal id="modal-1" ref="my-modal-submit-id" title="BTB Waiver Form" centered v-bind:hide-footer="true">
     <p> Please click on submit to complete this waiver. If you want to go through your waiver again, please click on cross sign on top right. </p>
       <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer();">SUBMIT</b-button> -->
-      <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer(); submitReservationMinor(); reloadfunction(); ">SUBMIT</b-button>
+      <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer(); submitReservationMinor();">SUBMIT</b-button>
   </b-modal>
 
   <b-container class="bv-example-row">
@@ -1143,6 +1143,139 @@
 
   mounted: function(){
 
+    var routePara = this.$route.fullPath;
+    var newRoutePara = routePara.replace('/','');
+
+    /** this part is for the order id to track down as on online form **/
+     var urlOrderId = newRoutePara;
+     var urlOrderIdLength = newRoutePara.length;
+     this.bookerOrderId = urlOrderId;
+     // console.log(urlOrderId+"oa");
+
+     if(urlOrderIdLength > 15){
+        axios.get("https://sandbox.xola.com/api/orders/"+urlOrderId,{headers:{'X-API-KEY':'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo'}})
+        .then(response => {
+          // this.posts = response.data.data
+          console.log(response);
+          this.fetchOrderDetail = response.data;
+
+          if(response.data.amount > 0){
+            console.log(" YES > 0");
+            this.reservationTimeDiv = false;
+            this.fullnameDiv = false;
+            // this.emailDiv = false;
+
+            // console.log("size "+response.data.items[0].demographics[0].quantity);
+            // console.log("firs name "+response.data.items[0].demographics[0].quantity);
+            // console.log("last name "+response.data.items[0].demographics[0].quantity);
+            // console.log("email "+response.data.customerEmail);
+
+            var teamSize = response.data.items[0].demographics[0].quantity;
+            var bookerEmail = response.data.customerEmail;
+            var firstName = response.data.customerName.split(' ').slice(0, -1).join(' ');
+            var lastName = response.data.customerName.split(' ').slice(-1).join(' ');
+            var missionName = response.data.items[0].name;
+            var arrivalDatetime = response.data.items[0].arrivalDatetime;
+            var missionExperience = response.data.items[0].experience.id;
+            var travlerIdtoBookerTable = response.data.travelers[0].id;
+            var amount = response.data.amount;
+
+            this.bookerTravelerId = travlerIdtoBookerTable;
+            this.bookerEmail = bookerEmail;
+            console.log(firstName+" "+lastName);
+            this.bookerFirstName = firstName;
+            this.bookerLastName = lastName;
+            this.bookername = this.bookerFirstName+' '+this.bookerLastName;
+            console.log(this.bookername);
+
+            if(missionExperience == "5e2077dfdbc7032265381d36"){
+              console.log('Cyberbot');
+              var missionId = 1;
+            }
+            console.log(firstName);
+            console.log(lastName);
+            console.log(missionId);
+            console.log(arrivalDatetime);
+            console.log(missionExperience);
+            console.log(travlerIdtoBookerTable);
+            console.log(newRoutePara);
+
+            /** axios.psot to PEOPLE TABLE if its unique by name **/
+            // console.log(process.env.VUE_APP_PEOPLE+'/find_or_create/email/'+bookerEmail+'/first_name/'+firstName+'/last_name/'+lastName);
+            axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/email/'+bookerEmail+'/first_name/'+firstName+'/last_name/'+lastName,{
+                    email: bookerEmail,
+                    first_name: firstName,
+                    last_name: lastName
+                  })
+                  .then(response => {
+                    console.log("Added to people table on url loaded with value");
+                    console.log(response);
+                    console.log(response.data[0].id);
+                    var peopleIdAfterFC = response.data[0].id;
+
+                    /** axios post to booker table as getting value for person_id from people table **/
+                    console.log(process.env.VUE_APP_BOOKERS+'/find_or_create/'+travlerIdtoBookerTable);
+                      axios.post(process.env.VUE_APP_BOOKERS+'/find_or_create/'+travlerIdtoBookerTable,{
+                        person_id: peopleIdAfterFC,
+                        xola_booker_id: travlerIdtoBookerTable /** traverlerid from XOLA submitted to booker table **/
+                      })
+                      .then(response => {
+                        console.log(response);
+                        // console.log("ID MAN"+peopleIdAfterFC);
+                            console.log(response.data[0].id);
+                            var bookerIdAfterFC = response.data[0].id;
+
+                            /** axios post to RESERVATION TABLE after getting booker id from BOOKER TABLE **/
+                              axios.post(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+newRoutePara,{
+                                xola_order_id: newRoutePara, /** newRoutePara is the ORDER ID submitted to reservation table **/
+                                size: teamSize,
+                                booker_id: bookerIdAfterFC,
+                                final_dollar_amount: amount,
+                                reservation_for: arrivalDatetime,
+                                location_id: 1,
+                                mission_id: missionId
+                              })
+                              .then(response => {
+                                console.log(response);
+                                console.log(bookerIdAfterFC);
+                                console.log(" xola url posted to RESERVATION TABLE");
+                              })
+                              .catch(function (error) {
+                                console.log(error);
+                              });
+                            /** end of POST to reservation table **/
+                      })
+                      .catch(function (error) {
+                        console.log(error);
+                      });
+                    /** END of post to booker table **/
+
+
+                    
+
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                  });
+            /** end of axios.post to PEOPLE TABLE **/
+
+
+          }
+          else{
+            console.log("Value does not exist on xola. You are using wrong order id.");
+          }
+
+        })
+        .catch(function (error) {
+          // alert("INCORRECT URL OR ID");
+        });
+     }
+
+     else{
+      console.log('No');
+     }
+    /** END of order id online form **/
+
     this.showSignaturePad = true;
     this.$refs.signaturePad.$refs.signaturePadCanvas.width = 400;
     this.$refs.signaturePad.$refs.signaturePadCanvas.height = 400;
@@ -1188,8 +1321,7 @@
        var arrivalDate = moment().format('YYYY-MM-DD');
        var arrivalTime = this.arrivalTime1;
 
-
-
+    console.log("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate);
      axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate,
      {headers: {'X-API-KEY': 'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo'}}) 
      .then(response => 
@@ -1198,16 +1330,6 @@
               this.allbookings.sort()
             )
           );
-           // this.allbookings.sort();
-           // console.log(this.allbookings.items[0].arrivalTime);
-           // console.log(this.allbookings);
-
-    // axios.get("https://sandbox.xola.com/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime,
-    //  {headers: {'X-API-KEY': 'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo'}}) 
-    // .then(response => 
-    //         (this.posts = response.data.data));
-            
-    //        this.posts.sort();
 
 
     axios.get(process.env.VUE_APP_BOOKERS).then(response => {this.allPlayerList = response.data});
@@ -1304,6 +1426,8 @@
       covidForm4: 0,
       covidForm5: 0,
 
+      fetchOrderDetail:[],
+
       playerMinorIdforReservationMinor:'',
       saveSignatureURL: '',
 
@@ -1362,6 +1486,8 @@
 
       bookerArrivalTime: '',
 
+      bookerOrderId:'',
+      
       bookername: '',
       bookerId: '',
       bookerTeamSize: '',
@@ -1688,14 +1814,22 @@
     console.log("Inside MINOR DATE");
     console.log("INISDE DOB");
 
-    // var index = this.countvalidationminorfunction++;
-    // console.log(index);
-
-    // console.log(this.minorsDetail.splice(index, 1));
-
-    console.log(this.minorsDetail);
     var dob= this.minorsDetail[this.minorsDetail.length-1].date_of_birth;
+    var minorPlayerValue = this.minorsDetail[this.minorsDetail.length-1].minorPlayerOrNot;
+
+    console.log(minorPlayerValue);
     console.log(dob);
+
+    if(minorPlayerValue === '1'){
+      console.log("NO");
+      // this.validationMinorDOBTextFalse = true;
+      // this.validationMinorDOBBelow8TextFalse = true;
+    }
+
+    else{
+      console.log("YES");
+
+      console.log(dob);
       var today = new Date();
       var birthDate = new Date(dob);
       var age = today.getFullYear() - birthDate.getFullYear();
@@ -1736,7 +1870,31 @@
     // if(this.minordatabase.date_of_birth < '2012-01-01'){
     //     this.validateMinorDOBFalse = false;
     // }
+    }
+    
   },
+
+  validationByPlayerMinor(){
+
+    console.log(this.minorsDetail);
+
+    var minorPlayerValue = this.minorsDetail[this.minorsDetail.length-1].minorPlayerOrNot;
+    console.log(minorPlayerValue);
+
+    // console.log("ROW DEFINE AS "+this.minorsDetail[this.minorsDetail.length]);
+
+    console.log("LENGTH"+[this.minorsDetail.length-1]);
+
+    if(this.minorsDetail[this.minorsDetail.length-1].minorPlayerOrNot == "1"){
+      console.log("YES");
+    }
+
+    if(this.minorsDetail[this.minorsDetail.length-1].minorPlayerOrNot == "0"){
+      console.log("NO");
+    }
+
+  },
+
 
   fromMilTime: function(todo){
 
@@ -1821,18 +1979,24 @@
           // console.log(this.posts[index].items[0].experience.id);
 
           this.bookername = this.posts[index].customerName;
-          this.bookerId = this.posts[index].id;
+          this.bookerId = this.posts[index].travelers[0].id;
           this.bookerTeamSize = this.posts[index].items[0].quantity;
           this.bookerAmount = this.posts[index].items[0].amount;
           this.bookerTravelerId = this.posts[index].travelers[0].id;
           this.bookerExperineceId = this.posts[index].items[0].experience.id;
           this.bookerEmail = this.posts[index].customerEmail;
           this.bookerArrivalTime = this.posts[index].items[0].arrivalDatetime;
+          this.bookerOrderId = this.posts[index].id;
+
+          this.bookerFirstName = this.posts[index].customerName.split(' ').slice(0, -1).join(' ');
+          this.bookerLastName = this.posts[index].customerName.split(' ').slice(-1).join(' ');
+
+
           // this.bookerPhoneNumber = this.post[index].customerNumber;
           // this.bookerTravelerId = this.posts[index].id;
 
           console.log("below booker id = ");
-          console.log(this.bookerId);
+          console.log(this.bookerId); /** this should be traveler id not order id **/
         },
 
         bookerNameGetHelp(index){
@@ -1840,13 +2004,17 @@
           // console.log(this.posts[index].items[0].experience.id);
 
           this.bookername = this.allbookings[index].customerName;
-          this.bookerId = this.allbookings[index].id;
+          this.bookerId = this.posts[index].travelers[0].id;
           this.bookerTeamSize = this.allbookings[index].items[0].quantity;
           this.bookerAmount = this.allbookings[index].items[0].amount;
           this.bookerTravelerId = this.allbookings[index].travelers[0].id;
           this.bookerExperineceId = this.allbookings[index].items[0].experience.id;
           this.bookerEmail = this.allbookings[index].customerEmail;
           this.bookerArrivalTime = this.allbookings[index].items[0].arrivalDatetime;
+          this.bookerOrderId = this.posts[index].id;
+
+          this.bookerFirstName = this.posts[index].customerName.split(' ').slice(0, -1).join(' ');
+          this.bookerLastName = this.posts[index].customerName.split(' ').slice(-1).join(' ');
           // this.bookerPhoneNumber = this.post[index].customerNumber;
           // this.bookerTravelerId = this.posts[index].id;
 
@@ -1896,7 +2064,7 @@
 
           // alert("Open DevTools see the save data.");
           console.log(isEmpty);
-          console.log(data);
+          // console.log(data);
 
           this.disabledNextButtonAtLast = false;
 
@@ -1922,8 +2090,7 @@
           })
           // this.playerLastId = this.playersresult.id; // this is the line which passes value from playerresult to playerid
 
-          this.validateMinorFieldFunction();
-
+          // this.validateMinorFieldFunction();
         },
 
         removeExperience: function(todo){
@@ -1949,6 +2116,7 @@
             // console.log(this.minorsDetail);
 
             // console.log(this.minorsDetail[0].first_name);
+            this.validationByPlayerMinor();
 
            var firstminorname = this.minorsDetail[0].first_name;
            var lastminorname = this.minorsDetail[0].last_name;
@@ -2166,47 +2334,56 @@
 
       console.log("INSIDE CHECK LAST PEOPLE ID");
 
-      axios.get(process.env.VUE_APP_PEOPLE).then(response => {
-        this.lastPeopleDataId = response.data.slice(-1);
+      // axios.get(process.env.VUE_APP_PEOPLE).then(response => {
+      //   this.lastPeopleDataId = response.data.slice(-1);
 
-        var reservationOrderId = this.bookerTravelerId;
+      //   var reservationOrderId = this.bookerOrderId;
+      //   console.log(this.bookerOrderId);
+      //   console.log(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+reservationOrderId);
+
+      var reservationOrderId = this.bookerOrderId;
+      
         axios.post(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+reservationOrderId).then(response => {
           this.consistsreservationresult = response.data;
-          console.log(response.data);
-
           this.reservationIdForReservationMinor = response.data[0].id;
-
-          console.log(this.reservationIdForReservationMinor);
 
           console.log("inside reservation order by id");
 
-          // axios.get(process.env.VUE_APP_WAIVERS).then(response => {
-          //   console.log("inside waiver get id");
-          //   this.waiverresult = response.data.slice(-1);
-          //   console.log("inside waiver get id1");
-            // var reservationOrderByEmail = this.bookerEmail;
-            var reservationOrderByEmail = this.bookerEmail;
-            var reservationFirstName = this.bookerFirstName;
-            var reservationLastName = this.bookerLastName;
-            var formEmailUsed = this.email;
-            var formFirstName = this.first_name;
-            var formLastname = this.last_name;
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
 
-            console.log(this.email);
-            console.log(this.bookerEmail);
+      // })
+      // .catch(function (error) {
+      //   console.log(error);
+      // });
 
-            axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/email/'+reservationOrderByEmail+'/first_name/'+reservationFirstName+'/last_name/'+reservationLastName,{
-                first_name: this.bookerFirstName,
-                last_name: this.bookerLastName,
-                email: this.bookerEmail
-              })
-              .then(response => {
-              this.consistspeopleresult = response.data;
-              console.log(response.data);
-              console.log("reservation name created in people table");
+      /** this will submit on PEOPLE table **/
+         var reservationOrderByEmail = this.bookerEmail;
+              var reservationFirstName = this.bookerFirstName;
+              var reservationLastName = this.bookerLastName;
+              var formEmailUsed = this.email;
+              var formFirstName = this.first_name;
+              var formLastname = this.last_name;
 
+        axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/email/'+reservationOrderByEmail+'/first_name/'+reservationFirstName+'/last_name/'+reservationLastName,{
+                  first_name: this.bookerFirstName,
+                  last_name: this.bookerLastName,
+                  email: this.bookerEmail
+                })
+                .then(response => {
+                this.consistspeopleresult = response.data;
+                console.log(response.data);
+                console.log("reservation name created in people table");
 
-              /** SUBMIT PLAYER FORM CODE **/
+                })
+                .catch(function (error) {
+                  console.log(error);
+                });
+      /** end of submit **/
+
+      /** SUBMIT PLAYER FORM CODE **/
 
                 // var reservationOrderByEmail = this.bookerEmail;
                 axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/email/'+formEmailUsed+'/first_name/'+formFirstName+'/last_name/'+formLastname,{
@@ -2232,8 +2409,8 @@
                     waiver_id: this.waiverIdSinged
                     })
                     .then(response => {
-                      console.log(response);
-                      console.log(response.data[0].id);
+                      // console.log(response);
+                      // console.log(response.data[0].id);
                       console.log("new people as player or booker/player");
                     })
                     .catch(function(error){
@@ -2249,30 +2426,12 @@
 
               /** END OF SUBMIT PLAYER FORM CODE **/
 
-              })
-              .catch(function (error) {
-                console.log(error);
-              });
-
-          // })
-          // .catch(function (error) {
-          //   console.log(error);
-          // });
-
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
     },
 
 
     postReservationData(){
-      var reservationOrderId = this.bookerTravelerId;
+      console.log("Order Id"+this.bookerOrderId);
+      var reservationOrderId = this.bookerOrderId;
 
       var bookerDataId = this.bookerresult[0];
       // var checkEmptyBooking = Object.keys(bookerDataId).length;
@@ -2320,14 +2479,18 @@
               console.log(reservationOrderByEmail);
 
               var fullName = this.bookername;
+              console.log(this.bookername);
+
               var firstName = fullName.split(' ').slice(0, -1).join(' ');
               var lastName = fullName.split(' ').slice(-1).join(' ');
               console.log(firstName);
               console.log(lastName);
 
-              this.bookerFirstName = firstName;
-              this.bookerLastName = lastName;
+              // this.bookerFirstName = firstName;
+              // this.bookerLastName = lastName;
 
+              // var firstName = this.bookerFirstName;
+              // var lastName = this.bookerLastName;
               // console.log(firstName);
               // console.log(lastName);
 
@@ -3453,7 +3616,7 @@
   }
 
    #hearAboutUsTitle{
-      font-size: 1.5em;
+      font-size: 1.4em;
     }
 
     #minorNameTitle{
@@ -3502,6 +3665,7 @@
   #minorHeadingDOB{
     font-size: 0.98em;
     margin-top: 3.5%;
+    margin-left: 0%;
   }
 
   #needhelp1{
@@ -3558,7 +3722,7 @@
   }
 
   #dateDefine{
-    margin-left: 20%;
+    margin-left: 22%;
   }
 
   .input-group-prepend{
@@ -3683,6 +3847,7 @@
     #minorHeadingDOB{
       font-size: 1.3em;
       margin-top: 3%;
+      margin-left: 20%;
     }
 
     /** this css is linked with gender input radio button as well **/
@@ -3708,8 +3873,8 @@
 
     #addMinorForm{
       /*background-color: yellow;*/
-      width: 77%;
-      margin: auto;
+      width: 65%;
+      margin-left: 20%;
     }
 
     #minorCheckedText{
@@ -3719,14 +3884,14 @@
 
     #minorFirstName{
     /*margin-top: 2%;*/
-    width: 80%;
-    margin: auto;
+    width: 110%;
+    margin-left: 10%;
   }
 
   #minorLastName{
     /*margin-top: -4%;*/
-    width: 80%;
-    margin: auto;
+    width: 110%;
+    margin-left: 20%;
   }
 
     #minorHeading{
@@ -3775,13 +3940,14 @@
   .work-experiences > div {
     margin: 20px 0;
     padding-bottom: 10px;
+    /*background-color: yellow;*/
   }
   .work-experiences > div:not(:last-child) {
     border-bottom: 1px solid rgb(206, 212, 218);
   }
 
   #dateDefine{
-    margin-left: 30%;
+    margin-left: 50%;
   }
 
   .input-group-prepend{
@@ -3790,8 +3956,8 @@
 
   #trashCan{
     margin-top: 25%;
+    margin-left: -20%;
   }
-
  /* #inline-form-input-name{
     height: auto;
     width: auto;
