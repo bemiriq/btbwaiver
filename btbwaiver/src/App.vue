@@ -1213,10 +1213,10 @@
                     console.log(response.data[0].id);
                     var peopleIdAfterFC = response.data[0].id;
 
-                    /** axios post to booker table as getting value for person_id from people table **/
+                    /** axios get to booker table as getting value for person_id from people table **/
                     console.log(process.env.VUE_APP_BOOKERS+'/find_or_create/'+travlerIdtoBookerTable);
                       axios.post(process.env.VUE_APP_BOOKERS+'/find_or_create/'+travlerIdtoBookerTable,{
-                        person_id: peopleIdAfterFC,
+                        // person_id: peopleIdAfterFC,
                         xola_booker_id: travlerIdtoBookerTable /** traverlerid from XOLA submitted to booker table **/
                       })
                       .then(response => {
@@ -1224,6 +1224,19 @@
                         // console.log("ID MAN"+peopleIdAfterFC);
                             console.log(response.data[0].id);
                             var bookerIdAfterFC = response.data[0].id;
+                            console.log(bookerIdAfterFC);
+
+                            /** axios put to booker id grabbed before **/
+                              axios.put(process.env.VUE_APP_BOOKERS+'/'+bookerIdAfterFC,{
+                                person_id: peopleIdAfterFC
+                              })
+                              .then(response => {
+                                console.log(response);
+                              })
+                              .catch(function (error){
+                                console.log(response);
+                              })
+                            /** END of booker id fetched before **/
 
                             /** axios post to RESERVATION TABLE after getting booker id from BOOKER TABLE **/
                               axios.post(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+newRoutePara,{
@@ -1238,6 +1251,9 @@
                               .then(response => {
                                 console.log(response);
                                 console.log(bookerIdAfterFC);
+                                this.consistsreservationresult = response.data[0].id;
+                                this.reservationIdForReservationMinor = response.data[0].id;
+                                console.log(response.data[0].id);
                                 console.log(" xola url posted to RESERVATION TABLE");
                               })
                               .catch(function (error) {
@@ -1485,6 +1501,7 @@
       surveylistid:'',
 
       bookerArrivalTime: '',
+      // bookerReservationId: '',
 
       bookerOrderId:'',
       
@@ -2918,6 +2935,7 @@
           // console.log(this.minorsDetail);
           // console.log(this.minorsDetail[0].first_name);
           console.log(this.reservationIdForReservationMinor);
+          // this.consistsreservationresult[0].id = this.reservationIdForReservationMinor
           var reservationIdUsedOnSession = this.reservationIdForReservationMinor;
           console.log(reservationIdUsedOnSession);
 
@@ -2987,7 +3005,6 @@
 
       var foundTravelId = this.consistsreservationresult.find((todo) => {
         return todo.xola_order_id == this.bookerTravelerId
-        // console.log(todo.travelers.id);
       })
 
       // If nothing is foundTravelId, Array.find() returns undefined, which is false-y
@@ -3003,7 +3020,7 @@
 
               axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
                 person_id: this.people_id,
-                reservation_id: reservationwithid
+                reservation_id: this.consistsreservationresult[0].id
               })
               .then(function (response) {
                 // console.log(response);
@@ -3020,7 +3037,7 @@
 
               axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
                 person_id: this.people_id,
-                reservation_id: reservationwithnewid + 1
+                reservation_id: this.consistsreservationresult[0].id
               })
               .then(function (response) {
                 // console.log(response);
