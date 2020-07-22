@@ -2775,6 +2775,8 @@
 
       // /**** THIS DATA WILL SUBMIT PEOPLE TO PDF FILE ********************************/
 
+      console.log(this.saveSignatureURL);
+
                     axios.post(process.env.VUE_APP_PDF_WAIVER_URL,{
                       first_name: this.first_name,
                       last_name: this.last_name,
