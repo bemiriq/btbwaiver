@@ -2782,7 +2782,7 @@
                       last_name: this.last_name,
                       email: this.email,
                       date_of_birth: this.date_of_birth,
-                      minors: this.minorsDetail,
+                      minorsDetail: this.minorsDetail,
                       signiture: this.saveSignatureURL
                     })
                     .then(response => {
