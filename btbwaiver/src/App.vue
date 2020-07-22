@@ -2732,12 +2732,13 @@
       /** if the minor player is selected as TRUE it submits inside reservation_minor **/
 
       var arr = this.minorsDetail;
+      console.log(arr);
 
       for(var i=0; i < arr.length; i++){
 
         console.log(this.minorsDetail[i].minorPlayerOrNot);
 
-                     if(this.minorsDetail[i].minorPlayerOrNot == '1'){
+                     if(this.minorsDetail[i].minorPlayerOrNot == '1' && this.minorsChecked == 'A'){
                         
                         console.log("SOLTIIIIIIIII");
                         var playerMinorIdforReservationMinor1 = this.playerMinorIdList[i];
@@ -3070,19 +3071,20 @@
 
       // /**** THIS DATA WILL SUBMIT PEOPLE TO PDF FILE ********************************/
 
-                    // axios.post(process.env.VUE_APP_WAIVER_MINOR_URL,{
-                    //   first_name: this.first_name,
-                    //   last_name: this.last_name,
-                    //   date_of_birth: this.date_of_birth,
-                    //   minors: this.minorsDetail,
-                    //   signature: this.saveSignatureURL
-                    // })
-                    // .then(response => {
-                    //   console.log(response.data);
-                    // })
-                    // .catch(function(error){
-                    //   console.log(error);
-                    // });
+                    axios.post(process.env.VUE_APP_PDF_WAIVER_URL,{
+                      first_name: this.first_name,
+                      last_name: this.last_name,
+                      email: this.email,
+                      date_of_birth: this.date_of_birth,
+                      minors: this.minorsDetail,
+                      signiture: this.saveSignatureURL
+                    })
+                    .then(response => {
+                      console.log(response.data);
+                    })
+                    .catch(function(error){
+                      console.log(error);
+                    });
 
     // /******************** END OF POST TO WAIVER PDF URL *********************************/
       
