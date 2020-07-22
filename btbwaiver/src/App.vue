@@ -2767,6 +2767,25 @@
       }
     /** END of if clause for minor player for reservation_minor table **/
 
+      // /**** THIS DATA WILL SUBMIT PEOPLE TO PDF FILE ********************************/
+
+                    axios.post(process.env.VUE_APP_PDF_WAIVER_URL,{
+                      first_name: this.first_name,
+                      last_name: this.last_name,
+                      email: this.email,
+                      date_of_birth: this.date_of_birth,
+                      minors: this.minorsDetail,
+                      signiture: this.saveSignatureURL
+                    })
+                    .then(response => {
+                      console.log(response.data);
+                    })
+                    .catch(function(error){
+                      console.log(error);
+                    });
+
+    // /******************** END OF POST TO WAIVER PDF URL *********************************/
+
     },
 
 
@@ -3067,26 +3086,6 @@
 
 
       /** if function submits to different database if it contains value on it only **/
-      
-
-      // /**** THIS DATA WILL SUBMIT PEOPLE TO PDF FILE ********************************/
-
-                    axios.post(process.env.VUE_APP_PDF_WAIVER_URL,{
-                      first_name: this.first_name,
-                      last_name: this.last_name,
-                      email: this.email,
-                      date_of_birth: this.date_of_birth,
-                      minors: this.minorsDetail,
-                      signiture: this.saveSignatureURL
-                    })
-                    .then(response => {
-                      console.log(response.data);
-                    })
-                    .catch(function(error){
-                      console.log(error);
-                    });
-
-    // /******************** END OF POST TO WAIVER PDF URL *********************************/
       
     }
 
