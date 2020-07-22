@@ -2770,11 +2770,6 @@
       // /**** THIS DATA WILL SUBMIT PEOPLE TO PDF FILE ********************************/
 
                     axios.post(process.env.VUE_APP_PDF_WAIVER_URL,{
-
-                          headers: {
-                              'Content-Type': 'application/x-www-form-urlencoded'
-                          },
-
                       first_name: this.first_name,
                       last_name: this.last_name,
                       email: this.email,
