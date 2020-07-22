@@ -2769,7 +2769,13 @@
 
       // /**** THIS DATA WILL SUBMIT PEOPLE TO PDF FILE ********************************/
 
-                    axios.post(process.env.VUE_APP_PDF_WAIVER_URL,{
+      var optionAxios = {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }
+        
+                    axios.post(process.env.VUE_APP_PDF_WAIVER_URL,optionAxios{
                       first_name: this.first_name,
                       last_name: this.last_name,
                       email: this.email,
