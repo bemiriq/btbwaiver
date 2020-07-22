@@ -571,7 +571,7 @@
   </div>
 
 
-  <div v-show="!minorsAddDiv">
+  <div v-show="minorsAddDiv">
 
         <br><br>
 
@@ -617,7 +617,9 @@
             <p v-show="!validationMinorDOBTextFalse" v-if="minordatabase.date_of_birth < currentDateCompare" style="color: red;">Minor should be under 18</p>
             <p v-show="!validationMinorDOBBelow8TextFalse" v-if="minordatabase.date_of_birth > minorLessThan6" style="color: red;">Minor should be over 8 year </p>
             
+            <!-- <dropdown-datepicker display-format="mdy" v-model="minordatabase.date_of_birth" v-bind:min-age="0" @input="validationMinorDOBText" id="dateDefine"></dropdown-datepicker>  -->
             <dropdown-datepicker display-format="mdy" v-model="minordatabase.date_of_birth" v-bind:min-age="0" @input="validationMinorDOBText" id="dateDefine"></dropdown-datepicker> 
+
         </div>
 
         <div class="col-md-2">
@@ -1837,8 +1839,10 @@
     console.log(minorPlayerValue);
     console.log(dob);
 
-    if(minorPlayerValue === '1'){
-      console.log("NO");
+    if(minorPlayerValue > '0'){
+      console.log("NO"+minorPlayerValue);
+      this.disableAddMinorButton = false;
+      this.validateMinorField = false;
       // this.validationMinorDOBTextFalse = true;
       // this.validationMinorDOBBelow8TextFalse = true;
     }
@@ -1884,6 +1888,8 @@
       this.validateMinorField = true;  // disable minor page NEXT button
       this.disableAddMinorButton = true;
      }
+
+     // this.disableAddMinorButton = true;
     // if(this.minordatabase.date_of_birth < '2012-01-01'){
     //     this.validateMinorDOBFalse = false;
     // }
