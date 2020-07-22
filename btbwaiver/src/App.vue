@@ -2795,10 +2795,14 @@
                         var waiverIdFetched = this.waiverIdSinged;
                         console.log(this.waiverIdSinged);
 
+                        var signedValues = this.saveSignatureURL;
+                        console.log(signedValues + " OLO LO LO ");
+                        
                           axios.put(process.env.VUE_APP_WAIVERS+'/'+waiverIdFetched,{
-                                  waiver_url : this.saveSignatureURL
+                                  waiver_url : signedValues
                                 })
                                 .then(response => {
+                                  console.log(response);
                                   console.log("UPDATED WAIVER TABLE with AWS URL");
                                 })
                                 .catch(function (error) {
