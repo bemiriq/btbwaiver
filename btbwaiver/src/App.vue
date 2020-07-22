@@ -2783,7 +2783,7 @@
                       email: this.email,
                       date_of_birth: this.date_of_birth,
                       minorsDetail: this.minorsDetail,
-                      signiture: this.saveSignatureURL
+                      signature: this.saveSignatureURL
                     })
                     .then(response => {
                       console.log(response.data);
