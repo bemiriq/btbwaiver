@@ -1596,7 +1596,7 @@
          ],
 
          signatureoptions:{
-          penColor: "#c0f"
+          penColor: " #000000"
         },
 
         minorsDetail: [
