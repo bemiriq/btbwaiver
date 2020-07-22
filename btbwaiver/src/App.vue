@@ -2024,20 +2024,24 @@
 
         bookerNameGetHelp(index){
 
+          console.log(" O L ");
+
           // console.log(this.posts[index].items[0].experience.id);
 
           this.bookername = this.allbookings[index].customerName;
-          this.bookerId = this.posts[index].travelers[0].id;
+          console.log(this.bookername);
+
+          this.bookerId = this.allbookings[index].travelers[0].id;
           this.bookerTeamSize = this.allbookings[index].items[0].quantity;
           this.bookerAmount = this.allbookings[index].items[0].amount;
           this.bookerTravelerId = this.allbookings[index].travelers[0].id;
           this.bookerExperineceId = this.allbookings[index].items[0].experience.id;
           this.bookerEmail = this.allbookings[index].customerEmail;
           this.bookerArrivalTime = this.allbookings[index].items[0].arrivalDatetime;
-          this.bookerOrderId = this.posts[index].id;
+          this.bookerOrderId = this.allbookings[index].id;
 
-          this.bookerFirstName = this.posts[index].customerName.split(' ').slice(0, -1).join(' ');
-          this.bookerLastName = this.posts[index].customerName.split(' ').slice(-1).join(' ');
+          this.bookerFirstName = this.allbookings[index].customerName.split(' ').slice(0, -1).join(' ');
+          this.bookerLastName = this.allbookings[index].customerName.split(' ').slice(-1).join(' ');
           // this.bookerPhoneNumber = this.post[index].customerNumber;
           // this.bookerTravelerId = this.posts[index].id;
 
