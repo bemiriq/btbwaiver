@@ -2787,6 +2787,26 @@
                     })
                     .then(response => {
                       console.log(response.data);
+                      // var awsUrl = response.data;
+                      // console.log(awsUrl);
+
+                      /** this will update the URL with AWS link **/
+
+                        var waiverIdFetched = this.waiverIdSinged;
+                        console.log(this.waiverIdSinged);
+
+                          axios.put(process.env.VUE_APP_WAIVERS+'/'+waiverIdFetched,{
+                                  waiver_url : this.saveSignatureURL
+                                })
+                                .then(response => {
+                                  console.log("UPDATED WAIVER TABLE with AWS URL");
+                                })
+                                .catch(function (error) {
+                                  console.log(error);
+                                });
+
+                      /** END of AWS link **/
+
                     })
                     .catch(function(error){
                       console.log(error);
@@ -2794,6 +2814,7 @@
 
     // /******************** END OF POST TO WAIVER PDF URL *********************************/
 
+    
     },
 
 
