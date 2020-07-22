@@ -2787,8 +2787,8 @@
                     })
                     .then(response => {
                       console.log(response.data);
-                      // var awsUrl = response.data;
-                      // console.log(awsUrl);
+                      var awsUrl = response.data.Location;
+                      console.log(awsUrl);
 
                       /** this will update the URL with AWS link **/
 
@@ -2797,9 +2797,9 @@
 
                         var signedValues = this.saveSignatureURL;
                         console.log(signedValues + " OLO LO LO ");
-                        
+
                           axios.put(process.env.VUE_APP_WAIVERS+'/'+waiverIdFetched,{
-                                  waiver_url : signedValues
+                                  waiver_url : awsUrl
                                 })
                                 .then(response => {
                                   console.log(response);
