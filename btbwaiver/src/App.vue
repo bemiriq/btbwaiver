@@ -891,7 +891,7 @@
           <br>
 
           <footer id="modal-scrollable___BV_modal_footer_" class="modal-footer">
-            <!-- <button type="button" class="btn btn-secondary">Cancel</button> -->
+
             <button type="button" class="btn btn-primary" v-bind:disabled="disabledAgreeButton" v-on:click="clickedOkonWaiver(); submitMinorForm();" @click="$bvModal.hide('modal-scrollable')" >OK</button>
 
           </footer>
@@ -916,17 +916,16 @@
         width="auto"
         height="400px"
         ref="signaturePad"
-        :options="signatureoptions" v-show="showSignaturePad" style="margin:auto;" />
+        :options="{onBegin, onEnd, signatureoptions}" v-show="showSignaturePad" style="margin:auto;" />
       </div>
     </div>
     <div class="row">
       <div class="col-6 mt-2">
         <button class="btn btn-outline-secondary" @click="undo">Undo</button>
       </div>
-      <div class="col-6 mt-2">
-         <!-- <button class="btn btn-outline-primary" @click="change">Reset</button>  -->
+      <!-- <div class="col-6 mt-2">
          <button class="btn btn-outline-primary" @click="save">Save</button> 
-      </div>
+      </div> -->
     </div>
   </div>
 
@@ -955,7 +954,7 @@
 
         <!-- <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkLastPeopleId(); checkBookerId(); checkWaiverId(); checkReservationId(); checkPeopleId(); submitPlayerForm();">NEXT</b-button> -->
         <!-- <b-button variant="primary" v-b-modal.modal-1 v-on:click="checkLastPeopleId(); checkWaiverId(); checkReservationId(); checkPeopleId(); submitPlayerForm();">NEXT</b-button> -->
-        <b-button variant="primary" v-b-modal.modal-1 v-bind:disabled="disabledNextButtonAtLast">NEXT</b-button>
+        <b-button variant="primary" v-b-modal.modal-1 v-bind:disabled="disabledNextButtonAtLast" @click="save">NEXT</b-button>
 
 
 
@@ -1350,12 +1349,15 @@
           );
 
 
-    axios.get(process.env.VUE_APP_BOOKERS).then(response => {this.allPlayerList = response.data});
+    // axios.get(process.env.VUE_APP_BOOKERS).then(response => {this.allPlayerList = response.data});
 
-    axios.get(process.env.VUE_APP_RESERVATIONS).then(response => {this.allReservationList = response.data});  
+    // axios.get(process.env.VUE_APP_RESERVATIONS).then(response => {this.allReservationList = response.data});  
+    
 
-    console.log("below is axios post url");
+    // console.log("below is axios post url");
+
     var surveyid1 = '1';
+
     // console.log(process.env.VUE_APP_SURVEY+'/'+surveyid1).then(response => {this.surveyQuestionAnswersList = response.data});
     // axios.get(process.env.VUE_APP_SURVEY+'/'+surveyid1).then(response => {this.surveyQuestionAnswersList = response.data});
 
@@ -2082,19 +2084,16 @@
           this.$refs.signaturePad.$refs.signaturePadCanvas.height = 250
           },
 
+
         undo() {
           this.$refs.signaturePad.undoSignature();
            this.disabledNextButtonAtLast = true;
         },
+
         save() {
+          // console.log(" INSIDE SAVEEEEE ");
           const { isEmpty, data } = this.$refs.signaturePad.saveSignature();
-
-          // alert("Open DevTools see the save data.");
-          console.log(isEmpty);
-          // console.log(data);
-
-          this.disabledNextButtonAtLast = false;
-
+          // this.disabledNextButtonAtLast = false;
           this.saveSignatureURL = data;
         },
 
@@ -2103,11 +2102,23 @@
             penColor: "#00f"
           };
         },
+
         resume() {
           this.options = {
             penColor: "#c0f"
           };
         },
+
+
+        onBegin() {
+          console.log('Begin signature');
+        },
+
+        onEnd() {
+          console.log('End signature');
+          this.disabledNextButtonAtLast = false;
+        },
+
 
         addExperience(){
           this.minorsDetail.push({
@@ -2472,15 +2483,23 @@
       else{
         var bookerwithid = bookerDataId['id'];
         // console.log(bookerDataId['id']);
-        // console.log('not null');
       }
 
-        console.log("inside reservation data");
-        console.log(this.bookerTravelerId);
+      /** below IF and ELSE statement is used for NEED A HELP button at first two page , which used to insert time as UNDEFINE in DTB reservation table **/
 
-        var reservationtime = this.selectedTime;
-        console.log(reservationtime);
+        if(this.selectedTime == ''){
 
+          var filterTime = this.bookerArrivalTime;
+
+          var reservationtime = filterTime.replace('T',' ');
+
+          console.log(reservationtime);
+
+        }
+        else{
+          var reservationtime = this.selectedTime;
+        }
+      /** END of if/else for NEED A HELP button **/
 
 
         axios.post(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+reservationOrderId,{
@@ -2902,29 +2921,53 @@
       console.log(selectedBookerId);
 
       /** axios post the bookers table **/
-          var found = this.allPlayerList.find((todo) => {
-            return todo.xola_booker_id == selectedBookerId
-          })
 
-          // If nothing is found, Array.find() returns undefined, which is false-y
+          // var found = this.allPlayerList.find((todo) => {
+          //   return todo.xola_booker_id == selectedBookerId
+          // })
 
-          if (found) {
-            console.log("already inserted")
-              } 
-          else {
-            console.log("new id");
-              axios.post(process.env.VUE_APP_BOOKERS,{
-                person_id: peoplewithid,
-                xola_booker_id: selectedBookerId
-              })
-              .then(function (response) {
-                console.log(response);
-              })
-              .catch(function (error) {
-                console.log(error);
-              });
-            }
-          /** end of bookers table **/
+          // if (found) {
+          //   console.log("already inserted")
+          //     } 
+          // else {
+          //   console.log("new id");
+          //     axios.post(process.env.VUE_APP_BOOKERS,{
+          //       person_id: peoplewithid,
+          //       xola_booker_id: selectedBookerId
+          //     })
+          //     .then(function (response) {
+          //       console.log(response);
+          //     })
+          //     .catch(function (error) {
+          //       console.log(error);
+          //     });
+          //   }
+
+        console.log(peoplewithid);
+
+        axios.post(process.env.VUE_APP_BOOKERS+'/find_or_create/'+selectedBookerId,{
+
+        })
+        .then(response => {
+
+            console.log(response);
+            var fetchedBookerId = response.data[0].id;
+
+            axios.put(process.env.VUE_APP_BOOKERS+'/'+fetchedBookerId,{
+              person_id: peoplewithid
+            })
+            .then(response => {
+              console.log(response);
+            })
+            .catch(function(error){
+              console.log(error);
+            })
+        })
+        .catch(function(error){
+          console.log(error);
+        })
+
+      /** end of bookers table **/
 
       var lastPlayerIdNew = this.newPlayerLastId;
       var answerId = this.hearAboutUs;
