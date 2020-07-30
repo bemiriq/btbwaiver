@@ -1180,6 +1180,7 @@
             var missionExperience = response.data.items[0].experience.id;
             var travlerIdtoBookerTable = response.data.travelers[0].id;
             var amount = response.data.amount;
+            var itemId = response.data.items[0].id;
 
             this.bookerTravelerId = travlerIdtoBookerTable;
             this.bookerEmail = bookerEmail;
@@ -1187,7 +1188,10 @@
             this.bookerFirstName = firstName;
             this.bookerLastName = lastName;
             this.bookername = this.bookerFirstName+' '+this.bookerLastName;
+            this.bookerItemId = itemId;
             console.log(this.bookername);
+
+            this.waiverSignedOnline = 0;
 
             if(missionExperience == "5e2077dfdbc7032265381d36"){
               console.log('Cyberbot');
@@ -1227,6 +1231,8 @@
                             var bookerIdAfterFC = response.data[0].id;
                             console.log(bookerIdAfterFC);
 
+                            this.bookerDatabaseTableId = response.data[0].id;
+
                             /** axios put to booker id grabbed before **/
                               axios.put(process.env.VUE_APP_BOOKERS+'/'+bookerIdAfterFC,{
                                 person_id: peopleIdAfterFC
@@ -1240,21 +1246,22 @@
                             /** END of booker id fetched before **/
 
                             /** axios post to RESERVATION TABLE after getting booker id from BOOKER TABLE **/
-                              axios.post(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+newRoutePara,{
+                              axios.post(process.env.VUE_APP_RESERVATIONS+'/find_or_create/id/'+newRoutePara+'/experience_item/'+itemId,{
                                 xola_order_id: newRoutePara, /** newRoutePara is the ORDER ID submitted to reservation table **/
                                 size: teamSize,
                                 booker_id: bookerIdAfterFC,
                                 final_dollar_amount: amount,
                                 reservation_for: arrivalDatetime,
                                 location_id: 1,
-                                mission_id: missionId
+                                mission_id: missionId,
+                                experience_item_id: itemId
                               })
                               .then(response => {
                                 console.log(response);
                                 console.log(bookerIdAfterFC);
-                                this.consistsreservationresult = response.data[0].id;
-                                this.reservationIdForReservationMinor = response.data[0].id;
-                                console.log(response.data[0].id);
+                                this.consistsreservationresult = response.data.id;
+                                this.reservationIdForReservationMinor = response.data.id;
+                                console.log(response.data.id);
                                 console.log(" xola url posted to RESERVATION TABLE");
                               })
                               .catch(function (error) {
@@ -1461,6 +1468,8 @@
 
       countvalidationminorfunction: 0,
 
+      waiverSignedOnline: 1,
+
       reservationIdForReservationMinor:'',
       toplayerMinorIdList: '', 
       playerMinorIdList: [], 
@@ -1508,7 +1517,7 @@
       // bookerReservationId: '',
 
       bookerOrderId:'',
-      
+      bookerItemId:'',
       bookername: '',
       bookerId: '',
       bookerTeamSize: '',
@@ -1523,6 +1532,7 @@
       // inputBookerId: '',
       bookerFirstName: '',
       bookerLastName: '',
+      bookerDatabaseTableId:'',
 
       reservationDateTime: '',
 
@@ -2012,6 +2022,7 @@
           this.bookerEmail = this.posts[index].customerEmail;
           this.bookerArrivalTime = this.posts[index].items[0].arrivalDatetime;
           this.bookerOrderId = this.posts[index].id;
+          this.bookerItemId = this.posts[index].items[0].id;
 
           this.bookerFirstName = this.posts[index].customerName.split(' ').slice(0, -1).join(' ');
           this.bookerLastName = this.posts[index].customerName.split(' ').slice(-1).join(' ');
@@ -2041,6 +2052,7 @@
           this.bookerEmail = this.allbookings[index].customerEmail;
           this.bookerArrivalTime = this.allbookings[index].items[0].arrivalDatetime;
           this.bookerOrderId = this.allbookings[index].id;
+          this.bookerItemId = this.allbookings[index].items[0].id;
 
           this.bookerFirstName = this.allbookings[index].customerName.split(' ').slice(0, -1).join(' ');
           this.bookerLastName = this.allbookings[index].customerName.split(' ').slice(-1).join(' ');
@@ -2325,24 +2337,39 @@
       },
 
     checkBookerId(){
-        axios.get(process.env.VUE_APP_BOOKERS).then(response => {
-        console.log("check booker id");
-        this.bookerresult = response.data.slice(-1);
+        // axios.get(process.env.VUE_APP_BOOKERS).then(response => {
+        // console.log("check booker id");
+        // this.bookerresult = response.data.slice(-1);
 
-            // postWaiverId(){
-            /** axios post on waiver table **/
-            axios.post(process.env.VUE_APP_WAIVERS,{
-              waiver_url : this.randomNumber
-            })
-            .then(response => {
-              console.log("below is waiver id");
-              console.log(response.data.id);
-              this.waiverIdSinged = response.data.id;
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
+        //     // postWaiverId(){
+        //     /** axios post on waiver table **/
+        //     axios.post(process.env.VUE_APP_WAIVERS,{
+        //       waiver_url : this.randomNumber
+        //     })
+        //     .then(response => {
+        //       console.log("below is waiver id");
+        //       console.log(response.data.id);
+        //       this.waiverIdSinged = response.data.id;
+        //     })
+        //     .catch(function (error) {
+        //       console.log(error);
+        //     });
+        // });
+
+        var selectedBookerId = this.bookerTravelerId;
+
+        axios.post(process.env.VUE_APP_BOOKERS+'/find_or_create/'+selectedBookerId,{
+
+        })
+        .then(response => {
+          console.log(response);
+          // var fetchedBookerId = response.data[0].id;
+          this.bookerDatabaseTableId = response.data[0].id;
+        })
+        .catch(function (error) {
+          console.log(error);
         });
+
     }, // this get id for player_minor table id
         // console.log('inside bookers');
 
@@ -2380,17 +2407,23 @@
       //   console.log(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+reservationOrderId);
 
       var reservationOrderId = this.bookerOrderId;
-      
-        axios.post(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+reservationOrderId).then(response => {
-          this.consistsreservationresult = response.data;
-          this.reservationIdForReservationMinor = response.data[0].id;
+      var reservationItemId = this.bookerItemId;
+        
+        // axios.post(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+newRoutePara+'/experience_item/'+itemId
 
-          console.log("inside reservation order by id");
+        // axios.post(process.env.VUE_APP_RESERVATIONS+'/find_or_create/id/'+reservationOrderId+'/experience_item/'+reservationItemId,{
 
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+        // })
+        // .then(response => {
+        //   this.consistsreservationresult = response.data;
+        //   this.reservationIdForReservationMinor = response.data.id;
+
+        //   console.log("inside reservation order by id");
+
+        // })
+        // .catch(function (error) {
+        //     console.log(error);
+        // });
 
       // })
       // .catch(function (error) {
@@ -2470,6 +2503,7 @@
     postReservationData(){
       console.log("Order Id"+this.bookerOrderId);
       var reservationOrderId = this.bookerOrderId;
+      var reservationItemId = this.bookerItemId;
 
       var bookerDataId = this.bookerresult[0];
       // var checkEmptyBooking = Object.keys(bookerDataId).length;
@@ -2501,23 +2535,26 @@
         }
       /** END of if/else for NEED A HELP button **/
 
+        console.log(this.bookerDatabaseTableId+" RESERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 
-        axios.post(process.env.VUE_APP_RESERVATIONS+'/find_or_create/'+reservationOrderId,{
+        axios.post(process.env.VUE_APP_RESERVATIONS+'/find_or_create/id/'+reservationOrderId+'/experience_item/'+reservationItemId,{
             // person_id: sand + 1,
             xola_order_id: this.bookerTravelerId,
             size: this.bookerTeamSize,
             // booker_id: bookerwithid + 1,
-            booker_id: bookerwithid + 1,
+            booker_id: this.bookerDatabaseTableId,
             final_dollar_amount: this.bookerAmount,
             reservation_for: reservationtime,
             location_id: 1,
-            mission_id: this.mission_id
+            mission_id: this.mission_id,
+            experience_item_id: reservationItemId
           })
           .then(response => {
             console.log(response);
             console.log(" inside reservation order by ID");
 
-
+              this.consistsreservationresult = response.data.id;
+              this.reservationIdForReservationMinor = response.data.id;
               // postPeopleData(){
               var reservationOrderByEmail = this.bookerEmail;
               console.log(this.bookerEmail);
@@ -2777,7 +2814,8 @@
 
                         axios.post(process.env.VUE_APP_RESERVATION_MINOR,{
                           player_minor_id: playerMinorIdforReservationMinor1,
-                          reservation_id: this.reservationIdForReservationMinor
+                          reservation_id: this.reservationIdForReservationMinor,
+                          arrived: this.waiverSignedOnline
                         })
 
                         .then(function (response) {
@@ -2884,13 +2922,13 @@
         var bookerwithid = bookerDataId['id'];
       }
 
-      var reservationDataId = this.consistsreservationresult[0];
-      if(reservationDataId == null){
-        var reservationwithid = '0';
-      }
-      else{
-        var reservationwithid = reservationDataId['id'];
-      }
+      var reservationDataId = this.consistsreservationresult;
+      // if(reservationDataId == null){
+      //   var reservationwithid = '0';
+      // }
+      // else{
+      //   var reservationwithid = reservationDataId['id'];
+      // }
 
       var peopleDataId = this.consistspeopleresult[0];
 
@@ -2917,7 +2955,7 @@
     // console.log(this.newPlayerLastId);
     // console.log(lastPlayerIdHo);
 
-      var selectedBookerId = this.bookerId;
+      var selectedBookerId = this.bookerTravelerId;
       console.log(selectedBookerId);
 
       /** axios post the bookers table **/
@@ -2951,7 +2989,9 @@
         .then(response => {
 
             console.log(response);
+
             var fetchedBookerId = response.data[0].id;
+            this.bookerDatabaseTableId = response.data[0].id;
 
             axios.put(process.env.VUE_APP_BOOKERS+'/'+fetchedBookerId,{
               person_id: peoplewithid
@@ -3103,24 +3143,21 @@
       }
         /** axios post the bookers table **/
 
-      var foundTravelId = this.consistsreservationresult.find((todo) => {
-        return todo.xola_order_id == this.bookerTravelerId
-      })
+      // var foundTravelId = this.consistsreservationresult.find((todo) => {
+      //   return todo.xola_order_id == this.bookerTravelerId
+      // })
 
       // If nothing is foundTravelId, Array.find() returns undefined, which is false-y
        if(this.playerSelected == 'yes'){
 
           console.log("UPDATE ON RESERVATION PEOPLE ");
 
-          if (foundTravelId) {
-            // console.log("already inserted travel id");
-            // console.log(reservationwithid);
-
-            /** axios post on reservation_people table**/
+          // if (foundTravelId) {
 
               axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
                 person_id: this.people_id,
-                reservation_id: this.consistsreservationresult[0].id
+                reservation_id: this.consistsreservationresult,
+                arrived: this.waiverSignedOnline
               })
               .then(function (response) {
                 // console.log(response);
@@ -3129,24 +3166,24 @@
                 console.log(error);
               });
 
-          } 
+          // } 
           
-          else {
+          // else {
 
-              /** axios post on reservation_people table**/
+          //     /** axios post on reservation_people table**/
 
-              axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
-                person_id: this.people_id,
-                reservation_id: this.consistsreservationresult[0].id
-              })
-              .then(function (response) {
-                // console.log(response);
-              })
-              .catch(function (error) {
-                console.log(error);
-              });
+          //     axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
+          //       person_id: this.people_id,
+          //       reservation_id: this.consistsreservationresult.id
+          //     })
+          //     .then(function (response) {
+          //       // console.log(response);
+          //     })
+          //     .catch(function (error) {
+          //       console.log(error);
+          //     });
 
-            }
+          //   }
         }
 
         else{
