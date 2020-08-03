@@ -1189,7 +1189,15 @@
             this.bookerLastName = lastName;
             this.bookername = this.bookerFirstName+' '+this.bookerLastName;
             this.bookerItemId = itemId;
+            this.bookerArrivalTime = arrivalDatetime;
             console.log(this.bookername);
+
+            this.bookerTeamSize = teamSize;
+            // booker_id: this.bookerDatabaseTableId,
+            this.bookerAmount = amount;
+
+
+
 
             this.waiverSignedOnline = 0;
 
@@ -1204,6 +1212,8 @@
             console.log(missionExperience);
             console.log(travlerIdtoBookerTable);
             console.log(newRoutePara);
+
+            this.mission_id = missionId;
 
             /** axios.psot to PEOPLE TABLE if its unique by name **/
             // console.log(process.env.VUE_APP_PEOPLE+'/find_or_create/email/'+bookerEmail+'/first_name/'+firstName+'/last_name/'+lastName);
