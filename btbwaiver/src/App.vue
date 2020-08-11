@@ -7,7 +7,7 @@
 
       <div>
         <!-- <img alt="Vue logo" src="./assets/btb.png"> -->
-        <a href="/"><img center src="./assets/btb.png" alt="BTB LOGO" id="btbImageLogo"></img></a>
+        <a href="/"><img center src="./assets/btb.png" alt="BTB LOGO" id="btbImageLogo" width="50%"></img></a>
 
       </div>
 
@@ -592,7 +592,7 @@
       <div class="form-row" v-for="(minordatabase, index) in minorsDetail" :key="index" id="addMinorForm">
 
         <div class="col-md-2" id="minorNameDiv">
-           <label id="minorHeading">Are you a player?</label>
+           <label id="minorHeading">Is this minor a player ?</label>
            <br>
             <!-- <b-form-checkbox id="checkbox-index" v-model="minordatabase.minorPlayerOrNot" name="checkbox-index" value="yes" unchecked-value="no">
             </b-form-checkbox> -->
@@ -678,6 +678,11 @@
   <!-- div for COVID FORM PAGE -->
 
   <div v-show="!covidWholeForm">
+
+    <span id="hearAboutUsTitle">COVID-19 Attestation</span>
+      
+      <br/><br/><br/>
+
         <b-form-group>
           <b-form-checkbox id="checkbox-1" v-model="covidForm1" name="checkbox-1" value="1" unchecked-value="not_accepted">
             I confirm I am not experiencing any of the following symptoms of COVID-19 that are listed below: 
@@ -2814,18 +2819,28 @@
 
         console.log(this.minorsDetail[i].minorPlayerOrNot);
 
-                     if(this.minorsDetail[i].minorPlayerOrNot == '1' && this.minorsChecked == 'A'){
-                        
+                     // if(this.minorsDetail[i].minorPlayerOrNot == '1' && this.minorsChecked == 'A'){
+                     
+                      if(this.minorsChecked == 'A'){
+
                         console.log("SOLTIIIIIIIII");
                         var playerMinorIdforReservationMinor1 = this.playerMinorIdList[i];
 
                         console.log(this.playerMinorIdList[i]+' yo ho id ');
                         console.log(playerMinorIdforReservationMinor1);
 
+                        if(this.minorsDetail[i].minorPlayerOrNot == '1'){
+                          var non_player_value = '1';
+                        }
+                        else{
+                          var non_player_value = '0';
+                        }
+
                         axios.post(process.env.VUE_APP_RESERVATION_MINOR,{
                           player_minor_id: playerMinorIdforReservationMinor1,
                           reservation_id: this.reservationIdForReservationMinor,
-                          arrived: this.waiverSignedOnline
+                          arrived: this.waiverSignedOnline,
+                          non_player: non_player_value
                         })
 
                         .then(function (response) {
@@ -2838,9 +2853,30 @@
                     
                       }
 
-                    else{
-                      console.log("NOT A PLAYER MINOR");
-                    }
+                    // else{
+                    //   console.log("NOT A PLAYER MINOR");
+
+                    //   var playerMinorIdforReservationMinor1 = this.playerMinorIdList[i];
+
+                    //     console.log(this.playerMinorIdList[i]+' yo ho id ');
+                    //     console.log(playerMinorIdforReservationMinor1);
+
+                    //     axios.post(process.env.VUE_APP_RESERVATION_MINOR,{
+                    //       player_minor_id: playerMinorIdforReservationMinor1,
+                    //       reservation_id: this.reservationIdForReservationMinor,
+                    //       arrived: this.waiverSignedOnline,
+                    //       non_player: 0
+                    //     })
+
+                    //     .then(function (response) {
+                    //       console.log(response);
+                    //       console.log(playerMinorIdforReservationMinor1);
+                    //     })
+                    //     .catch(function (error) {
+                    //       console.log(error);
+                    //     });
+
+                    // }
       }
     /** END of if clause for minor player for reservation_minor table **/
 
@@ -3153,21 +3189,15 @@
       }
         /** axios post the bookers table **/
 
-      // var foundTravelId = this.consistsreservationresult.find((todo) => {
-      //   return todo.xola_order_id == this.bookerTravelerId
-      // })
-
-      // If nothing is foundTravelId, Array.find() returns undefined, which is false-y
        if(this.playerSelected == 'yes'){
 
           console.log("UPDATE ON RESERVATION PEOPLE ");
 
-          // if (foundTravelId) {
-
               axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
                 person_id: this.people_id,
                 reservation_id: this.consistsreservationresult,
-                arrived: this.waiverSignedOnline
+                arrived: this.waiverSignedOnline,
+                non_player: 1
               })
               .then(function (response) {
                 // console.log(response);
@@ -3176,28 +3206,23 @@
                 console.log(error);
               });
 
-          // } 
-          
-          // else {
-
-          //     /** axios post on reservation_people table**/
-
-          //     axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
-          //       person_id: this.people_id,
-          //       reservation_id: this.consistsreservationresult.id
-          //     })
-          //     .then(function (response) {
-          //       // console.log(response);
-          //     })
-          //     .catch(function (error) {
-          //       console.log(error);
-          //     });
-
-          //   }
         }
 
         else{
           console.log("NO UPDATE ON RESERVATION PEOPLE");
+
+          axios.post(process.env.VUE_APP_RESERVATIONPEOPLE,{
+                person_id: this.people_id,
+                reservation_id: this.consistsreservationresult,
+                arrived: this.waiverSignedOnline,
+                non_player: 0
+              })
+              .then(function (response) {
+                // console.log(response);
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
         }
 
         /** end of bookers table **/
