@@ -1174,7 +1174,7 @@
      // console.log(urlOrderId+"oa");
 
      if(urlOrderIdLength > 15){
-        axios.get(process.env.VUE_APP_XOLA1+"/api/orders/"+urlOrderId)
+        axios.get(process.env.VUE_APP_XOLA+"/api/orders/"+urlOrderId)
         .then(response => {
           // this.posts = response.data.data
           console.log(response);
@@ -1375,11 +1375,11 @@
        var arrivalDate = moment().format('YYYY-MM-DD');
        var arrivalTime = this.arrivalTime1;
 
-    console.log(process.env.VUE_APP_XOLA1);
+    console.log(process.env.VUE_APP_XOLA);
     console.log(process.env.VUE_APP_ROOTURL1);
 
-    console.log(process.env.VUE_APP_XOLA1+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate);
-     axios.get(process.env.VUE_APP_XOLA1+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate) 
+    console.log(process.env.VUE_APP_XOLA+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate);
+     axios.get(process.env.VUE_APP_XOLA+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate) 
      .then(response => 
             (this.allbookings = response.data.data,
               // console.log(response.data.data[0].items[0].arrivalTime),
@@ -1424,7 +1424,7 @@
 
           
 
-    //  axios.get((process.env.VUE_APP_XOLA1+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime), 
+    //  axios.get((process.env.VUE_APP_XOLA+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime), 
     //  {
     //   headers: {
     //     'X-API-KEY': "Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo",
@@ -1434,7 +1434,7 @@
     // })
       // .then
 
-     // axios.get(process.env.VUE_APP_XOLA1+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime)
+     // axios.get(process.env.VUE_APP_XOLA+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime)
     //  .then(response => 
     //   (this.posts = response.data.data)
     //   );
@@ -2283,8 +2283,8 @@
 
         var arrivalDate = moment().format('YYYY-MM-DD');
       // var arrivalTime = this.militaryTimeFormat;
-      console.log(process.env.VUE_APP_XOLA1+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+militaryTimeFormat);
-      axios.get(process.env.VUE_APP_XOLA1+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+militaryTimeFormat)
+      console.log(process.env.VUE_APP_XOLA+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+militaryTimeFormat);
+      axios.get(process.env.VUE_APP_XOLA+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+militaryTimeFormat)
       .then(response => (this.posts = response.data.data));
 
       this.selectedTime = moment(standardTimeFormat, "HHmm").format("YYYY-MM-DD HH:mm:00");
@@ -2305,9 +2305,9 @@
 
       var arrivalDate = moment().format('YYYY-MM-DD');
 
-      // axios.get(process.env.VUE_APP_XOLA1+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate,{headers:{'X-API-KEY':'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo'}})
-      console.log(process.env.VUE_APP_XOLA1+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate);
-      axios.get(process.env.VUE_APP_XOLA1+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate)
+      // axios.get(process.env.VUE_APP_XOLA+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate,{headers:{'X-API-KEY':'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo'}})
+      console.log(process.env.VUE_APP_XOLA+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate);
+      axios.get(process.env.VUE_APP_XOLA+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate)
       .then(response => (this.posts = response.data.data));
 
     },
