@@ -281,7 +281,7 @@
 
   <br>
 
-  <b-form-group label="Are you a player ?" id="areYouAPlayer"></b-form-group>
+  <b-form-group label="Are you playing Beat The Bomb today?" id="areYouAPlayer"></b-form-group>
   <b-form-group id="areYouPlayerDiv">
       <b-form-radio-group id="radio-group-2" v-model="playerSelected" name="radio-sub-component">
         <b-form-radio value="yes">YES</b-form-radio>
@@ -1038,14 +1038,29 @@
       
       var specialChar = "@";
 
-       if (this.email.includes(specialChar) && this.phone.length > 9 && this.email.length > 6) {
-        // if(this.email.length > 6){
-          return false;
-        // }
-      } else {
-        return true;
-        // this.validationEmailText = false;
+      //  if (this.email.includes(specialChar) && this.phone.length > 9 && this.email.length > 6) {
+      //     return false;
+      // } else {
+      //   return true;
+      // }
+
+      if(this.email.includes(specialChar)){
+        // if(this.phone.length > 9){
+          var x = !this.reg.test(this.email);
+          console.log(x); 
+
+          if(x = 'false' && this.phone.length > 9){
+            console.log('SAN');
+            return false;
+          }
+          else{
+            return true;
+          }
       }
+      else{
+        return true;
+      }
+
     },
 
     sortedArray: function() {
@@ -1159,7 +1174,7 @@
      // console.log(urlOrderId+"oa");
 
      if(urlOrderIdLength > 15){
-        axios.get(process.env.VUE_APP_XOLA+"/api/orders/"+urlOrderId)
+        axios.get(process.env.VUE_APP_XOLA1+"/api/orders/"+urlOrderId)
         .then(response => {
           // this.posts = response.data.data
           console.log(response);
@@ -1360,11 +1375,11 @@
        var arrivalDate = moment().format('YYYY-MM-DD');
        var arrivalTime = this.arrivalTime1;
 
-    console.log(process.env.VUE_APP_XOLA);
+    console.log(process.env.VUE_APP_XOLA1);
     console.log(process.env.VUE_APP_ROOTURL1);
 
-    console.log(process.env.VUE_APP_XOLA+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate);
-     axios.get(process.env.VUE_APP_XOLA+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate) 
+    console.log(process.env.VUE_APP_XOLA1+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate);
+     axios.get(process.env.VUE_APP_XOLA1+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate) 
      .then(response => 
             (this.allbookings = response.data.data,
               // console.log(response.data.data[0].items[0].arrivalTime),
@@ -1409,7 +1424,7 @@
 
           
 
-    //  axios.get((process.env.VUE_APP_XOLA+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime), 
+    //  axios.get((process.env.VUE_APP_XOLA1+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime), 
     //  {
     //   headers: {
     //     'X-API-KEY': "Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo",
@@ -1419,7 +1434,7 @@
     // })
       // .then
 
-     // axios.get(process.env.VUE_APP_XOLA+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime)
+     // axios.get(process.env.VUE_APP_XOLA1+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+arrivalTime)
     //  .then(response => 
     //   (this.posts = response.data.data)
     //   );
@@ -1469,6 +1484,8 @@
       covidForm3: 0,
       covidForm4: 0,
       covidForm5: 0,
+
+      reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
 
       fetchOrderDetail:[],
 
@@ -1760,16 +1777,6 @@
     var specialChar = "@";
     var specialChar1 = '.';
 
-      // if (this.email.includes(specialChar) && this.phone.length > 9 && this.email.length > 6) {
-      //   return false;
-      // } else {
-      //   return true;
-      // }
-
-    // if(this.email.length > 7){
-    //   this.ValidateEmailTextFalse = false;
-    // }
-
     if(this.email.includes(specialChar) && this.email.includes(specialChar1) && this.email.length > 12){
       this.ValidateEmailTextFalse = true;
     }
@@ -1777,9 +1784,6 @@
       this.ValidateEmailTextFalse = false;
     }
 
-    // if(this.email.length > 12){
-    //   this.ValidateEmailTextFalse = true;
-    // }
   },
 
   validateFirstNameText(){
@@ -2155,9 +2159,7 @@
             date_of_birth: '',
             minorPlayerOrNot: "1"
           })
-          // this.playerLastId = this.playersresult.id; // this is the line which passes value from playerresult to playerid
-
-          // this.validateMinorFieldFunction();
+          this.validateMinorField = true; /** this will make the NEXT button disabled when they click on ADD ANOTHER MINOR **/
         },
 
         removeExperience: function(todo){
@@ -2281,8 +2283,8 @@
 
         var arrivalDate = moment().format('YYYY-MM-DD');
       // var arrivalTime = this.militaryTimeFormat;
-      console.log(process.env.VUE_APP_XOLA+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+militaryTimeFormat);
-      axios.get(process.env.VUE_APP_XOLA+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+militaryTimeFormat)
+      console.log(process.env.VUE_APP_XOLA1+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+militaryTimeFormat);
+      axios.get(process.env.VUE_APP_XOLA1+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate+"&items.arrivalTime="+militaryTimeFormat)
       .then(response => (this.posts = response.data.data));
 
       this.selectedTime = moment(standardTimeFormat, "HHmm").format("YYYY-MM-DD HH:mm:00");
@@ -2303,9 +2305,9 @@
 
       var arrivalDate = moment().format('YYYY-MM-DD');
 
-      // axios.get(process.env.VUE_APP_XOLA+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate,{headers:{'X-API-KEY':'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo'}})
-      console.log(process.env.VUE_APP_XOLA+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate);
-      axios.get(process.env.VUE_APP_XOLA+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate)
+      // axios.get(process.env.VUE_APP_XOLA1+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate,{headers:{'X-API-KEY':'Af144hp8uKL3ESKoSDlsDR1btaMM4nO1cbdsT8rWvKo'}})
+      console.log(process.env.VUE_APP_XOLA1+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate);
+      axios.get(process.env.VUE_APP_XOLA1+"/api/orders?seller=5e1f43c0c697353cf12979e7&items.arrival="+arrivalDate)
       .then(response => (this.posts = response.data.data));
 
     },
@@ -2603,7 +2605,7 @@
                     // date_of_birth: this.date_of_birth,
                     // gender_id: this.gender_id,
                     // marketing_consent: this.promotional_item,
-                    // phone: this.phone,
+                    phone: this.phone,
                     // instagram: this.instagram,
                     // waiver_id: this.waiverIdSinged
                   })
