@@ -2458,6 +2458,7 @@
               var formEmailUsed = this.email;
               var formFirstName = this.first_name;
               var formLastname = this.last_name;
+              var formPhone = this.phone;
 
         axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/email/'+reservationOrderByEmail+'/first_name/'+reservationFirstName+'/last_name/'+reservationLastName,{
                   first_name: this.bookerFirstName,
@@ -2479,7 +2480,7 @@
 
                 // var reservationOrderByEmail = this.bookerEmail;
                 axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/email/'+formEmailUsed+'/first_name/'+formFirstName+'/last_name/'+formLastname,{
-                  
+                  phone: formPhone
                 })
                 .then(response => {
                   console.log(response);
