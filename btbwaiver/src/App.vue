@@ -1049,9 +1049,11 @@
           var x = !this.reg.test(this.email);
           console.log(x); 
 
-          if(x = 'false' && this.phone.length > 9){
-            console.log('FALSE SAN');
-            return false;
+          if(x = 'false'){
+            if(this.phone.length > 9){
+              console.log('FALSE SAN');
+              return false;
+            }
           }
           else{
             console.log('TRUE SAN');
