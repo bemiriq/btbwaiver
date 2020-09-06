@@ -1174,6 +1174,12 @@
      this.bookerOrderId = urlOrderId;
      // console.log(urlOrderId+"oa");
 
+      console.log(routePara);
+      console.log(newRoutePara);
+      console.log(urlOrderId);
+      console.log(urlOrderIdLength);
+
+
      if(urlOrderIdLength > 15){
         axios.get(process.env.VUE_APP_XOLA+"/api/orders/"+urlOrderId)
         .then(response => {
