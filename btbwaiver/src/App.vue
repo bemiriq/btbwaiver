@@ -1060,7 +1060,6 @@
       else{
         return true;
       }
-
     },
 
     sortedArray: function() {
