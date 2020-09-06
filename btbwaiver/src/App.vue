@@ -944,7 +944,7 @@
   <b-modal id="modal-1" ref="my-modal-submit-id" title="BTB Waiver Form" centered v-bind:hide-footer="true">
     <p> Please click on submit to complete this waiver. If you want to go through your waiver again, please click on cross sign on top right. </p>
       <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer();">SUBMIT</b-button> -->
-      <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer(); submitReservationMinor();">SUBMIT</b-button>
+      <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer(); submitReservationMinor(); reloadfunction();">SUBMIT</b-button>
   </b-modal>
 
   <b-container class="bv-example-row">
@@ -1775,14 +1775,30 @@
     this.increaseHeightForInstagram = '1';
 
     var specialChar = "@";
-    var specialChar1 = '.';
+    // var specialChar1 = '.';
 
-    if(this.email.includes(specialChar) && this.email.includes(specialChar1) && this.email.length > 12){
-      this.ValidateEmailTextFalse = true;
-    }
-    else{
-      this.ValidateEmailTextFalse = false;
-    }
+    // if(this.email.includes(specialChar) && this.email.includes(specialChar1) && this.email.length > 12){
+    //   this.ValidateEmailTextFalse = true;
+    // }
+    // else{
+    //   this.ValidateEmailTextFalse = false;
+    // }
+
+    if(this.email.includes(specialChar)){
+        // if(this.phone.length > 9){
+          var x = !this.reg.test(this.email);
+          // console.log(x); 
+
+          if(x = 'false'){
+            this.ValidateEmailTextFalse = false;
+          }
+          else{
+            this.ValidateEmailTextFalse = true;
+          }
+      }
+      else{
+        console.log("EMAIL NOT TYPED");
+      }
 
   },
 
