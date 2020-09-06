@@ -1050,10 +1050,11 @@
           console.log(x); 
 
           if(x = 'false' && this.phone.length > 9){
-            console.log('SAN');
+            console.log('FALSE SAN');
             return false;
           }
           else{
+            console.log('TRUE SAN');
             return true;
           }
       }
