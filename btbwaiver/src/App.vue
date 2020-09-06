@@ -331,7 +331,7 @@
               v-model="email"
               type="email"
               required
-              placeholder="Enter Email Address" size="lg">
+              placeholder="Enter Email Address" size="lg" @blur="validationEmailText">
             </b-form-input>
           </b-form-group>
 
@@ -1044,7 +1044,7 @@
       //   return true;
       // }
 
-      if(this.email.includes(specialChar)){
+      if(this.email.length > '3'){
         // if(this.phone.length > 9){
           var x = !this.reg.test(this.email);
           console.log(x); 
@@ -1784,7 +1784,7 @@
     //   this.ValidateEmailTextFalse = false;
     // }
 
-    if(this.email.includes(specialChar)){
+    if(this.email.length > '3'){
         // if(this.phone.length > 9){
           var x = !this.reg.test(this.email);
           // console.log(x); 
