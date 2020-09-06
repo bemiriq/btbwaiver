@@ -1053,13 +1053,14 @@
             console.log('FALSE SAN');
             return false;
           }
-          else{
+          if(x = 'true' && this.phone.length < 10){
             console.log('TRUE SAN');
             return true;
           }
       }
       else{
-        return true;
+        // return true;
+        console.log("EMAIL TYPED LESS THAN 3");
       }
     },
 
