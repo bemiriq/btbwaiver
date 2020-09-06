@@ -331,7 +331,7 @@
               v-model="email"
               type="email"
               required
-              placeholder="Enter Email Address" size="lg" @blur="validationEmailText">
+              placeholder="Enter Email Address" size="lg">
             </b-form-input>
           </b-form-group>
 
@@ -1049,11 +1049,9 @@
           var x = !this.reg.test(this.email);
           console.log(x); 
 
-          if(x = 'false'){
-            if(this.phone.length > 9){
-              console.log('FALSE SAN');
-              return false;
-            }
+          if(x = 'false' && this.phone.length > 9){
+            console.log('FALSE SAN');
+            return false;
           }
           else{
             console.log('TRUE SAN');
