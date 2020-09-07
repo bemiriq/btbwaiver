@@ -2516,13 +2516,14 @@
                     marketing_consent: this.promotional_item,
                     phone: this.phone,
                     email: this.formEmailUsed,
-                    instagram: this.instagram,
-                    waiver_id: this.waiverIdSinged
+                    instagram: this.instagram
+                    // waiver_id: this.waiverIdSinged
                     })
                     .then(response => {
                       console.log(response);
                       // console.log(response.data[0].id);
                       console.log("new people as player or booker/player");
+                      console.log(this.waiverIdSinged + ' Vaiguni');
                     })
                     .catch(function(error){
                       console.log(error);
@@ -2630,7 +2631,7 @@
                   })
                   .then(response => {
                     console.log(" inside reservation order by email");
-                    console.log(response);
+                    // console.log(response);
                     // console.log(response.data[0].id);
                     // this.lastPeopleDataId = response.data[0].id;
                     // console.log(this.lastPeopleDataId)
