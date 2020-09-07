@@ -840,7 +840,7 @@
   <!-- END OF DIV for COVID FORM -->
 
 
-  <div v-show="!minorsignDiv">
+  <div v-show="minorsignDiv">
 
    <br><br>
 
@@ -913,25 +913,21 @@
   <br>
 
 
-  <div class="container" v-show="!displaySignaturePad">
-    <div class="row">
+  <div class="container" v-show="displaySignaturePad">
+
       <div class="col-12 mt-2" >
         <VueSignaturePad
         id="signature"
-        width="auto"
-        height="400px"
         ref="signaturePad"
-        :options="{onBegin, onEnd, signatureoptions}" v-show="showSignaturePad" style="margin:auto;" />
+        :options="{onBegin, onEnd, signatureoptions}" v-show="showSignaturePad" style="margin:auto; height: 300px; width: 65%;" />
       </div>
-    </div>
-    <div class="row">
-      <div class="col-6 mt-2">
+      <br>
+      <div class="col-6">
         <button class="btn btn-outline-secondary" @click="undo">Undo</button>
       </div>
       <!-- <div class="col-6 mt-2">
          <button class="btn btn-outline-primary" @click="save">Save</button> 
       </div> -->
-    </div>
   </div>
 
   <br><br>
@@ -1036,31 +1032,16 @@
     computed: {
       isDisableComputed() {
       
-      var specialChar = "@";
+      var x = !this.reg.test(this.email); /** checks if its the valid email or not and return as TRUE or FALSE **/
+      console.log(x); 
 
-      //  if (this.email.includes(specialChar) && this.phone.length > 9 && this.email.length > 6) {
-      //     return false;
-      // } else {
-      //   return true;
-      // }
-
-      if(this.email.length > '3'){
-        // if(this.phone.length > 9){
-          var x = !this.reg.test(this.email);
-          console.log(x); 
-
-          if(x = 'false' && this.phone.length > 9){
-            console.log('FALSE SAN');
-            return false;
-          }
-          if(x = 'true' && this.phone.length < 10){
-            console.log('TRUE SAN');
-            return true;
-          }
+      if(x === false && this.phone.length > 9){
+        // console.log("ENABLE");
+        return false;
       }
       else{
-        // return true;
-        console.log("EMAIL TYPED LESS THAN 3");
+        // console.log("DISABLE");
+        return true;
       }
     },
 
@@ -1782,30 +1763,15 @@
     this.increaseHeightForInstagram = '1';
 
     var specialChar = "@";
-    // var specialChar1 = '.';
 
-    // if(this.email.includes(specialChar) && this.email.includes(specialChar1) && this.email.length > 12){
-    //   this.ValidateEmailTextFalse = true;
-    // }
-    // else{
-    //   this.ValidateEmailTextFalse = false;
-    // }
-
-    if(this.email.length > '3'){
-        // if(this.phone.length > 9){
           var x = !this.reg.test(this.email);
-          // console.log(x); 
 
-          if(x = 'false'){
-            this.ValidateEmailTextFalse = false;
-          }
-          else{
+          if(x === false){
             this.ValidateEmailTextFalse = true;
           }
-      }
-      else{
-        console.log("EMAIL NOT TYPED");
-      }
+          else{
+            this.ValidateEmailTextFalse = false;
+          }
 
   },
 
