@@ -2860,10 +2860,10 @@
                         console.log(playerMinorIdforReservationMinor1);
 
                         if(this.minorsDetail[i].minorPlayerOrNot == '1'){
-                          var non_player_value = '1';
+                          var non_player_value = '0';
                         }
                         else{
-                          var non_player_value = '0';
+                          var non_player_value = '1';
                         }
 
                         axios.post(process.env.VUE_APP_RESERVATION_MINOR,{
@@ -3227,7 +3227,7 @@
                 person_id: this.people_id,
                 reservation_id: this.consistsreservationresult,
                 arrived: this.waiverSignedOnline,
-                non_player: 1
+                non_player: 0
               })
               .then(function (response) {
                 // console.log(response);
@@ -3245,7 +3245,7 @@
                 person_id: this.people_id,
                 reservation_id: this.consistsreservationresult,
                 arrived: this.waiverSignedOnline,
-                non_player: 0
+                non_player: 1
               })
               .then(function (response) {
                 // console.log(response);
