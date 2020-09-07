@@ -614,10 +614,9 @@
         <div class="col-md-4">
             <label id="minorHeadingDOB">Minor's date of birth</label>
 
-            <p v-show="!validationMinorDOBTextFalse" v-if="minordatabase.date_of_birth < currentDateCompare" style="color: red;">Minor should be under 18</p>
-            <p v-show="!validationMinorDOBBelow8TextFalse" v-if="minordatabase.date_of_birth > minorLessThan6" style="color: red;">Minor should be over 8 year </p>
+            <p v-if="currentDateCompare > minordatabase.date_of_birth && minordatabase.date_of_birth > '0000-00-00' && minordatabase.minorPlayerOrNot == '1' " v-show="!validationMinorDOBTextFalse" style="color: red;">Minor should be under 18</p>
+            <p v-if="minordatabase.date_of_birth > minorLessThan6 && minordatabase.minorPlayerOrNot == '1'" v-show="!validationMinorDOBBelow8TextFalse" style="color: red;">Minor should be over 8 year </p>
             
-            <!-- <dropdown-datepicker display-format="mdy" v-model="minordatabase.date_of_birth" v-bind:min-age="0" @input="validationMinorDOBText" id="dateDefine"></dropdown-datepicker>  -->
             <dropdown-datepicker display-format="mdy" v-model="minordatabase.date_of_birth" v-bind:min-age="0" @input="validationMinorDOBText" id="dateDefine"></dropdown-datepicker> 
 
         </div>
@@ -840,7 +839,7 @@
   <!-- END OF DIV for COVID FORM -->
 
 
-  <div v-show="minorsignDiv">
+  <div v-show="!minorsignDiv">
 
    <br><br>
 
@@ -913,7 +912,7 @@
   <br>
 
 
-  <div class="container" v-show="displaySignaturePad">
+  <div class="container" v-show="!displaySignaturePad">
 
       <div class="col-12 mt-2" >
         <VueSignaturePad
@@ -1030,6 +1029,51 @@
     },
 
     computed: {
+
+      validationMinorDOBText(){
+          // console.log("Inside MINOR DATE");
+          // console.log("INISDE DOB");
+
+          // console.log(this.minorsDetail);
+          // console.log(this.minorsDetail.length);
+          for(let i=0; i < this.minorsDetail.length; i++){
+            // console.log(i);
+            var dob = this.minorsDetail[i].date_of_birth;
+            // console.log(dob);
+            // console.log(this.currentDateCompare);
+            // console.log(this.minorLessThan6);
+            // console.log("MINOR"+' '+this.minorsDetail[i].minorPlayerOrNot);
+            if(this.minorsDetail[i].minorPlayerOrNot == '1'){
+                if(dob < this.currentDateCompare || dob > this.minorLessThan6 || this.minorsDetail[i].first_name < '2' || this.minorsDetail[i].last_name < '2' ){
+                // console.log("ERROR MESSAGE");
+                this.disableAddMinorButton = true; /** disables the button **/
+                this.validateMinorField = true;
+                break; /** it breaks the loop to make the button disable when the first case is incorrect and second is correct **/
+              }
+              else{
+                // console.log("CORRECT");
+                this.disableAddMinorButton = false; /** enable the button **/
+                this.validateMinorField = false;
+              }
+            }
+            else{
+              // console.log("only go though name validation");
+              if(this.minorsDetail[i].first_name > '1' && this.minorsDetail[i].last_name > '1' && this.minorsDetail[i].date_of_birth > '0000-00-00'){
+                this.disableAddMinorButton = false;  /** enables the button **/
+                this.validateMinorField = false;
+              }
+              else{
+                this.disableAddMinorButton = true;  /** disables the button **/
+                this.validateMinorField = true;
+                break;
+              }
+              
+            }
+            
+          }
+
+        },
+
       isDisableComputed() {
       
       var x = !this.reg.test(this.email); /** checks if its the valid email or not and return as TRUE or FALSE **/
@@ -1459,8 +1503,8 @@
       validatePhoneTextFalse: true,
       validationDOBTextFalse: true,
       validateMinorDOBFalse: true,
-      validationMinorDOBTextFalse: true,
-      validationMinorDOBBelow8TextFalse: true,
+      validationMinorDOBTextFalse: false,
+      validationMinorDOBBelow8TextFalse: false,
       disableAddMinorButton: true,
       validateFirstNameTextFalse: true,
       validateLastNameTextFalse: true,
@@ -1634,13 +1678,13 @@
         },
 
         minorsDetail: [
-        {
-          first_name: "",
-          last_name: "",
-          date_of_birth: "",
-          minorPlayerOrNot: "1"
-          // title: "Date of Birth"
-        }
+          {
+            first_name: "",
+            last_name: "",
+            date_of_birth: "",
+            minorPlayerOrNot: "1"
+            // title: "Date of Birth"
+          }
         ],
 
         /* post data to api*/
@@ -1654,15 +1698,6 @@
 
         first_name:"",
         // date_of_birth:[],
-
-        /*below are the objects posted for player_minors table*/
-        // minordatabase:[
-        // {
-        //   date_of_birth:"",
-        //   first_name:""
-        // }
-        // ],
-        /* end of player_minors table*/
 
         file: "",
 
@@ -1851,73 +1886,67 @@
 
   },
 
-  validationMinorDOBText(){
-    console.log("Inside MINOR DATE");
-    console.log("INISDE DOB");
+    // var dob= this.minorsDetail[this.minorsDetail.length-1].date_of_birth;
+    // var minorPlayerValue = this.minorsDetail[this.minorsDetail.length-1].minorPlayerOrNot;
 
-    var dob= this.minorsDetail[this.minorsDetail.length-1].date_of_birth;
-    var minorPlayerValue = this.minorsDetail[this.minorsDetail.length-1].minorPlayerOrNot;
+    // console.log(minorPlayerValue);
+    // console.log(dob);
 
-    console.log(minorPlayerValue);
-    console.log(dob);
-
-    if(minorPlayerValue > '0'){
-      console.log("NO"+minorPlayerValue);
-      this.disableAddMinorButton = false;
-      this.validateMinorField = false;
-      // this.validationMinorDOBTextFalse = true;
-      // this.validationMinorDOBBelow8TextFalse = true;
-    }
-
-    else{
-      console.log("YES");
-
-      console.log(dob);
-      var today = new Date();
-      var birthDate = new Date(dob);
-      var age = today.getFullYear() - birthDate.getFullYear();
-      var m = today.getMonth() - birthDate.getMonth();
-      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-          console.log(birthDate.getDate());
-          age--;
-      }
-     if(age>18){
-        console.log("greater than 18");
-        // alert('You are not eligible. Age should be above 16...!!!');
-        this.validationMinorDOBTextFalse = false;
-        this.validateMinorField = true; // disable minor page NEXT button
-        this.disableAddMinorButton = true;
-        // console.log('Over 18');
-     }
-     else{
-      console.log("less than eighteen");
-      this.validationMinorDOBTextFalse = true;
-      this.validateMinorField = false;  // eable minor page NEXT button
-      this.disableAddMinorButton = false;
-     }
-     if(age<8){
-      this.validationMinorDOBBelow8TextFalse = false;
-      this.validateMinorField = true;
-      this.disableAddMinorButton = true;
-      console.log("666");
-     }
-     else{
-      this.validationMinorDOBBelow8TextFalse = true;
-      this.validateMinorField = false;  // eable minor page NEXT button
-      this.disableAddMinorButton = false;
-     }
-     if(age<8 || age>18){
-      this.validateMinorField = true;  // disable minor page NEXT button
-      this.disableAddMinorButton = true;
-     }
-
-     // this.disableAddMinorButton = true;
-    // if(this.minordatabase.date_of_birth < '2012-01-01'){
-    //     this.validateMinorDOBFalse = false;
+    // if(minorPlayerValue > '0'){
+    //   console.log("NO"+minorPlayerValue);
+    //   this.disableAddMinorButton = false;
+    //   this.validateMinorField = false;
+    //   // this.validationMinorDOBTextFalse = true;
+    //   // this.validationMinorDOBBelow8TextFalse = true;
     // }
-    }
-    
-  },
+
+    // else{
+    //   console.log("YES");
+
+    //   console.log(dob);
+    //   var today = new Date();
+    //   var birthDate = new Date(dob);
+    //   var age = today.getFullYear() - birthDate.getFullYear();
+    //   var m = today.getMonth() - birthDate.getMonth();
+    //   if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    //       console.log(birthDate.getDate());
+    //       age--;
+    //   }
+    //  if(age>18){
+    //     console.log("greater than 18");
+    //     // alert('You are not eligible. Age should be above 16...!!!');
+    //     this.validationMinorDOBTextFalse = false;
+    //     this.validateMinorField = true; // disable minor page NEXT button
+    //     this.disableAddMinorButton = true;
+    //     // console.log('Over 18');
+    //  }
+    //  else{
+    //   console.log("less than eighteen");
+    //   this.validationMinorDOBTextFalse = true;
+    //   this.validateMinorField = false;  // eable minor page NEXT button
+    //   this.disableAddMinorButton = false;
+    //  }
+    //  if(age<8){
+    //   this.validationMinorDOBBelow8TextFalse = false;
+    //   this.validateMinorField = true;
+    //   this.disableAddMinorButton = true;
+    //   console.log("666");
+    //  }
+    //  else{
+    //   this.validationMinorDOBBelow8TextFalse = true;
+    //   this.validateMinorField = false;  // eable minor page NEXT button
+    //   this.disableAddMinorButton = false;
+    //  }
+    //  if(age<8 || age>18){
+    //   this.validateMinorField = true;  // disable minor page NEXT button
+    //   this.disableAddMinorButton = true;
+    //  }
+
+    //  // this.disableAddMinorButton = true;
+    // // if(this.minordatabase.date_of_birth < '2012-01-01'){
+    // //     this.validateMinorDOBFalse = false;
+    // // }
+    // }
 
   validationByPlayerMinor(){
 
@@ -2469,7 +2498,7 @@
 
                 // var reservationOrderByEmail = this.bookerEmail;
                 axios.post(process.env.VUE_APP_PEOPLE+'/find_or_create/email/'+formEmailUsed+'/first_name/'+formFirstName+'/last_name/'+formLastname,{
-                  phone: formPhone
+
                 })
                 .then(response => {
                   console.log(response);
