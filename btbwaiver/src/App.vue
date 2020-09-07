@@ -939,7 +939,7 @@
   <b-modal id="modal-1" ref="my-modal-submit-id" title="BTB Waiver Form" centered v-bind:hide-footer="true">
     <p> Please click on submit to complete this waiver. If you want to go through your waiver again, please click on cross sign on top right. </p>
       <!-- <b-button variant="primary" v-on:click="submitPlayerForm(); reloadfunction(); minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer();">SUBMIT</b-button> -->
-      <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer(); submitReservationMinor(); reloadfunction();">SUBMIT</b-button>
+      <b-button variant="primary" v-on:click="minorsignDiv = !minorsignDiv ; waiverSubmitted = !waiverSubmitted; hideModal(); clickedTimer(); submitReservationMinor();">SUBMIT</b-button>
   </b-modal>
 
   <b-container class="bv-example-row">
@@ -2509,9 +2509,9 @@
                   var peopleId = response.data[0].id;
                   /** if the booker is player as well then it will update the values **/
                   axios.put(process.env.VUE_APP_PEOPLE+'/'+peopleId,{
-                    first_name: formFirstName,
-                    last_name: formLastname,
-                    date_of_birth: this.date_of_birth,
+                    // first_name: formFirstName,
+                    // last_name: formLastname,
+                    // date_of_birth: this.date_of_birth,
                     gender_id: this.gender_id,
                     marketing_consent: this.promotional_item,
                     phone: this.phone,
@@ -2520,7 +2520,7 @@
                     waiver_id: this.waiverIdSinged
                     })
                     .then(response => {
-                      // console.log(response);
+                      console.log(response);
                       // console.log(response.data[0].id);
                       console.log("new people as player or booker/player");
                     })
@@ -2630,7 +2630,7 @@
                   })
                   .then(response => {
                     console.log(" inside reservation order by email");
-                    // console.log(response);
+                    console.log(response);
                     // console.log(response.data[0].id);
                     // this.lastPeopleDataId = response.data[0].id;
                     // console.log(this.lastPeopleDataId)
