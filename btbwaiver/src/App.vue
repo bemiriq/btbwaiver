@@ -3094,10 +3094,10 @@
       console.log(answerId);
       /* post to post_survey_answers */
 
-      if(answerId = '6'){
+      if(answerId == '6'){
         console.log("answer Id was 6");
           axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
-          person_id: lastPlayerIdNew,
+          // person_id: lastPlayerIdNew,
           survey_id: 1,
           answer_id: answerId,
           question_id: 1,
@@ -3113,7 +3113,7 @@
       else{
         console.log("not 6");
           axios.post(process.env.VUE_APP_PERSON_SURVEY_ANSWER,{
-          person_id: lastPlayerIdNew,
+          // person_id: lastPlayerIdNew,
           survey_id: 1,
           answer_id: answerId,
           question_id: 1
