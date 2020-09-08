@@ -573,7 +573,7 @@
 
   <div v-show="!minorsAddDiv">
 
-        <br><br>
+    <br><br>
 
     <span id="minorNameTitle">{{ minorNameTitle }}</span>
 
@@ -1036,7 +1036,12 @@
 
           // console.log(this.minorsDetail);
           // console.log(this.minorsDetail.length);
-          for(let i=0; i < this.minorsDetail.length; i++){
+
+          if(this.minorsChecked == 'A'){ /** if selected they have minors checkbox **/
+            
+            this.validateMinorField = true; /** disables the button **/
+
+            for(let i=0; i < this.minorsDetail.length; i++){
             // console.log(i);
             var dob = this.minorsDetail[i].date_of_birth;
             // console.log(dob);
@@ -1057,19 +1062,24 @@
               }
             }
             else{
-              // console.log("only go though name validation");
-              if(this.minorsDetail[i].first_name > '1' && this.minorsDetail[i].last_name > '1' && this.minorsDetail[i].date_of_birth > '0000-00-00'){
-                this.disableAddMinorButton = false;  /** enables the button **/
-                this.validateMinorField = false;
-              }
-              else{
-                this.disableAddMinorButton = true;  /** disables the button **/
-                this.validateMinorField = true;
-                break;
-              }
+                // console.log("only go though name validation");
+                if(this.minorsDetail[i].first_name > '1' && this.minorsDetail[i].last_name > '1' && this.minorsDetail[i].date_of_birth > '0000-00-00'){
+                  this.disableAddMinorButton = false;  /** enables the button **/
+                  this.validateMinorField = false;
+                }
+                else{
+                  this.disableAddMinorButton = true;  /** disables the button **/
+                  this.validateMinorField = true;
+                  break;
+                }
               
-            }
+              }
             
+            }
+          }
+          /** if they will click on no minors this will activate the NEXT button for MINORS ADD DIV PART **/
+          else{
+            this.validateMinorField = false; /** enables the button **/
           }
 
         },
@@ -2625,7 +2635,7 @@
                     // date_of_birth: this.date_of_birth,
                     // gender_id: this.gender_id,
                     // marketing_consent: this.promotional_item,
-                    phone: this.phone,
+                    // phone: this.phone,
                     // instagram: this.instagram,
                     // waiver_id: this.waiverIdSinged
                   })
@@ -2704,7 +2714,7 @@
       })
 
       .then(response => {
-            // console.log(response.data);
+            console.log(response.data);
            // this.list2rfidcontainer = response.data[0].id;
             console.log(response.data[0].id);
 
