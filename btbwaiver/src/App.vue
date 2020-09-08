@@ -2718,6 +2718,8 @@
            // this.list2rfidcontainer = response.data[0].id;
             console.log(response.data[0].id);
 
+            this.peopleTableId = response.data[0].id;
+
             // this.list2rfidcontainer = response.data[0].id;
             axios.get(process.env.VUE_APP_PEOPLE).then(response => {
               this.playersresult = response.data.slice(-1);
@@ -2851,6 +2853,7 @@
       var arr = this.minorsDetail;
       console.log(arr);
 
+      /** start of for loop **/
       for(var i=0; i < arr.length; i++){
 
         console.log(this.minorsDetail[i].minorPlayerOrNot);
@@ -2888,35 +2891,10 @@
                         });
                     
                       }
-
-                    // else{
-                    //   console.log("NOT A PLAYER MINOR");
-
-                    //   var playerMinorIdforReservationMinor1 = this.playerMinorIdList[i];
-
-                    //     console.log(this.playerMinorIdList[i]+' yo ho id ');
-                    //     console.log(playerMinorIdforReservationMinor1);
-
-                    //     axios.post(process.env.VUE_APP_RESERVATION_MINOR,{
-                    //       player_minor_id: playerMinorIdforReservationMinor1,
-                    //       reservation_id: this.reservationIdForReservationMinor,
-                    //       arrived: this.waiverSignedOnline,
-                    //       non_player: 0
-                    //     })
-
-                    //     .then(function (response) {
-                    //       console.log(response);
-                    //       console.log(playerMinorIdforReservationMinor1);
-                    //     })
-                    //     .catch(function (error) {
-                    //       console.log(error);
-                    //     });
-
-                    // }
       }
     /** END of if clause for minor player for reservation_minor table **/
 
-      // /**** THIS DATA WILL SUBMIT PEOPLE TO PDF FILE ********************************/
+    // /**** THIS DATA WILL SUBMIT PEOPLE TO PDF FILE ********************************/
 
       console.log(this.saveSignatureURL);
 
@@ -2941,12 +2919,31 @@
                         var signedValues = this.saveSignatureURL;
                         console.log(signedValues + " OLO LO LO ");
 
-                          axios.put(process.env.VUE_APP_WAIVERS+'/'+waiverIdFetched,{
+
+                          axios.post(process.env.VUE_APP_WAIVERS,{
                                   waiver_url : awsUrl
                                 })
                                 .then(response => {
                                   console.log(response);
                                   console.log("UPDATED WAIVER TABLE with AWS URL");
+
+                                  var waiverId = response.data.id;
+                                  console.log(waiverId);
+                                  var peopleId = this.peopleTableId;
+                                  console.log("people id "+ peopleid);
+
+                                  /** THIS WILL UPDATE WAIVER ID ON PEOPLE TABLE **/
+                                    axios.put(process.env.VUE_APP_PEOPLE+'/'+peopleId,{
+                                        waiver_id: waiverId
+                                      })
+                                    .then(response => {
+                                      console.log(response);
+                                    })
+                                    .catch(function (error) {
+                                      console.log(error);
+                                    });
+                                  /** END OF WAIVER ID UPDATE ON PEOPLE TABLE **/
+
                                 })
                                 .catch(function (error) {
                                   console.log(error);
@@ -2960,7 +2957,6 @@
                     });
 
     // /******************** END OF POST TO WAIVER PDF URL *********************************/
-
     
     },
 
