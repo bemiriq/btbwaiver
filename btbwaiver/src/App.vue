@@ -1527,8 +1527,6 @@
       covidForm4: 0,
       covidForm5: 0,
 
-      peopleTableId: '',
-
       reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
 
       fetchOrderDetail:[],
@@ -2931,19 +2929,19 @@
 
                                   var waiverId = response.data.id;
                                   console.log(waiverId);
-                                  var peopleId = this.peopleTableId;
-                                  console.log("people id "+ peopleid);
+                                  var peopleId = this.people_id;
+                                  console.log("people id "+ peopleId);
 
                                   /** THIS WILL UPDATE WAIVER ID ON PEOPLE TABLE **/
-                                    axios.put(process.env.VUE_APP_PEOPLE+'/'+peopleId,{
-                                        waiver_id: waiverId
-                                      })
-                                    .then(response => {
-                                      console.log(response);
+                                  axios.put(process.env.VUE_APP_PEOPLE+'/'+peopleId,{
+                                      waiver_id: waiverId
                                     })
-                                    .catch(function (error) {
-                                      console.log(error);
-                                    });
+                                  .then(response => {
+                                    console.log(response);
+                                  })
+                                  .catch(function (error) {
+                                    console.log(error);
+                                  });
                                   /** END OF WAIVER ID UPDATE ON PEOPLE TABLE **/
 
                                 })
